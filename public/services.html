@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Services &amp; Practice Areas | THEWHY Consulting</title>
+  <meta name="description" content="Explore THEWHY Consulting's 10 structured practice areas: Accounting & Tax, Corporate Finance, Strategy & AI, HR, Audit & Assurance, Business Support, Advisory, Secretarial, Outsourced Accounting, and Statutory Certification." />
+  <meta name="theme-color" content="#111820" />
+
+  <!-- Google Fonts: DM Sans & Manrope -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/assets/img/logo-mark.svg">
+
+  <!-- Bespoke Design System CSS -->
+  <link rel="stylesheet" href="/css/custom.css">
+</head>
+<body>
+
+  <!-- PAGE PRELOADER -->
+  <div class="page-preloader" id="pagePreloader">
+    <img src="/assets/img/logo-horizontal-white.svg" alt="THEWHY Consulting" class="preloader-logo">
+    <div class="preloader-bar"></div>
+  </div>
+
+  <!-- SCROLL TO TOP -->
+  <button class="scroll-top" id="scrollTop" aria-label="Scroll to top">
+    <i class="fa-solid fa-chevron-up"></i>
+  </button>
+
+  <!-- MOBILE SLIDE-OVER DRAWER -->
+  <div class="drawer-overlay" id="drawerOverlay"></div>
+  <aside class="drawer" id="drawer">
+    <button class="drawer-close" id="drawerClose" aria-label="Close navigation">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <div class="drawer-nav">
+      <div style="margin-bottom: 16px;">
+        <img src="/assets/img/logo-horizontal-white.svg" alt="THEWHY Consulting" style="height: 40px; width: auto;">
+      </div>
+      <small>THEWHY Practice Directory</small>
+      <a href="/">Home</a>
+      <a href="/about">About Us</a>
+      <a href="/services" class="active">Services</a>
+      <a href="/industries">Who We Serve</a>
+      <a href="/team">Our Team</a>
+      <a href="/insights">Insights</a>
+      <a href="/launch">Special Program</a>
+      <a href="/contact">Contact</a>
+      <a href="/admin">Executive Portal</a>
+      <a href="/contact" class="drawer-cta">Schedule Consultation &rarr;</a>
+    </div>
+  </aside>
+
+  <!-- FLOATING FROSTED GLASS SITE NAVIGATION -->
+  <nav class="site-nav" id="siteNav">
+    <div class="container">
+      <div class="nav-shell">
+        <a class="brand" href="/">
+          <img src="/assets/img/logo-horizontal.svg" alt="THEWHY Consulting" class="brand-logo">
+        </a>
+
+        <div class="nav-links">
+          <a href="/">Home</a>
+          <a href="/about">About</a>
+          <a href="/services" class="active">Services</a>
+          <a href="/industries">Industries</a>
+          <a href="/team">Our Team</a>
+          <a href="/insights">Insights</a>
+          <a href="/launch">Special Program</a>
+          <a href="/contact">Contact</a>
+        </div>
+
+        <div class="nav-actions">
+          <a href="/contact" class="nav-cta">
+            <span>Get In Touch</span> <i class="fa-solid fa-arrow-right" style="font-size:11px;"></i>
+          </a>
+          <button class="menu-btn" id="menuBtn" aria-label="Open navigation">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- SUBPAGE HERO -->
+  <header class="subpage-hero">
+    <div class="subpage-hero-bg" style="background-image: url('/assets/img/banners/boardroom-strategy.jpg');"></div>
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="/">Home</a> <span>/</span> Services
+      </div>
+      <h1 class="reveal">Our 10 Core Practice Areas</h1>
+      <p class="hero-lead reveal delay-1">
+        Comprehensive management consulting and financial stewardship designed to safeguard corporate balance sheets, clear statutory liabilities, and accelerate scalable enterprise growth in Nigeria.
+      </p>
+    </div>
+  </header>
+
+  <!-- PRACTICE JUMP NAVIGATION -->
+  <section style="background: var(--white); border-bottom: 1px solid var(--line); position: sticky; top: 76px; z-index: 20; padding: 0.75rem 0; overflow-x: auto; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+    <div class="container" style="display: flex; gap: 0.5rem; align-items: center; white-space: nowrap;">
+      <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--muted); margin-right: 0.5rem;">Jump To:</span>
+      <a href="#accounting-tax" class="practice-pill" style="font-size: 0.8rem; padding: 6px 12px; border-radius: 8px; background: var(--paper); color: var(--ink); font-weight: 600;">01. Accounting &amp; Tax</a>
+      <a href="#corporate-finance" class="practice-pill" style="font-size: 0.8rem; padding: 6px 12px; border-radius: 8px; background: var(--paper); color: var(--ink); font-weight: 600;">02. Corporate Finance</a>
+      <a href="#strategy-solutions" class="practice-pill" style="font-size: 0.8rem; padding: 6px 12px; border-radius: 8px; background: var(--paper); color: var(--ink); font-weight: 600;">03. Strategy &amp; AI</a>
+      <a href="#hr-services" class="practice-pill" style="font-size: 0.8rem; padding: 6px 12px; border-radius: 8px; background: var(--paper); color: var(--ink); font-weight: 600;">04. HR &amp; Training</a>
+      <a href="#audit-assurance" class="practice-pill" style="font-size: 0.8rem; padding: 6px 12px; border-radius: 8px; background: var(--paper); color: var(--ink); font-weight: 600;">05. Audit &amp; Forensics</a>
+      <a href="#business-support" class="practice-pill" style="font-size: 0.8rem; padding: 6px 12px; border-radius: 8px; background: var(--paper); color: var(--ink); font-weight: 600;">06. Business Support</a>
+      <a href="#business-advisory" class="practice-pill" style="font-size: 0.8rem; padding: 6px 12px; border-radius: 8px; background: var(--paper); color: var(--ink); font-weight: 600;">07. Business Advisory</a>
+      <a href="#secretarial-support" class="practice-pill" style="font-size: 0.8rem; padding: 6px 12px; border-radius: 8px; background: var(--paper); color: var(--ink); font-weight: 600;">08. Secretarial Support</a>
+      <a href="#outsourcing-accountants" class="practice-pill" style="font-size: 0.8rem; padding: 6px 12px; border-radius: 8px; background: var(--paper); color: var(--ink); font-weight: 600;">09. Outsourced Accounting</a>
+      <a href="#statutory-certification" class="practice-pill" style="font-size: 0.8rem; padding: 6px 12px; border-radius: 8px; background: var(--paper); color: var(--ink); font-weight: 600;">10. Statutory Certifications</a>
+    </div>
+  </section>
+
+  <!-- 10 PRACTICE SECTIONS DETAILED -->
+  <main class="page-content" style="padding: 4rem 0;">
+    <div class="container" style="display: flex; flex-direction: column; gap: 4rem;">
+
+      <!-- 01. ACCOUNTING & TAX -->
+      <section id="accounting-tax" class="practice-card reveal" style="background: var(--white); border-radius: var(--radius); padding: 3rem; border: 1px solid var(--line); box-shadow: var(--shadow-soft);">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+          <div style="display: flex; align-items: center; gap: 1.25rem;">
+            <div style="width: 60px; height: 60px; border-radius: 18px; background: var(--orange-light); color: var(--orange); display: flex; align-items: center; justify-content: center; font-size: 1.6rem;">
+              <i class="fa-solid fa-calculator"></i>
+            </div>
+            <div>
+              <span style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--orange);">Pillar 01</span>
+              <h2 style="font-size: 1.8rem; color: var(--ink); margin-top: 2px;">Accounting, Tax &amp; Cloud Systems</h2>
+            </div>
+          </div>
+          <a href="/contact?subject=Accounting+and+Tax+Consultation" class="btn btn-primary" style="font-size: 0.85rem; padding: 10px 20px;">
+            <span>Consult on Tax &amp; Accounts</span> <i class="fa-solid fa-arrow-right"></i>
+          </a>
+        </div>
+
+        <p style="font-size: 1.05rem; color: var(--muted); line-height: 1.7; margin-bottom: 2rem;">
+          Our onsite and offsite accounting services are geared towards proper stewardship and accountability for maximization of wealth for all stakeholders, business owners, and directors. We handle end-to-end accounting policies, cloud software deployment, bank reconciliation, asset verification, excess bank charges recovery, and stress-free representation before federal and state tax authorities (FIRS &amp; LIRS).
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+          <div style="background: var(--paper); border-radius: 18px; padding: 1.75rem;">
+            <h3 style="font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--orange); margin-bottom: 1rem; font-weight: 800;">
+              Core Capabilities:
+            </h3>
+            <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px; font-size: 0.9rem; color: var(--ink-secondary);">
+              <li><i class="fa-solid fa-circle-check" style="color: var(--orange); margin-right: 8px;"></i> Stocktaking &amp; Physical Asset Verification</li>
+              <li><i class="fa-solid fa-circle-check" style="color: var(--orange); margin-right: 8px;"></i> Debt Management &amp; Systematic Recovery</li>
+              <li><i class="fa-solid fa-circle-check" style="color: var(--orange); margin-right: 8px;"></i> Algorithmic Excess Bank Charges Recovery</li>
+              <li><i class="fa-solid fa-circle-check" style="color: var(--orange); margin-right: 8px;"></i> Treasury Management &amp; Multi-Bank Reconciliation</li>
+              <li><i class="fa-solid fa-circle-check" style="color: var(--orange); margin-right: 8px;"></i> Cloud Accounting Setup (QuickBooks, Zoho, Sage)</li>
+              <li><i class="fa-solid fa-circle-check" style="color: var(--orange); margin-right: 8px;"></i> Stress-Free FIRS &amp; LIRS Tax Liaison &amp; Audit Defense</li>
+              <li><i class="fa-solid fa-circle-check" style="color: var(--orange); margin-right: 8px;"></i> Employee &amp; Expatriate Tax Structuring</li>
+              <li><i class="fa-solid fa-circle-check" style="color: var(--orange); margin-right: 8px;"></i> Monthly VAT Registration, Filing &amp; Compliance</li>
+            </ul>
+          </div>
+
+          <div style="background: var(--paper); border-radius: 18px; padding: 1.75rem;">
+            <h3 style="font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--blue); margin-bottom: 1rem; font-weight: 800;">
+              Tangible Deliverables:
+            </h3>
+            <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px; font-size: 0.9rem; color: var(--ink-secondary);">
+              <li><i class="fa-solid fa-file-invoice" style="color: var(--blue); margin-right: 8px;"></i> Audited management accounts &amp; bank reconciliations</li>
+              <li><i class="fa-solid fa-file-invoice" style="color: var(--blue); margin-right: 8px;"></i> Corporate Tax Clearance Certificates (TCC) &amp; receipts</li>
+              <li><i class="fa-solid fa-file-invoice" style="color: var(--blue); margin-right: 8px;"></i> Forensic bank charge audit recovery reports</li>
+              <li><i class="fa-solid fa-file-invoice" style="color: var(--blue); margin-right: 8px;"></i> Cloud-based chart of accounts &amp; accounting policy manuals</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 02. CORPORATE FINANCE -->
+      <section id="corporate-finance" class="practice-card reveal" style="background: var(--white); border-radius: var(--radius); padding: 3rem; border: 1px solid var(--line); box-shadow: var(--shadow-soft);">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+          <div style="display: flex; align-items: center; gap: 1.25rem;">
+            <div style="width: 60px; height: 60px; border-radius: 18px; background: var(--blue-light); color: var(--blue); display: flex; align-items: center; justify-content: center; font-size: 1.6rem;">
+              <i class="fa-solid fa-chart-pie"></i>
+            </div>
+            <div>
+              <span style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--blue);">Pillar 02</span>
+              <h2 style="font-size: 1.8rem; color: var(--ink); margin-top: 2px;">Corporate Finance &amp; Capital Structuring</h2>
+            </div>
+          </div>
+          <a href="/contact?subject=Corporate+Finance+Consultation" class="btn btn-outline" style="font-size: 0.85rem; padding: 10px 20px;">
+            <span>Engage Corporate Finance</span> &rarr;
+          </a>
+        </div>
+
+        <p style="font-size: 1.05rem; color: var(--muted); line-height: 1.7; margin-bottom: 2rem;">
+          We offer clients holistic advice, targeted capital deployments, and deep relationships with investment banks, commercial banks, private equities, and angel investors. We assist businesses in sourcing affordable loans, analyzing buy-or-lease decisions, structuring mergers and acquisitions (M&amp;A), and revitalizing distressed corporate balance sheets.
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+          <div style="background: var(--paper); border-radius: 18px; padding: 1.75rem;">
+            <h3 style="font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--blue); margin-bottom: 1rem; font-weight: 800;">
+              Core Capabilities:
+            </h3>
+            <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px; font-size: 0.9rem; color: var(--ink-secondary);">
+              <li><i class="fa-solid fa-circle-check" style="color: var(--blue); margin-right: 8px;"></i> Sourcing Affordable Working Capital &amp; Term Loans</li>
+              <li><i class="fa-solid fa-circle-check" style="color: var(--blue); margin-right: 8px;"></i> Buy or Lease Decision Modeling &amp; Capital Budgeting</li>
+              <li><i class="fa-solid fa-circle-check" style="color: var(--blue); margin-right: 8px;"></i> Mergers, Acquisitions, Demergers &amp; Amalgamations</li>
+              <li><i class="fa-solid fa-circle-check" style="color: var(--blue); margin-right: 8px;"></i> Comprehensive Bankable Project Reports for Credit Facilities</li>
+              <li><i class="fa-solid fa-circle-check" style="color: var(--blue); margin-right: 8px;"></i> Private Equity Capital &amp; Preference Share Structuring</li>
+              <li><i class="fa-solid fa-circle-check" style="color: var(--blue); margin-right: 8px;"></i> Revival of Debt-Ridden Companies &amp; Creditor Moratoriums</li>
+              <li><i class="fa-solid fa-circle-check" style="color: var(--blue); margin-right: 8px;"></i> 5-Year Integrated Cash Flow Forecasting &amp; Budget Models</li>
+            </ul>
+          </div>
+
+          <div style="background: var(--paper); border-radius: 18px; padding: 1.75rem;">
+            <h3 style="font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--navy); margin-bottom: 1rem; font-weight: 800;">
+              Tangible Deliverables:
+            </h3>
+            <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px; font-size: 0.9rem; color: var(--ink-secondary);">
+              <li><i class="fa-solid fa-file-invoice" style="color: var(--navy); margin-right: 8px;"></i> Bankable project appraisal &amp; investment memorandums</li>
+              <li><i class="fa-solid fa-file-invoice" style="color: var(--navy); margin-right: 8px;"></i> Debt restructuring agreements &amp; interest haircut terms</li>
+              <li><i class="fa-solid fa-file-invoice" style="color: var(--navy); margin-right: 8px;"></i> M&amp;A valuation models &amp; due diligence reports</li>
+              <li><i class="fa-solid fa-file-invoice" style="color: var(--navy); margin-right: 8px;"></i> Dynamic 5-year financial model with sensitivity matrices</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 03. STRATEGY & BUSINESS SOLUTIONS -->
+      <section id="strategy-solutions" class="practice-card reveal" style="background: var(--white); border-radius: var(--radius); padding: 3rem; border: 1px solid var(--line); box-shadow: var(--shadow-soft);">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+          <div style="display: flex; align-items: center; gap: 1.25rem;">
+            <div style="width: 60px; height: 60px; border-radius: 18px; background: #faf5ff; color: #9333ea; display: flex; align-items: center; justify-content: center; font-size: 1.6rem;">
+              <i class="fa-solid fa-lightbulb"></i>
+            </div>
+            <div>
+              <span style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #9333ea;">Pillar 03</span>
+              <h2 style="font-size: 1.8rem; color: var(--ink); margin-top: 2px;">Strategy, Innovation &amp; AI Solutions</h2>
+            </div>
+          </div>
+          <a href="/launch" class="btn btn-outline" style="font-size: 0.85rem; padding: 10px 20px;">
+            <span>Explore CEO Bootcamps</span> &rarr;
+          </a>
+        </div>
+
+        <p style="font-size: 1.05rem; color: var(--muted); line-height: 1.7; margin-bottom: 2rem;">
+          We engage in strategic and value-adding advisory, business incorporations, and interim enterprise management. We organize strategic boot camps for CEOs of small and medium businesses, investor relations management, fixed asset certification, driving new ventures, and harnessing AI for breakthrough innovation to ensure Nigerian businesses thrive across volatile economic terrains.
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+          <div style="background: var(--paper); border-radius: 18px; padding: 1.75rem;">
+            <h3 style="font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.06em; color: #9333ea; margin-bottom: 1rem; font-weight: 800;">
+              Core Capabilities:
+            </h3>
+            <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px; font-size: 0.9rem; color: var(--ink-secondary);">
+              <li><i class="fa-solid fa-circle-check" style="color: #9333ea; margin-right: 8px;"></i> Strategic Boot Camps for SME CEOs &amp; Directors</li>
+              <li><i class="fa-solid fa-circle-check" style="color: #9333ea; margin-right: 8px;"></i> Harnessing AI for Breakthrough Business Innovation</li>
+              <li><i class="fa-solid fa-circle-check" style="color: #9333ea; margin-right: 8px;"></i> Interim Business Management &amp; Executive Continuity</li>
+              <li><i class="fa-solid fa-circle-check" style="color: #9333ea; margin-right: 8px;"></i> Driving Innovations, New Ventures &amp; Conglomerate Structuring</li>
+              <li><i class="fa-solid fa-circle-check" style="color: #9333ea; margin-right: 8px;"></i> Joint Ventures &amp; Strategic Alliances Formation</li>
+            </ul>
+          </div>
+
+          <div style="background: var(--paper); border-radius: 18px; padding: 1.75rem;">
+            <h3 style="font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--navy); margin-bottom: 1rem; font-weight: 800;">
+              Tangible Deliverables:
+            </h3>
+            <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px; font-size: 0.9rem; color: var(--ink-secondary);">
+              <li><i class="fa-solid fa-file-invoice" style="color: var(--navy); margin-right: 8px;"></i> Corporate strategic roadmap &amp; execution KPI matrix</li>
+              <li><i class="fa-solid fa-file-invoice" style="color: var(--navy); margin-right: 8px;"></i> AI workflow automation blueprint for operations</li>
+              <li><i class="fa-solid fa-file-invoice" style="color: var(--navy); margin-right: 8px;"></i> Strategic decision appraisal &amp; implementation road map</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 04. HR SERVICES & CMD TRAINING -->
+      <section id="hr-services" class="practice-card reveal" style="background: var(--white); border-radius: var(--radius); padding: 3rem; border: 1px solid var(--line); box-shadow: var(--shadow-soft);">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+          <div style="display: flex; align-items: center; gap: 1.25rem;">
+            <div style="width: 60px; height: 60px; border-radius: 18px; background: #ecfdf5; color: #059669; display: flex; align-items: center; justify-content: center; font-size: 1.6rem;">
+              <i class="fa-solid fa-users-gear"></i>
+            </div>
+            <div>
+              <span style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #059669;">Pillar 04</span>
+              <h2 style="font-size: 1.8rem; color: var(--ink); margin-top: 2px;">HR Services &amp; CMD-Certified Training</h2>
+            </div>
+          </div>
+          <a href="/contact?subject=HR+Services+Inquiry" class="btn btn-outline" style="font-size: 0.85rem; padding: 10px 20px;">
+            <span>Consult on HR</span> &rarr;
+          </a>
+        </div>
+
+        <p style="font-size: 1.05rem; color: var(--muted); line-height: 1.7; margin-bottom: 2rem;">
+          Comprehensive human resource management from recruitment to training certified by the Centre for Management Development (CMD). We optimize human capital performance, structure competitive compensation packages, perform mystery shopping and background checks, and procure statutory certifications.
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+          <div style="background: var(--paper); border-radius: 18px; padding: 1.75rem;">
+            <h3 style="font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.06em; color: #059669; margin-bottom: 1rem; font-weight: 800;">
+              Core Capabilities:
+            </h3>
+            <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px; font-size: 0.9rem; color: var(--ink-secondary);">
+              <li><i class="fa-solid fa-circle-check" style="color: #059669; margin-right: 8px;"></i> Recruitment, Selection &amp; Executive Talent Acquisition</li>
+              <li><i class="fa-solid fa-circle-check" style="color: #059669; margin-right: 8px;"></i> HR Operations, Shared Services &amp; Policy Manuals</li>
+              <li><i class="fa-solid fa-circle-check" style="color: #059669; margin-right: 8px;"></i> Compensation, Grading Schemes &amp; Benefits Architecture</li>
+              <li><i class="fa-solid fa-circle-check" style="color: #059669; margin-right: 8px;"></i> Background Checks, Credential Verification &amp; Mystery Shopping</li>
+              <li><i class="fa-solid fa-circle-check" style="color: #059669; margin-right: 8px;"></i> Training Services: Certified by Centre for Management Development (CMD)</li>
+            </ul>
+          </div>
+
+          <div style="background: var(--paper); border-radius: 18px; padding: 1.75rem;">
+            <h3 style="font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--navy); margin-bottom: 1rem; font-weight: 800;">
+              Tangible Deliverables:
+            </h3>
+            <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px; font-size: 0.9rem; color: var(--ink-secondary);">
+              <li><i class="fa-solid fa-file-invoice" style="color: var(--navy); margin-right: 8px;"></i> Complete Employee Handbook &amp; HR procedural manual</li>
+              <li><i class="fa-solid fa-file-invoice" style="color: var(--navy); margin-right: 8px;"></i> CMD accredited training certificates &amp; impact reports</li>
+              <li><i class="fa-solid fa-file-invoice" style="color: var(--navy); margin-right: 8px;"></i> Executive compensation benchmarks &amp; salary structures</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 05. AUDIT & ASSURANCE -->
+      <section id="audit-assurance" class="practice-card reveal" style="background: var(--white); border-radius: var(--radius); padding: 3rem; border: 1px solid var(--line); box-shadow: var(--shadow-soft);">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+          <div style="display: flex; align-items: center; gap: 1.25rem;">
+            <div style="width: 60px; height: 60px; border-radius: 18px; background: #eff6ff; color: #1d4ed8; display: flex; align-items: center; justify-content: center; font-size: 1.6rem;">
+              <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <div>
+              <span style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #1d4ed8;">Pillar 05</span>
+              <h2 style="font-size: 1.8rem; color: var(--ink); margin-top: 2px;">Audit, Assurance &amp; Forensic Review</h2>
+            </div>
+          </div>
+          <a href="/contact?subject=Audit+Assurance+Inquiry" class="btn btn-outline" style="font-size: 0.85rem; padding: 10px 20px;">
+            <span>Request Audit Review</span> &rarr;
+          </a>
+        </div>
+
+        <p style="font-size: 1.05rem; color: var(--muted); line-height: 1.7; margin-bottom: 2rem;">
+          Independent, rigorous assurance providing clear visibility over corporate governance, financial integrity, and risk exposures. In addition to statutory, internal, and operational audits, we conduct forensic reviews for embezzlement of assets, diversion of funds, shareholder disputes, anti-money laundering (AML), and cyber security forensics.
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+          <div style="background: var(--paper); border-radius: 18px; padding: 1.75rem;">
+            <h3 style="font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.06em; color: #1d4ed8; margin-bottom: 1rem; font-weight: 800;">
+              Core Capabilities:
+            </h3>
+            <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px; font-size: 0.9rem; color: var(--ink-secondary);">
+              <li><i class="fa-solid fa-circle-check" style="color: #1d4ed8; margin-right: 8px;"></i> Statutory Audit &amp; Tax Audit Liaison</li>
+              <li><i class="fa-solid fa-circle-check" style="color: #1d4ed8; margin-right: 8px;"></i> Internal Audit &amp; Concurrent Audit Programs</li>
+              <li><i class="fa-solid fa-circle-check" style="color: #1d4ed8; margin-right: 8px;"></i> Corporate Fraud Investigation &amp; Forensic Audits</li>
+              <li><i class="fa-solid fa-circle-check" style="color: #1d4ed8; margin-right: 8px;"></i> Advisory in Anti-Money Laundering (AML) Compliance</li>
+              <li><i class="fa-solid fa-circle-check" style="color: #1d4ed8; margin-right: 8px;"></i> Cyber Security &amp; Computer Forensic Investigations</li>
+              <li><i class="fa-solid fa-circle-check" style="color: #1d4ed8; margin-right: 8px;"></i> Stock Audit, Revenue Audit &amp; System Control Reviews</li>
+            </ul>
+          </div>
+
+          <div style="background: var(--paper); border-radius: 18px; padding: 1.75rem;">
+            <h3 style="font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--navy); margin-bottom: 1rem; font-weight: 800;">
+              Tangible Deliverables:
+            </h3>
+            <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px; font-size: 0.9rem; color: var(--ink-secondary);">
+              <li><i class="fa-solid fa-file-invoice" style="color: var(--navy); margin-right: 8px;"></i> Statutory audit opinion &amp; internal control management letters</li>
+              <li><i class="fa-solid fa-file-invoice" style="color: var(--navy); margin-right: 8px;"></i> Forensic fraud investigation evidence &amp; expert testimony reports</li>
+              <li><i class="fa-solid fa-file-invoice" style="color: var(--navy); margin-right: 8px;"></i> Assessment of claims related to loss of profit and earnings</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 06. BUSINESS SUPPORT -->
+      <section id="business-support" class="practice-card reveal" style="background: var(--white); border-radius: var(--radius); padding: 3rem; border: 1px solid var(--line); box-shadow: var(--shadow-soft);">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+          <div style="display: flex; align-items: center; gap: 1.25rem;">
+            <div style="width: 60px; height: 60px; border-radius: 18px; background: var(--yellow-light); color: var(--yellow-deep); display: flex; align-items: center; justify-content: center; font-size: 1.6rem;">
+              <i class="fa-solid fa-building-circle-check"></i>
+            </div>
+            <div>
+              <span style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--yellow-deep);">Pillar 06</span>
+              <h2 style="font-size: 1.8rem; color: var(--ink); margin-top: 2px;">Business Support &amp; Foreign Direct Investment</h2>
+            </div>
+          </div>
+          <a href="/contact?subject=Business+Support+FDI" class="btn btn-outline" style="font-size: 0.85rem; padding: 10px 20px;">
+            <span>Inquire About Setup</span> &rarr;
+          </a>
+        </div>
+
+        <p style="font-size: 1.05rem; color: var(--muted); line-height: 1.7; margin-bottom: 2rem;">
+          Helping local and international entrepreneurs establish and structure thriving entities in Nigeria. We streamline CAC private and public registrations, Limited Liability Partnerships (LLP), foreign investor equity onboarding, NGO and foundation incorporations, and post-incorporation filings.
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+          <div style="background: var(--paper); border-radius: 18px; padding: 1.75rem;">
+            <h3 style="font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--yellow-deep); margin-bottom: 1rem; font-weight: 800;">
+              Core Capabilities:
+            </h3>
+            <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px; font-size: 0.9rem; color: var(--ink-secondary);">
+              <li><i class="fa-solid fa-circle-check" style="color: var(--yellow-deep); margin-right: 8px;"></i> Foreign Direct Investment (Company/LLP Registration for Foreign Individuals)</li>
+              <li><i class="fa-solid fa-circle-check" style="color: var(--yellow-deep); margin-right: 8px;"></i> Company Formation (Private Limited, Public Limited &amp; CAC Post-Incorporation)</li>
+              <li><i class="fa-solid fa-circle-check" style="color: var(--yellow-deep); margin-right: 8px;"></i> Limited Liability Partnership Formation &amp; Conversion</li>
+              <li><i class="fa-solid fa-circle-check" style="color: var(--yellow-deep); margin-right: 8px;"></i> Registration of Trusts, NGOs &amp; Business Associations</li>
+              <li><i class="fa-solid fa-circle-check" style="color: var(--yellow-deep); margin-right: 8px;"></i> Setting Up Liaison Office, Branch Office &amp; Project Offices</li>
+            </ul>
+          </div>
+
+          <div style="background: var(--paper); border-radius: 18px; padding: 1.75rem;">
+            <h3 style="font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--navy); margin-bottom: 1rem; font-weight: 800;">
+              Tangible Deliverables:
+            </h3>
+            <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px; font-size: 0.9rem; color: var(--ink-secondary);">
+              <li><i class="fa-solid fa-file-invoice" style="color: var(--navy); margin-right: 8px;"></i> CAC Certificate of Incorporation &amp; Status Reports</li>
+              <li><i class="fa-solid fa-file-invoice" style="color: var(--navy); margin-right: 8px;"></i> NIPC Business Registration &amp; Capital Importation compliance</li>
+              <li><i class="fa-solid fa-file-invoice" style="color: var(--navy); margin-right: 8px;"></i> Constitutions, Partnership Deeds &amp; Registered Seals</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 07. BUSINESS ADVISORY -->
+      <section id="business-advisory" class="practice-card reveal" style="background: var(--white); border-radius: var(--radius); padding: 3rem; border: 1px solid var(--line); box-shadow: var(--shadow-soft);">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+          <div style="display: flex; align-items: center; gap: 1.25rem;">
+            <div style="width: 60px; height: 60px; border-radius: 18px; background: #fff7ed; color: #ea580c; display: flex; align-items: center; justify-content: center; font-size: 1.6rem;">
+              <i class="fa-solid fa-compass"></i>
+            </div>
+            <div>
+              <span style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #ea580c;">Pillar 07</span>
+              <h2 style="font-size: 1.8rem; color: var(--ink); margin-top: 2px;">Business Advisory &amp; Growth Planning</h2>
+            </div>
+          </div>
+          <a href="/contact?subject=Business+Advisory+Inquiry" class="btn btn-outline" style="font-size: 0.85rem; padding: 10px 20px;">
+            <span>Request Advisory</span> &rarr;
+          </a>
+        </div>
+
+        <p style="font-size: 1.05rem; color: var(--muted); line-height: 1.7; margin-bottom: 2rem;">
+          Translating complex market uncertainty into decisive commercial moves. We build dynamic cash flow forecast models, craft strategic decision appraisal frameworks, design enterprise succession roadmaps, and assist distressed businesses in executing resilient turnaround strategies.
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+          <div style="background: var(--paper); border-radius: 18px; padding: 1.75rem;">
+            <h3 style="font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.06em; color: #ea580c; margin-bottom: 1rem; font-weight: 800;">
+              Core Capabilities:
+            </h3>
+            <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px; font-size: 0.9rem; color: var(--ink-secondary);">
+              <li><i class="fa-solid fa-circle-check" style="color: #ea580c; margin-right: 8px;"></i> Growth Planning &amp; Business Model Turnaround</li>
+              <li><i class="fa-solid fa-circle-check" style="color: #ea580c; margin-right: 8px;"></i> Succession Planning &amp; Executive Continuity Frameworks</li>
+              <li><i class="fa-solid fa-circle-check" style="color: #ea580c; margin-right: 8px;"></i> Strategic Decision Appraisal &amp; Crafting Implementation Roadmaps</li>
+              <li><i class="fa-solid fa-circle-check" style="color: #ea580c; margin-right: 8px;"></i> Risk, Uncertainty &amp; Change Management Services</li>
+              <li><i class="fa-solid fa-circle-check" style="color: #ea580c; margin-right: 8px;"></i> Cash Flow Analysis, Forecasting &amp; Dynamic Budgeting Models</li>
+            </ul>
+          </div>
+
+          <div style="background: var(--paper); border-radius: 18px; padding: 1.75rem;">
+            <h3 style="font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--navy); margin-bottom: 1rem; font-weight: 800;">
+              Tangible Deliverables:
+            </h3>
+            <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px; font-size: 0.9rem; color: var(--ink-secondary);">
+              <li><i class="fa-solid fa-file-invoice" style="color: var(--navy); margin-right: 8px;"></i> 3-Year Enterprise Strategic Plan &amp; Scorecard</li>
+              <li><i class="fa-solid fa-file-invoice" style="color: var(--navy); margin-right: 8px;"></i> Rolling 12-Month Liquidity &amp; Cash Flow Forecast</li>
+              <li><i class="fa-solid fa-file-invoice" style="color: var(--navy); margin-right: 8px;"></i> Tailored-For-You (TFY) Strategic Diagnostic Report</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 08. SECRETARIAL & CORPORATE SUPPORT -->
+      <section id="secretarial-support" class="practice-card reveal" style="background: var(--white); border-radius: var(--radius); padding: 3rem; border: 1px solid var(--line); box-shadow: var(--shadow-soft);">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+          <div style="display: flex; align-items: center; gap: 1.25rem;">
+            <div style="width: 60px; height: 60px; border-radius: 18px; background: #f8fafc; color: #475569; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; border: 1px solid var(--line);">
+              <i class="fa-solid fa-briefcase"></i>
+            </div>
+            <div>
+              <span style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #475569;">Pillar 08</span>
+              <h2 style="font-size: 1.8rem; color: var(--ink); margin-top: 2px;">Secretarial &amp; Corporate Governance Support</h2>
+            </div>
+          </div>
+          <a href="/contact?subject=Secretarial+Support+Inquiry" class="btn btn-outline" style="font-size: 0.85rem; padding: 10px 20px;">
+            <span>Retain Company Secretary</span> &rarr;
+          </a>
+        </div>
+
+        <p style="font-size: 1.05rem; color: var(--muted); line-height: 1.7; margin-bottom: 2rem;">
+          Ensuring your enterprise maintains impeccable corporate governance and stays in perpetual good standing with regulatory authorities. We coordinate board meetings, prepare board packs and official minutes, maintain statutory registers, file statutory returns, and review Directors' reports.
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+          <div style="background: var(--paper); border-radius: 18px; padding: 1.75rem;">
+            <h3 style="font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.06em; color: #475569; margin-bottom: 1rem; font-weight: 800;">
+              Core Capabilities:
+            </h3>
+            <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px; font-size: 0.9rem; color: var(--ink-secondary);">
+              <li><i class="fa-solid fa-circle-check" style="color: #475569; margin-right: 8px;"></i> Scheduling &amp; Coordination of Board &amp; Committee Meetings</li>
+              <li><i class="fa-solid fa-circle-check" style="color: #475569; margin-right: 8px;"></i> Preparation &amp; Distribution of Minutes, Board Packs &amp; Resolutions</li>
+              <li><i class="fa-solid fa-circle-check" style="color: #475569; margin-right: 8px;"></i> Maintaining Corporate Seal &amp; Statutory Registers</li>
+              <li><i class="fa-solid fa-circle-check" style="color: #475569; margin-right: 8px;"></i> Filing of All Mandatory Annual Statutory Returns with CAC</li>
+              <li><i class="fa-solid fa-circle-check" style="color: #475569; margin-right: 8px;"></i> Review of Directors' Report &amp; Chairman's Statement</li>
+            </ul>
+          </div>
+
+          <div style="background: var(--paper); border-radius: 18px; padding: 1.75rem;">
+            <h3 style="font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--navy); margin-bottom: 1rem; font-weight: 800;">
+              Tangible Deliverables:
+            </h3>
+            <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px; font-size: 0.9rem; color: var(--ink-secondary);">
+              <li><i class="fa-solid fa-file-invoice" style="color: var(--navy); margin-right: 8px;"></i> Executed Board minutes &amp; certified resolutions</li>
+              <li><i class="fa-solid fa-file-invoice" style="color: var(--navy); margin-right: 8px;"></i> Updated Statutory Registers (Directors, Members, Charges)</li>
+              <li><i class="fa-solid fa-file-invoice" style="color: var(--navy); margin-right: 8px;"></i> CAC Annual Returns acknowledgment &amp; active status report</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 09. OUTSOURCING ACCOUNTANTS -->
+      <section id="outsourcing-accountants" class="practice-card reveal" style="background: var(--white); border-radius: var(--radius); padding: 3rem; border: 1px solid var(--line); box-shadow: var(--shadow-soft);">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+          <div style="display: flex; align-items: center; gap: 1.25rem;">
+            <div style="width: 60px; height: 60px; border-radius: 18px; background: #e0e7ff; color: #4338ca; display: flex; align-items: center; justify-content: center; font-size: 1.6rem;">
+              <i class="fa-solid fa-file-invoice-dollar"></i>
+            </div>
+            <div>
+              <span style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #4338ca;">Pillar 09</span>
+              <h2 style="font-size: 1.8rem; color: var(--ink); margin-top: 2px;">Outsourcing Accountants &amp; Financial Management</h2>
+            </div>
+          </div>
+          <a href="/contact?subject=Outsourced+Accounting+Inquiry" class="btn btn-outline" style="font-size: 0.85rem; padding: 10px 20px;">
+            <span>Retain Outsourced Finance</span> &rarr;
+          </a>
+        </div>
+
+        <p style="font-size: 1.05rem; color: var(--muted); line-height: 1.7; margin-bottom: 2rem;">
+          Affordable, elite-tier finance department capabilities without the prohibitive cost of maintaining an in-house accounting department. We handle day-to-day transaction processing, monthly payroll, cash management reporting, IFRS compliance, and serve as your primary liaison throughout external audit exercises.
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+          <div style="background: var(--paper); border-radius: 18px; padding: 1.75rem;">
+            <h3 style="font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.06em; color: #4338ca; margin-bottom: 1rem; font-weight: 800;">
+              Core Capabilities:
+            </h3>
+            <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px; font-size: 0.9rem; color: var(--ink-secondary);">
+              <li><i class="fa-solid fa-circle-check" style="color: #4338ca; margin-right: 8px;"></i> End-to-End Payroll Processing &amp; Pay Slip Generation</li>
+              <li><i class="fa-solid fa-circle-check" style="color: #4338ca; margin-right: 8px;"></i> Preparation of Annual &amp; Special Purpose Statutory Accounts</li>
+              <li><i class="fa-solid fa-circle-check" style="color: #4338ca; margin-right: 8px;"></i> Budgeting &amp; Cash Flow Planning &amp; System Reviews</li>
+              <li><i class="fa-solid fa-circle-check" style="color: #4338ca; margin-right: 8px;"></i> Physical Verification of Stocks, Assets &amp; Inventories</li>
+              <li><i class="fa-solid fa-circle-check" style="color: #4338ca; margin-right: 8px;"></i> Continued Support &amp; Assistance Throughout Audit Process</li>
+            </ul>
+          </div>
+
+          <div style="background: var(--paper); border-radius: 18px; padding: 1.75rem;">
+            <h3 style="font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--navy); margin-bottom: 1rem; font-weight: 800;">
+              Tangible Deliverables:
+            </h3>
+            <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px; font-size: 0.9rem; color: var(--ink-secondary);">
+              <li><i class="fa-solid fa-file-invoice" style="color: var(--navy); margin-right: 8px;"></i> Monthly management P&amp;L and executive dashboard</li>
+              <li><i class="fa-solid fa-file-invoice" style="color: var(--navy); margin-right: 8px;"></i> Monthly PAYE, Pension, and NHF deduction schedules</li>
+              <li><i class="fa-solid fa-file-invoice" style="color: var(--navy); margin-right: 8px;"></i> Clean, audit-ready balance sheet file for external auditors</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 10. STATUTORY CERTIFICATION -->
+      <section id="statutory-certification" class="practice-card reveal" style="background: var(--white); border-radius: var(--radius); padding: 3rem; border: 1px solid var(--line); box-shadow: var(--shadow-soft);">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+          <div style="display: flex; align-items: center; gap: 1.25rem;">
+            <div style="width: 60px; height: 60px; border-radius: 18px; background: var(--yellow-light); color: var(--yellow-deep); display: flex; align-items: center; justify-content: center; font-size: 1.6rem;">
+              <i class="fa-solid fa-certificate"></i>
+            </div>
+            <div>
+              <span style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--yellow-deep);">Pillar 10</span>
+              <h2 style="font-size: 1.8rem; color: var(--ink); margin-top: 2px;">Statutory Certification &amp; Procurement Approvals</h2>
+            </div>
+          </div>
+          <a href="/contact?subject=Statutory+Certification+Inquiry" class="btn btn-primary" style="font-size: 0.85rem; padding: 10px 20px;">
+            <span>Procure Certificates</span> <i class="fa-solid fa-arrow-right"></i>
+          </a>
+        </div>
+
+        <p style="font-size: 1.05rem; color: var(--muted); line-height: 1.7; margin-bottom: 2rem;">
+          Unlocking institutional procurement opportunities, commercial tenders, and government bids. We fast-track and secure all statutory certifications required under Nigerian legislation, including PENCOM pension compliance, NSITF employee compensation, Industrial Training Fund (ITF), Bureau of Public Procurement (BPP), and Tax Clearance Certificates (TCC).
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+          <div style="background: var(--paper); border-radius: 18px; padding: 1.75rem;">
+            <h3 style="font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--yellow-deep); margin-bottom: 1rem; font-weight: 800;">
+              Core Capabilities:
+            </h3>
+            <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px; font-size: 0.9rem; color: var(--ink-secondary);">
+              <li><i class="fa-solid fa-circle-check" style="color: var(--yellow-deep); margin-right: 8px;"></i> PENCOM (National Pension Commission) Clearance Certificates</li>
+              <li><i class="fa-solid fa-circle-check" style="color: var(--yellow-deep); margin-right: 8px;"></i> NSITF (Employees' Compensation Scheme) Certificates</li>
+              <li><i class="fa-solid fa-circle-check" style="color: var(--yellow-deep); margin-right: 8px;"></i> ITF (Industrial Training Fund) Compliance Certificates</li>
+              <li><i class="fa-solid fa-circle-check" style="color: var(--yellow-deep); margin-right: 8px;"></i> BPP (Bureau of Public Procurement) Federal Contractor Database</li>
+              <li><i class="fa-solid fa-circle-check" style="color: var(--yellow-deep); margin-right: 8px;"></i> Tax Clearance Certificates (TCC) for Direct &amp; Indirect Taxes</li>
+              <li><i class="fa-solid fa-circle-check" style="color: var(--yellow-deep); margin-right: 8px;"></i> Fixed Asset Certification for Capital Allowance Deductions</li>
+              <li><i class="fa-solid fa-circle-check" style="color: var(--yellow-deep); margin-right: 8px;"></i> Bankable Net Worth Certificates for Tender Guarantees</li>
+            </ul>
+          </div>
+
+          <div style="background: var(--paper); border-radius: 18px; padding: 1.75rem;">
+            <h3 style="font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--navy); margin-bottom: 1rem; font-weight: 800;">
+              Tangible Deliverables:
+            </h3>
+            <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px; font-size: 0.9rem; color: var(--ink-secondary);">
+              <li><i class="fa-solid fa-file-invoice" style="color: var(--navy); margin-right: 8px;"></i> Original verified statutory clearance certificates</li>
+              <li><i class="fa-solid fa-file-invoice" style="color: var(--navy); margin-right: 8px;"></i> Certified fixed asset valuation &amp; tax deduction schedule</li>
+              <li><i class="fa-solid fa-file-invoice" style="color: var(--navy); margin-right: 8px;"></i> Tender-ready institutional compliance dossier</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- UNIFIED FOOTER -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col" style="grid-column: span 1.5;">
+          <img src="/assets/img/logo-horizontal-white.svg" alt="THEWHY Consulting" style="height: 44px; margin-bottom: 1.25rem;">
+          <p style="color: #94a3b8; font-size: 0.9rem; line-height: 1.6; margin-bottom: 1.25rem;">
+            A boutique management consulting firm headquartered in Lagos, Nigeria. We provide high-impact, practical solutions in accounting, tax, corporate finance, HR, strategy, and statutory governance to turn SMEs into enduring conglomerates.
+          </p>
+          <div style="font-size: 0.8rem; color: #f8c638; font-weight: 600;">
+            <i class="fa-solid fa-building-shield"></i> An affiliate of Wale Kehinde &amp; Co. (Chartered Accountants)
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Practice Areas</h4>
+          <ul>
+            <li><a href="/services#accounting-tax">Accounting &amp; Tax</a></li>
+            <li><a href="/services#corporate-finance">Corporate Finance</a></li>
+            <li><a href="/services#strategy-solutions">Strategy &amp; AI Solutions</a></li>
+            <li><a href="/services#hr-services">HR Consulting &amp; Training</a></li>
+            <li><a href="/services#audit-assurance">Audit &amp; Forensic Review</a></li>
+            <li><a href="/services#statutory-certification">Statutory Certification</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Explore</h4>
+          <ul>
+            <li><a href="/about">About the Firm</a></li>
+            <li><a href="/industries">Who We Serve</a></li>
+            <li><a href="/team">Our Leadership Team</a></li>
+            <li><a href="/launch">SME Bootcamp (CMD)</a></li>
+            <li><a href="/insights">Articles &amp; Insights</a></li>
+            <li><a href="/admin">Executive Portal</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Contact &amp; Lagos HQ</h4>
+          <p style="color: #cbd5e1; font-size: 0.85rem; margin-bottom: 0.75rem;">
+            <i class="fa-solid fa-location-dot" style="color: #ef4c20; margin-right: 6px;"></i>
+            1a Hughes Avenue, Alagomeji, Yaba, Lagos
+          </p>
+          <p style="color: #cbd5e1; font-size: 0.85rem; margin-bottom: 0.75rem;">
+            <i class="fa-solid fa-location-dot" style="color: #356fb7; margin-right: 6px;"></i>
+            29, Isaac John Street, GRA Ikeja, Lagos
+          </p>
+          <p style="color: #cbd5e1; font-size: 0.85rem; margin-bottom: 0.75rem;">
+            <i class="fa-solid fa-phone" style="color: #f8c638; margin-right: 6px;"></i>
+            <a href="tel:+2348034992318" style="color: inherit;">+234-8034-99-23-18</a>
+          </p>
+          <p style="color: #cbd5e1; font-size: 0.85rem;">
+            <i class="fa-solid fa-envelope" style="color: #ef4c20; margin-right: 6px;"></i>
+            <a href="mailto:info@thewhy.ng" style="color: inherit;">info@thewhy.ng</a>
+          </p>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 THEWHY Consulting. All rights reserved. Registered in the Federal Republic of Nigeria.</p>
+        <div style="display: flex; gap: 1.5rem; font-size: 0.85rem;">
+          <a href="/privacy" style="color: #94a3b8;">Privacy Policy</a>
+          <a href="/terms" style="color: #94a3b8;">Terms of Use</a>
+          <a href="/admin" style="color: #94a3b8;">Admin Portal</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SME Executive Scaling Bootcamp (CMD-Certified) | THEWHY Consulting</title>
+  <meta name="description" content="THEWHY Executive Business Acceleration &amp; SME Scaling Bootcamp. A high-impact 6-week strategic immersion certified by the Centre for Management Development (CMD) for Nigerian business owners and CEOs." />
+  <meta name="theme-color" content="#111820" />
+
+  <!-- Google Fonts: DM Sans & Manrope -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/assets/img/logo-mark.svg">
+
+  <!-- Bespoke Design System CSS -->
+  <link rel="stylesheet" href="/css/custom.css">
+</head>
+<body>
+
+  <!-- PAGE PRELOADER -->
+  <div class="page-preloader" id="pagePreloader">
+    <img src="/assets/img/logo-horizontal-white.svg" alt="THEWHY Consulting" class="preloader-logo">
+    <div class="preloader-bar"></div>
+  </div>
+
+  <!-- SCROLL TO TOP -->
+  <button class="scroll-top" id="scrollTop" aria-label="Scroll to top">
+    <i class="fa-solid fa-chevron-up"></i>
+  </button>
+
+  <!-- MOBILE SLIDE-OVER DRAWER -->
+  <div class="drawer-overlay" id="drawerOverlay"></div>
+  <aside class="drawer" id="drawer">
+    <button class="drawer-close" id="drawerClose" aria-label="Close navigation">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <div class="drawer-nav">
+      <div style="margin-bottom: 16px;">
+        <img src="/assets/img/logo-horizontal-white.svg" alt="THEWHY Consulting" style="height: 40px; width: auto;">
+      </div>
+      <small>THEWHY Practice Directory</small>
+      <a href="/">Home</a>
+      <a href="/about">About Us</a>
+      <a href="/services">Services</a>
+      <a href="/industries">Who We Serve</a>
+      <a href="/team">Our Team</a>
+      <a href="/insights">Insights</a>
+      <a href="/launch" class="active">Special Program</a>
+      <a href="/contact">Contact</a>
+      <a href="/admin">Executive Portal</a>
+      <a href="#register" class="drawer-cta">Apply for Bootcamp &rarr;</a>
+    </div>
+  </aside>
+
+  <!-- FLOATING FROSTED GLASS SITE NAVIGATION -->
+  <nav class="site-nav" id="siteNav">
+    <div class="container">
+      <div class="nav-shell">
+        <a class="brand" href="/">
+          <img src="/assets/img/logo-horizontal.svg" alt="THEWHY Consulting" class="brand-logo">
+        </a>
+
+        <div class="nav-links">
+          <a href="/">Home</a>
+          <a href="/about">About</a>
+          <a href="/services">Services</a>
+          <a href="/industries">Industries</a>
+          <a href="/team">Our Team</a>
+          <a href="/insights">Insights</a>
+          <a href="/launch" class="active">Special Program</a>
+          <a href="/contact">Contact</a>
+        </div>
+
+        <div class="nav-actions">
+          <a href="#register" class="nav-cta">
+            <span>Apply Now</span> <i class="fa-solid fa-arrow-right" style="font-size:11px;"></i>
+          </a>
+          <button class="menu-btn" id="menuBtn" aria-label="Open navigation">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- PROGRAM HERO -->
+  <header class="subpage-hero" style="padding: 10rem 0 5rem 0;">
+    <div class="subpage-hero-bg" style="background-image: url('/assets/img/banners/boardroom-strategy.jpg');"></div>
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="/">Home</a> <span>/</span> Executive Programme
+      </div>
+      <div style="display: inline-block; background: rgba(248,198,56,0.18); border: 1px solid var(--yellow); color: var(--yellow); padding: 6px 16px; border-radius: 30px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1.25rem;" id="program-badge">
+        <i class="fa-solid fa-award"></i> CMD-Certified Executive Programme
+      </div>
+      <h1 class="reveal" style="max-width: 900px;" id="program-headline">Transform Your SME into an Enduring Conglomerate</h1>
+      <p class="hero-lead reveal delay-1" style="max-width: 820px;" id="program-subtitle">
+        A practical, high-impact 6-week strategic immersion designed for Founders, Managing Directors, and Finance Leaders to master tax resilience, capital structuring, and operational scalability in Nigeria.
+      </p>
+      <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 2rem;">
+        <a href="#register" class="btn btn-primary">
+          <span>Secure Executive Seat</span> <i class="fa-solid fa-arrow-down"></i>
+        </a>
+        <a href="#curriculum" class="btn btn-secondary" style="background: rgba(255,255,255,0.12); color: #fff; border-color: rgba(255,255,255,0.25);">
+          <span>View 6-Week Syllabus</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- QUICK HIGHLIGHTS METRICS BAR -->
+  <section style="background: var(--white); border-bottom: 1px solid var(--line); padding: 2rem 0;">
+    <div class="container">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; text-align: center;">
+        <div>
+          <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 700;">Accreditation</div>
+          <div style="font-size: 1.2rem; font-weight: 800; color: var(--navy); margin-top: 4px;">CMD Certified</div>
+        </div>
+        <div>
+          <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 700;">Format</div>
+          <div style="font-size: 1.2rem; font-weight: 800; color: var(--blue); margin-top: 4px;">Hybrid (Lagos HQ + Virtual)</div>
+        </div>
+        <div>
+          <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 700;">Duration</div>
+          <div style="font-size: 1.2rem; font-weight: 800; color: var(--orange); margin-top: 4px;">6 Intensive Weeks</div>
+        </div>
+        <div>
+          <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 700;">Cohort Intake</div>
+          <div style="font-size: 1.2rem; font-weight: 800; color: var(--yellow-deep); margin-top: 4px;">Limited to 25 Founders</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN CONTENT & DETAILS -->
+  <main class="page-content" style="padding: 5rem 0;">
+    <div class="container">
+
+      <!-- KEY BENEFITS -->
+      <div style="margin-bottom: 5rem;">
+        <div class="sec-intro text-center" style="max-width: 720px; margin: 0 auto 3rem auto; text-align: center;">
+          <span class="sec-tag">Proven Value</span>
+          <h2 class="sec-title" style="margin-top: 0.75rem;">Why Forward-Thinking CEOs Join This Programme</h2>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem;">
+          <div class="mono-card" style="background: var(--white); border-radius: 20px; padding: 2rem; border: 1px solid var(--line);">
+            <div style="font-size: 1.5rem; color: var(--orange); margin-bottom: 1rem;"><i class="fa-solid fa-chess"></i></div>
+            <h3 style="font-size: 1.2rem; margin-bottom: 0.75rem; color: var(--ink);">The Chessboard Turnaround Framework</h3>
+            <p style="color: var(--muted); font-size: 0.92rem; line-height: 1.6;">
+              Learn how to outmaneuver competitors by originating bold strategies and moving the heavy structural pieces of your business toward decisive market advantage.
+            </p>
+          </div>
+
+          <div class="mono-card" style="background: var(--white); border-radius: 20px; padding: 2rem; border: 1px solid var(--line);">
+            <div style="font-size: 1.5rem; color: var(--blue); margin-bottom: 1rem;"><i class="fa-solid fa-shield-halved"></i></div>
+            <h3 style="font-size: 1.2rem; margin-bottom: 0.75rem; color: var(--ink);">Tax Shielding &amp; Audit Defense</h3>
+            <p style="color: var(--muted); font-size: 0.92rem; line-height: 1.6;">
+              Build unshakeable statutory compliance with FIRS and State IRS, leverage legal incentives, and secure verified Tax Clearance Certificates (TCC) stress-free.
+            </p>
+          </div>
+
+          <div class="mono-card" style="background: var(--white); border-radius: 20px; padding: 2rem; border: 1px solid var(--line);">
+            <div style="font-size: 1.5rem; color: var(--yellow-deep); margin-bottom: 1rem;"><i class="fa-solid fa-money-bill-trend-up"></i></div>
+            <h3 style="font-size: 1.2rem; margin-bottom: 0.75rem; color: var(--ink);">Bankable Capital Structuring</h3>
+            <p style="color: var(--muted); font-size: 0.92rem; line-height: 1.6;">
+              Understand how commercial bank credit committees think. Structure bankable project reports and access affordable expansion loans and private equity.
+            </p>
+          </div>
+
+          <div class="mono-card" style="background: var(--white); border-radius: 20px; padding: 2rem; border: 1px solid var(--line);">
+            <div style="font-size: 1.5rem; color: #059669; margin-bottom: 1rem;"><i class="fa-solid fa-robot"></i></div>
+            <h3 style="font-size: 1.2rem; margin-bottom: 0.75rem; color: var(--ink);">AI &amp; Cloud Financial Systems</h3>
+            <p style="color: var(--muted); font-size: 0.92rem; line-height: 1.6;">
+              Transition from manual spreadsheets to automated cloud dashboards (QuickBooks, Zoho, Sage) and harness AI for breakthrough operational productivity.
+            </p>
+          </div>
+
+          <div class="mono-card" style="background: var(--white); border-radius: 20px; padding: 2rem; border: 1px solid var(--line);">
+            <div style="font-size: 1.5rem; color: var(--navy); margin-bottom: 1rem;"><i class="fa-solid fa-stamp"></i></div>
+            <h3 style="font-size: 1.2rem; margin-bottom: 0.75rem; color: var(--ink);">CMD Certified Credential</h3>
+            <p style="color: var(--muted); font-size: 0.92rem; line-height: 1.6;">
+              Graduate with executive credentials certified by Nigeria's Centre for Management Development, boosting tender qualification and corporate prestige.
+            </p>
+          </div>
+
+          <div class="mono-card" style="background: var(--white); border-radius: 20px; padding: 2rem; border: 1px solid var(--line);">
+            <div style="font-size: 1.5rem; color: var(--orange); margin-bottom: 1rem;"><i class="fa-solid fa-users"></i></div>
+            <h3 style="font-size: 1.2rem; margin-bottom: 0.75rem; color: var(--ink);">Exclusive Founder Network</h3>
+            <p style="color: var(--muted); font-size: 0.92rem; line-height: 1.6;">
+              Engage with a curated cohort of peer CEOs, senior chartered accountants, commercial bank executives, and institutional investors in private roundtables.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6-WEEK SYLLABUS -->
+      <div id="curriculum" style="margin-bottom: 5rem;">
+        <div class="sec-intro text-center" style="max-width: 720px; margin: 0 auto 3rem auto; text-align: center;">
+          <span class="sec-tag">Structured Roadmap</span>
+          <h2 class="sec-title" style="margin-top: 0.75rem;">6-Week Executive Curriculum</h2>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 1.25rem; max-width: 900px; margin: 0 auto;">
+          
+          <div style="background: var(--white); border-radius: 16px; padding: 1.75rem 2rem; border: 1px solid var(--line); display: flex; gap: 1.5rem; align-items: flex-start;">
+            <div style="background: var(--orange-light); color: var(--orange); font-weight: 800; font-size: 0.85rem; padding: 8px 14px; border-radius: 10px; white-space: nowrap;">Week 01</div>
+            <div>
+              <h3 style="font-size: 1.15rem; margin-bottom: 0.5rem; color: var(--ink);">Financial Diagnostics &amp; Cloud Treasury Architecture</h3>
+              <p style="color: var(--muted); font-size: 0.9rem; line-height: 1.5;">Stress-testing balance sheets, identifying hidden cash flow drains, algorithmic bank charge audits, and establishing cloud accounting standards.</p>
+            </div>
+          </div>
+
+          <div style="background: var(--white); border-radius: 16px; padding: 1.75rem 2rem; border: 1px solid var(--line); display: flex; gap: 1.5rem; align-items: flex-start;">
+            <div style="background: var(--blue-light); color: var(--blue); font-weight: 800; font-size: 0.85rem; padding: 8px 14px; border-radius: 10px; white-space: nowrap;">Week 02</div>
+            <div>
+              <h3 style="font-size: 1.15rem; margin-bottom: 0.5rem; color: var(--ink);">Tax Optimization &amp; Statutory Approvals (TCC / PENCOM)</h3>
+              <p style="color: var(--muted); font-size: 0.9rem; line-height: 1.5;">Navigating CITA, VAT, and withholding taxes, legal tax planning incentives, and procuring PENCOM, ITF, and NSITF procurement certificates.</p>
+            </div>
+          </div>
+
+          <div style="background: var(--white); border-radius: 16px; padding: 1.75rem 2rem; border: 1px solid var(--line); display: flex; gap: 1.5rem; align-items: flex-start;">
+            <div style="background: var(--yellow-light); color: var(--yellow-deep); font-weight: 800; font-size: 0.85rem; padding: 8px 14px; border-radius: 10px; white-space: nowrap;">Week 03</div>
+            <div>
+              <h3 style="font-size: 1.15rem; margin-bottom: 0.5rem; color: var(--ink);">Corporate Finance &amp; Sourcing Affordable Capital</h3>
+              <p style="color: var(--muted); font-size: 0.9rem; line-height: 1.5;">Preparing bankable project reports, debt turnaround frameworks, evaluating buy-or-lease decisions, and attracting private equity.</p>
+            </div>
+          </div>
+
+          <div style="background: var(--white); border-radius: 16px; padding: 1.75rem 2rem; border: 1px solid var(--line); display: flex; gap: 1.5rem; align-items: flex-start;">
+            <div style="background: #ecfdf5; color: #059669; font-weight: 800; font-size: 0.85rem; padding: 8px 14px; border-radius: 10px; white-space: nowrap;">Week 04</div>
+            <div>
+              <h3 style="font-size: 1.15rem; margin-bottom: 0.5rem; color: var(--ink);">AI Integration &amp; Operational Automation</h3>
+              <p style="color: var(--muted); font-size: 0.9rem; line-height: 1.5;">Deploying generative AI and workflow automations to streamline customer acquisition, financial reporting, and compliance monitoring.</p>
+            </div>
+          </div>
+
+          <div style="background: var(--white); border-radius: 16px; padding: 1.75rem 2rem; border: 1px solid var(--line); display: flex; gap: 1.5rem; align-items: flex-start;">
+            <div style="background: #f1f5f9; color: var(--navy); font-weight: 800; font-size: 0.85rem; padding: 8px 14px; border-radius: 10px; white-space: nowrap;">Week 05</div>
+            <div>
+              <h3 style="font-size: 1.15rem; margin-bottom: 0.5rem; color: var(--ink);">Corporate Governance &amp; Founder Succession</h3>
+              <p style="color: var(--muted); font-size: 0.9rem; line-height: 1.5;">Building independent advisory boards, maintaining statutory registers, drafting executive compensation plans, and creating continuity charters.</p>
+            </div>
+          </div>
+
+          <div style="background: var(--white); border-radius: 16px; padding: 1.75rem 2rem; border: 1px solid var(--line); display: flex; gap: 1.5rem; align-items: flex-start;">
+            <div style="background: var(--orange-light); color: var(--orange); font-weight: 800; font-size: 0.85rem; padding: 8px 14px; border-radius: 10px; white-space: nowrap;">Week 06</div>
+            <div>
+              <h3 style="font-size: 1.15rem; margin-bottom: 0.5rem; color: var(--ink);">Scale-Up Strategy, Mergers &amp; Capstone Presentation</h3>
+              <p style="color: var(--muted); font-size: 0.9rem; line-height: 1.5;">Joint ventures, M&amp;A readiness, executing the final strategic turnaround plan, and certification award ceremony.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- REGISTRATION / APPLICATION SECTION -->
+      <div id="register" style="background: var(--white); border-radius: var(--radius); padding: 3.5rem 3rem; border: 1px solid var(--line); box-shadow: var(--shadow); margin-bottom: 5rem;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 3rem; align-items: start;">
+          <div>
+            <span class="sec-tag" style="background: var(--orange-light); color: var(--orange);">Limited Executive Seats</span>
+            <h2 style="font-size: 2.2rem; margin: 1rem 0 1.25rem 0;">Apply for the Next Executive Cohort</h2>
+            <p style="color: var(--muted); line-height: 1.65; margin-bottom: 1.5rem;">
+              Admission is selective to ensure every participant engages in confidential, high-level peer exchanges. Please provide your business details below.
+            </p>
+            
+            <div style="background: var(--paper); border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem;">
+              <div style="font-weight: 700; color: var(--ink); margin-bottom: 0.5rem;">What Happens Next:</div>
+              <ul style="list-style: none; padding: 0; font-size: 0.88rem; color: var(--muted); line-height: 1.6;">
+                <li><i class="fa-solid fa-circle-check" style="color: var(--orange); margin-right: 6px;"></i> 24-Hour admissions review by THEWHY panel</li>
+                <li><i class="fa-solid fa-circle-check" style="color: var(--orange); margin-right: 6px;"></i> Formal syllabus prospectus and fee schedule emailed</li>
+                <li><i class="fa-solid fa-circle-check" style="color: var(--orange); margin-right: 6px;"></i> Diagnostic onboarding call with senior partner</li>
+              </ul>
+            </div>
+
+            <div style="font-size: 0.85rem; color: var(--muted);">
+              Need corporate group sponsorship? Call our training coordinator at <strong style="color: var(--ink);">+234-8034-99-23-18</strong>.
+            </div>
+          </div>
+
+          <!-- Application Form -->
+          <form id="bootcamp-form" style="display: flex; flex-direction: column; gap: 1.25rem;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem;">
+              <div>
+                <label style="display: block; font-size: 0.82rem; font-weight: 700; color: var(--ink); margin-bottom: 6px;">Full Name *</label>
+                <input type="text" id="bc-name" required placeholder="Alhaji Tunde Balogun" style="width: 100%; padding: 12px 16px; border: 1px solid var(--line); border-radius: 12px; font-size: 0.9rem; background: var(--paper);">
+              </div>
+              <div>
+                <label style="display: block; font-size: 0.82rem; font-weight: 700; color: var(--ink); margin-bottom: 6px;">Company / Enterprise *</label>
+                <input type="text" id="bc-company" required placeholder="Logistics &amp; Haulage Ltd" style="width: 100%; padding: 12px 16px; border: 1px solid var(--line); border-radius: 12px; font-size: 0.9rem; background: var(--paper);">
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem;">
+              <div>
+                <label style="display: block; font-size: 0.82rem; font-weight: 700; color: var(--ink); margin-bottom: 6px;">Work Email *</label>
+                <input type="email" id="bc-email" required placeholder="ceo@company.com" style="width: 100%; padding: 12px 16px; border: 1px solid var(--line); border-radius: 12px; font-size: 0.9rem; background: var(--paper);">
+              </div>
+              <div>
+                <label style="display: block; font-size: 0.82rem; font-weight: 700; color: var(--ink); margin-bottom: 6px;">Phone / WhatsApp *</label>
+                <input type="tel" id="bc-phone" required placeholder="+234 803 123 4567" style="width: 100%; padding: 12px 16px; border: 1px solid var(--line); border-radius: 12px; font-size: 0.9rem; background: var(--paper);">
+              </div>
+            </div>
+
+            <div>
+              <label style="display: block; font-size: 0.82rem; font-weight: 700; color: var(--ink); margin-bottom: 6px;">Current Role / Position</label>
+              <select id="bc-role" style="width: 100%; padding: 12px 16px; border: 1px solid var(--line); border-radius: 12px; font-size: 0.9rem; background: var(--paper);">
+                <option value="Founder / CEO">Founder / Chief Executive Officer</option>
+                <option value="Managing Director">Managing Director</option>
+                <option value="Chief Financial Officer">Chief Financial Officer / Finance Director</option>
+                <option value="Executive Director">Executive Director / Board Member</option>
+                <option value="Business Owner / Partner">Business Owner / Managing Partner</option>
+              </select>
+            </div>
+
+            <div>
+              <label style="display: block; font-size: 0.82rem; font-weight: 700; color: var(--ink); margin-bottom: 6px;">Primary Challenge You Want to Solve</label>
+              <textarea id="bc-challenge" rows="3" placeholder="e.g. Tax audit resolution, recovering excess bank charges, or structuring bankable expansion capital..." style="width: 100%; padding: 12px 16px; border: 1px solid var(--line); border-radius: 12px; font-size: 0.9rem; background: var(--paper); resize: vertical;"></textarea>
+            </div>
+
+            <button type="submit" id="bc-submit-btn" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 14px; font-size: 1rem; margin-top: 6px;">
+              <span>Submit Executive Application</span> <i class="fa-solid fa-arrow-right"></i>
+            </button>
+
+            <div id="bc-alert" style="display: none; padding: 12px; border-radius: 10px; font-size: 0.88rem; text-align: center;"></div>
+          </form>
+        </div>
+      </div>
+
+      <!-- FAQS -->
+      <div>
+        <div class="sec-intro text-center" style="max-width: 680px; margin: 0 auto 3rem auto; text-align: center;">
+          <span class="sec-tag">Clarity &amp; Assurance</span>
+          <h2 class="sec-title" style="margin-top: 0.75rem;">Frequently Asked Questions</h2>
+        </div>
+
+        <div style="max-width: 840px; margin: 0 auto; display: flex; flex-direction: column; gap: 1rem;">
+          <div style="background: var(--white); border-radius: 16px; padding: 1.75rem; border: 1px solid var(--line);">
+            <h4 style="font-size: 1.05rem; color: var(--ink); margin-bottom: 0.5rem; font-weight: 700;">Who is this programme tailored for?</h4>
+            <p style="color: var(--muted); font-size: 0.92rem; line-height: 1.6;">Business owners, CEOs, Managing Directors, and Finance Controllers of established SMEs operating with annual turnover from ₦25M to ₦2B+ who want to scale into enduring institutions.</p>
+          </div>
+
+          <div style="background: var(--white); border-radius: 16px; padding: 1.75rem; border: 1px solid var(--line);">
+            <h4 style="font-size: 1.05rem; color: var(--ink); margin-bottom: 0.5rem; font-weight: 700;">Is the training certified by statutory bodies?</h4>
+            <p style="color: var(--muted); font-size: 0.92rem; line-height: 1.6;">Yes. All training is fully certified by the Centre for Management Development (CMD), qualifying participants for mandatory professional development credits and procurement bids.</p>
+          </div>
+
+          <div style="background: var(--white); border-radius: 16px; padding: 1.75rem; border: 1px solid var(--line);">
+            <h4 style="font-size: 1.05rem; color: var(--ink); margin-bottom: 0.5rem; font-weight: 700;">What is the format and duration?</h4>
+            <p style="color: var(--muted); font-size: 0.92rem; line-height: 1.6;">The programme runs for 6 weeks in a flexible hybrid format: weekend executive workshops at our Lagos training facility and weekly virtual interactive strategy masterclasses.</p>
+          </div>
+
+          <div style="background: var(--white); border-radius: 16px; padding: 1.75rem; border: 1px solid var(--line);">
+            <h4 style="font-size: 1.05rem; color: var(--ink); margin-bottom: 0.5rem; font-weight: 700;">How do I register or sponsor team members?</h4>
+            <p style="color: var(--muted); font-size: 0.92rem; line-height: 1.6;">Submit the registration form on this page or contact our training desk directly at info@thewhy.ng or +234-8034-99-23-18. Group discounts are available for corporate teams.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- UNIFIED FOOTER -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col" style="grid-column: span 1.5;">
+          <img src="/assets/img/logo-horizontal-white.svg" alt="THEWHY Consulting" style="height: 44px; margin-bottom: 1.25rem;">
+          <p style="color: #94a3b8; font-size: 0.9rem; line-height: 1.6; margin-bottom: 1.25rem;">
+            A boutique management consulting firm headquartered in Lagos, Nigeria. We provide high-impact, practical solutions in accounting, tax, corporate finance, HR, strategy, and statutory governance to turn SMEs into enduring conglomerates.
+          </p>
+          <div style="font-size: 0.8rem; color: #f8c638; font-weight: 600;">
+            <i class="fa-solid fa-building-shield"></i> An affiliate of Wale Kehinde &amp; Co. (Chartered Accountants)
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Practice Areas</h4>
+          <ul>
+            <li><a href="/services#accounting-tax">Accounting &amp; Tax</a></li>
+            <li><a href="/services#corporate-finance">Corporate Finance</a></li>
+            <li><a href="/services#strategy-solutions">Strategy &amp; AI Solutions</a></li>
+            <li><a href="/services#hr-services">HR Consulting &amp; Training</a></li>
+            <li><a href="/services#audit-assurance">Audit &amp; Forensic Review</a></li>
+            <li><a href="/services#statutory-certification">Statutory Certification</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Explore</h4>
+          <ul>
+            <li><a href="/about">About the Firm</a></li>
+            <li><a href="/industries">Who We Serve</a></li>
+            <li><a href="/team">Our Leadership Team</a></li>
+            <li><a href="/launch">SME Bootcamp (CMD)</a></li>
+            <li><a href="/insights">Articles &amp; Insights</a></li>
+            <li><a href="/admin">Executive Portal</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Contact &amp; Lagos HQ</h4>
+          <p style="color: #cbd5e1; font-size: 0.85rem; margin-bottom: 0.75rem;">
+            <i class="fa-solid fa-location-dot" style="color: #ef4c20; margin-right: 6px;"></i>
+            1a Hughes Avenue, Alagomeji, Yaba, Lagos
+          </p>
+          <p style="color: #cbd5e1; font-size: 0.85rem; margin-bottom: 0.75rem;">
+            <i class="fa-solid fa-location-dot" style="color: #356fb7; margin-right: 6px;"></i>
+            29, Isaac John Street, GRA Ikeja, Lagos
+          </p>
+          <p style="color: #cbd5e1; font-size: 0.85rem; margin-bottom: 0.75rem;">
+            <i class="fa-solid fa-phone" style="color: #f8c638; margin-right: 6px;"></i>
+            <a href="tel:+2348034992318" style="color: inherit;">+234-8034-99-23-18</a>
+          </p>
+          <p style="color: #cbd5e1; font-size: 0.85rem;">
+            <i class="fa-solid fa-envelope" style="color: #ef4c20; margin-right: 6px;"></i>
+            <a href="mailto:info@thewhy.ng" style="color: inherit;">info@thewhy.ng</a>
+          </p>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 THEWHY Consulting. All rights reserved. Registered in the Federal Republic of Nigeria.</p>
+        <div style="display: flex; gap: 1.5rem; font-size: 0.85rem;">
+          <a href="/privacy" style="color: #94a3b8;">Privacy Policy</a>
+          <a href="/terms" style="color: #94a3b8;">Terms of Use</a>
+          <a href="/admin" style="color: #94a3b8;">Admin Portal</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/main.js"></script>
+  <script>
+    document.getElementById('bootcamp-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const btn = document.getElementById('bc-submit-btn');
+      const alertBox = document.getElementById('bc-alert');
+      const originalText = btn.innerHTML;
+
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Submitting Application...';
+
+      const payload = {
+        name: document.getElementById('bc-name').value,
+        company: document.getElementById('bc-company').value,
+        email: document.getElementById('bc-email').value,
+        phone: document.getElementById('bc-phone').value,
+        serviceRequired: 'SME Executive Bootcamp (CMD Accredited)',
+        message: 'Role: ' + document.getElementById('bc-role').value + ' | Challenge: ' + (document.getElementById('bc-challenge').value || 'Scale & Tax Governance')
+      };
+
+      try {
+        const res = await fetch('/api/inquiries', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.success) {
+          alertBox.style.display = 'block';
+          alertBox.style.background = '#ecfdf5';
+          alertBox.style.color = '#059669';
+          alertBox.innerHTML = '<i class="fa-solid fa-circle-check"></i> ' + (data.message || 'Application submitted successfully! Our admissions panel will contact you.');
+          document.getElementById('bootcamp-form').reset();
+        } else {
+          throw new Error(data.error || 'Submission failed');
+        }
+      } catch (err) {
+        alertBox.style.display = 'block';
+        alertBox.style.background = '#fef2f2';
+        alertBox.style.color = '#dc2626';
+        alertBox.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> ' + err.message;
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = originalText;
+      }
+    });
+  </script>
+</body>
+</html>

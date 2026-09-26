@@ -1,0 +1,31 @@
+{
+  "name": "whyng-consulting",
+  "version": "2.0.0",
+  "description": "Fullstack Platform for THEWHY Consulting (why.ng) - Management Consulting & Advisory",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "dev": "node --watch server/server.js",
+    "migrate": "node server/db/migrate.js"
+  },
+  "keywords": [
+    "consulting",
+    "management-consulting",
+    "tax",
+    "nigeria",
+    "lagos",
+    "corporate-finance",
+    "wale-kehinde"
+  ],
+  "author": "THEWHY Consulting",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-rate-limit": "^8.7.0",
+    "helmet": "^8.3.0",
+    "mysql2": "^3.24.4",
+    "uuid": "^9.0.1"
+  }
+}

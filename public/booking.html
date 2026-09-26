@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Book a Consultation | THEWHY Consulting</title>
+  <meta name="description" content="Schedule a 45-minute direct advisory session with practice directors at THEWHY Consulting Lagos headquarters or virtually." />
+  <meta name="theme-color" content="#111820" />
+
+  <!-- Google Fonts: DM Sans & Manrope -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/assets/img/logo-mark.svg">
+
+  <!-- Bespoke Design System CSS -->
+  <link rel="stylesheet" href="/css/custom.css">
+</head>
+<body>
+
+  <!-- PAGE PRELOADER -->
+  <div class="page-preloader" id="pagePreloader">
+    <img src="/assets/img/logo-horizontal-white.svg" alt="THEWHY Consulting" class="preloader-logo">
+    <div class="preloader-bar"></div>
+  </div>
+
+  <!-- SCROLL TO TOP -->
+  <button class="scroll-top" id="scrollTop" aria-label="Scroll to top">
+    <i class="fa-solid fa-chevron-up"></i>
+  </button>
+
+  <!-- MOBILE SLIDE-OVER DRAWER -->
+  <div class="drawer-overlay" id="drawerOverlay"></div>
+  <aside class="drawer" id="drawer">
+    <button class="drawer-close" id="drawerClose" aria-label="Close navigation">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <div class="drawer-nav">
+      <div style="margin-bottom: 16px;">
+        <img src="/assets/img/logo-horizontal-white.svg" alt="THEWHY Consulting" style="height: 40px; width: auto;">
+      </div>
+      <small>THEWHY Practice Directory</small>
+      <a href="/">Home</a>
+      <a href="/about">About Us</a>
+      <a href="/services">Services</a>
+      <a href="/calculator">Fee Calculator</a>
+      <a href="/case-studies">Track Record</a>
+      <a href="/insights">Insights</a>
+      <a href="/contact">Contact</a>
+      <a href="/admin">Executive Portal</a>
+      <a href="/booking" class="drawer-cta">Book Consultation &rarr;</a>
+    </div>
+  </aside>
+
+  <!-- FLOATING FROSTED GLASS SITE NAVIGATION -->
+  <nav class="site-nav" id="siteNav">
+    <div class="container">
+      <div class="nav-shell">
+        <a class="brand" href="/">
+          <img src="/assets/img/logo-horizontal.svg" alt="THEWHY Consulting" class="brand-logo">
+        </a>
+
+        <div class="nav-links">
+          <a href="/">Home</a>
+          <a href="/about">About</a>
+          <a href="/services">Services</a>
+          <a href="/calculator">Fee Calculator</a>
+          <a href="/case-studies">Track Record</a>
+          <a href="/insights">Insights</a>
+          <a href="/contact">Contact</a>
+        </div>
+
+        <div class="nav-actions">
+          <a href="/booking" class="nav-cta">
+            <span>Book Consultation</span> <i class="fa-solid fa-arrow-right" style="font-size:11px;"></i>
+          </a>
+          <button class="menu-btn" id="menuBtn" aria-label="Open navigation">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- SUBPAGE HERO -->
+  <header class="subpage-hero">
+    <div class="subpage-hero-bg" style="background-image: url('/assets/img/banners/contract-signing.jpg');"></div>
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="/">Home</a> <span>/</span> Book Consultation
+      </div>
+      <h1 class="reveal">Schedule Advisory Session</h1>
+      <p class="hero-lead reveal delay-1">
+        Direct boardroom access to chartered turnaround directors. We review your financial dilemma, identify regulatory liabilities, and outline an immediate execution roadmap.
+      </p>
+
+      <div class="hero-stats reveal delay-2">
+        <div class="hero-stat">
+          <strong>45 Mins</strong>
+          <span>Focused Session</span>
+        </div>
+        <div class="hero-stat">
+          <strong>Virtual or Lagos HQ</strong>
+          <span>Flexible Formats</span>
+        </div>
+        <div class="hero-stat">
+          <strong>Strict NDA</strong>
+          <span>Absolute Confidentiality</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN BOOKING SECTION -->
+  <section class="section" style="background:var(--paper);">
+    <div class="container">
+      <div class="booking-grid">
+        
+        <!-- LEFT: BOOKING FORM -->
+        <div class="booking-form-box">
+          
+          <div style="margin-bottom:24px;">
+            <span class="section-kicker">Consultation Request</span>
+            <h2 style="font-size:26px; letter-spacing:-0.03em;">Book Your Session</h2>
+            <p style="font-size:14px; color:var(--muted); margin-top:4px;">Fill in your details below to schedule an advisory consultation.</p>
+          </div>
+
+          <div id="bookingMsg" class="form-alert" style="display:none;"></div>
+
+          <form id="bookingForm">
+            <input type="hidden" name="estimatedFee" value="">
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Full Name *</label>
+                <input type="text" name="clientName" class="form-control" placeholder="e.g. Adebayo Ogunlesi" required>
+              </div>
+
+              <div class="form-group">
+                <label>Corporate Email *</label>
+                <input type="email" name="email" class="form-control" placeholder="adebayo@company.ng" required>
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Phone / WhatsApp *</label>
+                <input type="tel" name="phone" class="form-control" placeholder="+234 803 000 0000" required>
+              </div>
+
+              <div class="form-group">
+                <label>Company / Enterprise Name</label>
+                <input type="text" name="companyName" class="form-control" placeholder="e.g. Apex Marine Logistics Ltd">
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Primary Advisory Area *</label>
+                <select name="service" class="form-control" required>
+                  <option value="Accounting &amp; Tax Compliance">Accounting &amp; Tax Compliance</option>
+                  <option value="Corporate Finance &amp; Turnaround">Corporate Finance &amp; Turnaround</option>
+                  <option value="Forensic Bank Charges Recovery">Forensic Bank Charges Recovery</option>
+                  <option value="Fixed Asset Verification &amp; Valuation">Fixed Asset Verification &amp; Valuation</option>
+                  <option value="Strategy &amp; AI Integration">Strategy &amp; AI Integration</option>
+                  <option value="CMD Accredited HR Training">CMD Accredited HR Training</option>
+                  <option value="PENCOM &amp; ITF Clearance">PENCOM &amp; ITF Clearance</option>
+                  <option value="General Strategic Advisory" selected>General Strategic Advisory</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label>Meeting Format *</label>
+                <select name="meetingType" class="form-control" required>
+                  <option value="Virtual (Google Meet)">Virtual (Google Meet Video)</option>
+                  <option value="In-Person (Yaba Lagos HQ)">In-Person (Yaba, Lagos HQ)</option>
+                  <option value="Telephone Conference">Telephone Conference</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Preferred Date</label>
+                <input type="date" name="date" class="form-control">
+              </div>
+
+              <div class="form-group">
+                <label>Preferred Time Slot</label>
+                <select name="timeSlot" class="form-control">
+                  <option value="10:00 AM - 10:45 AM">Morning: 10:00 AM - 10:45 AM</option>
+                  <option value="02:00 PM - 02:45 PM">Afternoon: 02:00 PM - 02:45 PM</option>
+                  <option value="04:00 PM - 04:45 PM">Late Afternoon: 04:00 PM - 04:45 PM</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Company Scale</label>
+              <select name="companySize" class="form-control">
+                <option value="Micro (1-10 staff)">Micro / Startup (1-10 staff)</option>
+                <option value="SME (10-100 staff)" selected>Growing SME (10-100 staff)</option>
+                <option value="Mid-Market (100-500 staff)">Mid-Market Enterprise (100-500 staff)</option>
+                <option value="Large Conglomerate (500+ staff)">Conglomerate / Group (500+ staff)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Briefly Describe the Scenario or Challenge</label>
+              <textarea name="message" class="form-control" placeholder="Provide background on the specific dilemma (e.g. pending bank audit, tax demand notice, debt restructuring, or upcoming procurement bid)..."></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width:100%; min-height:54px; font-size:15px;">
+              <span>Submit Consultation Request</span> <i class="fa-solid fa-arrow-right"></i>
+            </button>
+            <p style="text-align:center; font-size:11px; color:var(--muted); margin-top:12px;">
+              <i class="fa-solid fa-lock" style="color:var(--blue)"></i> Encrypted transmission under professional client confidentiality.
+            </p>
+          </form>
+
+        </div>
+
+        <!-- RIGHT: PRACTICE DIRECTORS SIDEBAR -->
+        <div class="booking-sidebar">
+          
+          <div style="background:#ffffff; border:1px solid var(--line); border-radius:26px; padding:28px; box-shadow:var(--shadow-soft);">
+            <span class="section-kicker">Practice Lead</span>
+            <h3 style="font-size:18px; margin-bottom:14px;">Direct Partner Accessibility</h3>
+            <p style="font-size:14px; color:var(--muted); line-height:1.65; margin-bottom:20px;">
+              Every engagement is led personally by chartered partners from Wale Kehinde &amp; Co., ensuring statutory authority and executive judgment from day one.
+            </p>
+
+            <!-- Director Card 1 -->
+            <div style="display:flex; gap:14px; align-items:center; padding:12px 0; border-top:1px solid var(--line-light);">
+              <img src="/assets/img/team/1.jpg" alt="Kehinde Adewale" style="width:48px; height:48px; border-radius:50%; object-fit:cover;">
+              <div>
+                <strong style="font-family:Manrope; font-size:13px; display:block;">Mr. Kehinde Adewale</strong>
+                <span style="font-size:11px; color:var(--orange); font-weight:700;">Managing Consultant &bull; FCA, ACIT</span>
+              </div>
+            </div>
+
+            <!-- Director Card 2 -->
+            <div style="display:flex; gap:14px; align-items:center; padding:12px 0; border-top:1px solid var(--line-light);">
+              <img src="/assets/img/team/2.jpg" alt="Seun Olaniyi" style="width:48px; height:48px; border-radius:50%; object-fit:cover;">
+              <div>
+                <strong style="font-family:Manrope; font-size:13px; display:block;">Mr. Seun Olaniyi</strong>
+                <span style="font-size:11px; color:var(--blue); font-weight:700;">Accounting Operations &bull; ACA</span>
+              </div>
+            </div>
+
+            <!-- Director Card 3 -->
+            <div style="display:flex; gap:14px; align-items:center; padding:12px 0; border-top:1px solid var(--line-light);">
+              <img src="/assets/img/team/3.jpg" alt="Dolapo Wale-Kehinde" style="width:48px; height:48px; border-radius:50%; object-fit:cover;">
+              <div>
+                <strong style="font-family:Manrope; font-size:13px; display:block;">Mrs. Dolapo Wale-Kehinde</strong>
+                <span style="font-size:11px; color:#059669; font-weight:700;">Head Training &amp; HR &bull; PHRi</span>
+              </div>
+            </div>
+
+          </div>
+
+          <div style="background:#111820; color:#ffffff; border-radius:26px; padding:28px; box-shadow:var(--shadow-soft);">
+            <div style="font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:0.18em; color:var(--yellow); margin-bottom:8px;">
+              Urgent Matters
+            </div>
+            <h3 style="color:#ffffff; font-size:19px; margin-bottom:12px;">Need Immediate Triage?</h3>
+            <p style="font-size:13px; color:#b0bac5; line-height:1.65; margin-bottom:20px;">
+              For immediate debt standstill notices, active bank receiverships, or statutory audit deadlines, contact our practice desk directly:
+            </p>
+            <div style="display:grid; gap:10px; font-size:13px;">
+              <a href="tel:+2348034992318" style="color:#ffffff; display:flex; align-items:center; gap:8px;">
+                <i class="fa-solid fa-phone" style="color:var(--orange);"></i> +234-8034-99-23-18
+              </a>
+              <a href="mailto:info@thewhy.ng" style="color:#ffffff; display:flex; align-items:center; gap:8px;">
+                <i class="fa-solid fa-envelope" style="color:var(--blue);"></i> info@thewhy.ng
+              </a>
+              <a href="https://wa.me/2348034992318" target="_blank" style="color:#25D366; display:flex; align-items:center; gap:8px; font-weight:700;">
+                <i class="fa-brands fa-whatsapp"></i> Instant WhatsApp Dispatch
+              </a>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- UNIVERSAL FOOTER -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        
+        <div class="footer-col">
+          <a class="brand" href="/" style="margin-bottom:12px;">
+            <img src="/assets/img/logo-horizontal-white.svg" alt="THEWHY Consulting" class="brand-logo" style="height:46px;">
+          </a>
+          <p class="footer-intro">
+            Boutique management consulting firm focused on practical solutions for small and medium-sized enterprises.
+          </p>
+          <div class="footer-affiliate-badge">
+            An affiliate of <strong>Wale Kehinde &amp; Co.</strong> (Chartered Accountants)
+          </div>
+          <div class="footer-social">
+            <a href="https://wa.me/2348034992318" target="_blank" class="footer-social-btn" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+            <a href="https://linkedin.com" target="_blank" class="footer-social-btn" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+            <a href="tel:+2348034992318" class="footer-social-btn" aria-label="Call"><i class="fa-solid fa-phone"></i></a>
+            <a href="mailto:info@thewhy.ng" class="footer-social-btn" aria-label="Email"><i class="fa-solid fa-envelope"></i></a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <div class="footer-title">Practice Directory</div>
+          <div class="footer-links">
+            <a href="/about">About Our Firm</a>
+            <a href="/services">Services &amp; Pillars</a>
+            <a href="/case-studies">Documented Turnarounds</a>
+            <a href="/calculator">Fee &amp; Retainer Calculator</a>
+            <a href="/insights">Business Insights &amp; Articles</a>
+            <a href="/booking">Book Advisory Session</a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <div class="footer-title">Core Competencies</div>
+          <div class="footer-links">
+            <a href="/services#tab-accounting">Accounting &amp; Tax Services</a>
+            <a href="/services#tab-finance">Corporate Finance &amp; Turnaround</a>
+            <a href="/services#tab-strategy">Strategy &amp; AI Integration</a>
+            <a href="/services#tab-hr">CMD Accredited HR Training</a>
+            <a href="/services#tab-accounting">Excess Bank Charges Recovery</a>
+            <a href="/services#tab-hr">PENCOM &amp; ITF Clearance</a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <div class="footer-title">Lagos Headquarters</div>
+          <div class="contact-line">
+            <i class="fa-solid fa-location-dot"></i>
+            <span>1a Hughes Avenue, Alagomeji, Yaba, Lagos, Nigeria</span>
+          </div>
+          <div class="contact-line">
+            <i class="fa-solid fa-phone"></i>
+            <span><a href="tel:+2348034992318" style="color:inherit;">+234-8034-99-23-18</a></span>
+          </div>
+          <div class="contact-line">
+            <i class="fa-solid fa-envelope"></i>
+            <span><a href="mailto:info@thewhy.ng" style="color:inherit;">info@thewhy.ng</a></span>
+          </div>
+          <div style="margin-top:16px;">
+            <a href="https://wa.me/2348034992318" target="_blank" class="btn btn-ghost" style="padding:10px 18px; font-size:12px; gap:8px;">
+              <i class="fa-brands fa-whatsapp" style="color:#25D366; font-size:15px;"></i> Chat on WhatsApp
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom">
+        <div>
+          &copy; <span id="year">2026</span> THEWHY Consulting. All rights reserved. Affiliate of Wale Kehinde &amp; Co. (Chartered Accountants).
+        </div>
+        <div style="display:flex; gap:18px;">
+          <a href="/contact">Support</a>
+          <a href="/insights">Insights</a>
+          <a href="/admin">Executive Portal</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Executive Insight | THEWHY Consulting</title>
+  <meta name="description" content="Authoritative business intelligence, Nigerian tax policy, and corporate restructuring insights from THEWHY Consulting." />
+  <meta name="theme-color" content="#111820" />
+
+  <!-- Google Fonts: DM Sans & Manrope -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/assets/img/logo-mark.svg">
+
+  <!-- Bespoke Design System CSS -->
+  <link rel="stylesheet" href="/css/custom.css">
+</head>
+<body>
+
+  <!-- PAGE PRELOADER -->
+  <div class="page-preloader" id="pagePreloader">
+    <img src="/assets/img/logo-horizontal-white.svg" alt="THEWHY Consulting" class="preloader-logo">
+    <div class="preloader-bar"></div>
+  </div>
+
+  <!-- SCROLL TO TOP -->
+  <button class="scroll-top" id="scrollTop" aria-label="Scroll to top">
+    <i class="fa-solid fa-chevron-up"></i>
+  </button>
+
+  <!-- MOBILE SLIDE-OVER DRAWER -->
+  <div class="drawer-overlay" id="drawerOverlay"></div>
+  <aside class="drawer" id="drawer">
+    <button class="drawer-close" id="drawerClose" aria-label="Close navigation">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <div class="drawer-nav">
+      <div style="margin-bottom: 16px;">
+        <img src="/assets/img/logo-horizontal-white.svg" alt="THEWHY Consulting" style="height: 40px; width: auto;">
+      </div>
+      <small>THEWHY Practice Directory</small>
+      <a href="/">Home</a>
+      <a href="/about">About Us</a>
+      <a href="/services">Services</a>
+      <a href="/industries">Who We Serve</a>
+      <a href="/team">Our Team</a>
+      <a href="/insights" class="active">Insights</a>
+      <a href="/launch">Special Program</a>
+      <a href="/contact">Contact</a>
+      <a href="/admin">Executive Portal</a>
+      <a href="/contact" class="drawer-cta">Schedule Consultation &rarr;</a>
+    </div>
+  </aside>
+
+  <!-- FLOATING FROSTED GLASS SITE NAVIGATION -->
+  <nav class="site-nav" id="siteNav">
+    <div class="container">
+      <div class="nav-shell">
+        <a class="brand" href="/">
+          <img src="/assets/img/logo-horizontal.svg" alt="THEWHY Consulting" class="brand-logo">
+        </a>
+
+        <div class="nav-links">
+          <a href="/">Home</a>
+          <a href="/about">About</a>
+          <a href="/services">Services</a>
+          <a href="/industries">Industries</a>
+          <a href="/team">Our Team</a>
+          <a href="/insights" class="active">Insights</a>
+          <a href="/launch">Special Program</a>
+          <a href="/contact">Contact</a>
+        </div>
+
+        <div class="nav-actions">
+          <a href="/contact" class="nav-cta">
+            <span>Get In Touch</span> <i class="fa-solid fa-arrow-right" style="font-size:11px;"></i>
+          </a>
+          <button class="menu-btn" id="menuBtn" aria-label="Open navigation">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ARTICLE HERO / HEADER -->
+  <header class="subpage-hero" style="padding: 10rem 0 4rem 0;">
+    <div class="subpage-hero-bg" id="article-hero-bg" style="background-image: url('/assets/img/banners/boardroom-strategy.jpg');"></div>
+    <div class="container" style="max-width: 900px;">
+      <div class="breadcrumb">
+        <a href="/">Home</a> <span>/</span> <a href="/insights">Insights</a> <span>/</span> Article
+      </div>
+      
+      <div style="margin-bottom: 1rem;">
+        <span id="art-category" style="background: var(--orange-light); color: var(--orange); font-size: 0.8rem; font-weight: 700; padding: 6px 14px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.06em;">
+          Corporate Compliance
+        </span>
+      </div>
+
+      <h1 id="art-title" class="reveal" style="font-size: clamp(2rem, 4vw, 3rem); line-height: 1.15; margin-bottom: 1.25rem;">
+        Filing Annual Returns with the CAC: A Practical 2026 Guide
+      </h1>
+
+      <div style="display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; font-size: 0.88rem; color: #cbd5e1;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--orange); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem;">
+            TW
+          </div>
+          <span id="art-author" style="font-weight: 600; color: #fff;">THEWHY Practice Team</span>
+        </div>
+        <div>
+          <i class="fa-regular fa-calendar" style="color: var(--yellow); margin-right: 6px;"></i>
+          <span id="art-date">September 2026</span>
+        </div>
+        <div>
+          <i class="fa-regular fa-clock" style="color: var(--yellow); margin-right: 6px;"></i>
+          <span id="art-readtime">5 min read</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ARTICLE BODY -->
+  <main class="page-content" style="padding: 4rem 0;">
+    <div class="container" style="max-width: 900px;">
+      
+      <!-- Article Card Wrapper -->
+      <article style="background: var(--white); border-radius: var(--radius); padding: clamp(2rem, 5vw, 4rem); border: 1px solid var(--line); box-shadow: var(--shadow-soft);">
+        
+        <!-- Excerpt lead -->
+        <p id="art-excerpt" style="font-size: 1.2rem; font-weight: 600; color: var(--navy); line-height: 1.6; margin-bottom: 2rem; border-left: 4px solid var(--orange); padding-left: 1.25rem;">
+          Every business registered in Nigeria under the CAC has a statutory obligation to file annual returns to prevent inactive status and striking off.
+        </p>
+
+        <!-- Dynamic Body Text -->
+        <div id="art-body" style="font-size: 1.05rem; line-height: 1.85; color: var(--ink-secondary); display: flex; flex-direction: column; gap: 1.5rem;">
+          <!-- Content rendered here -->
+        </div>
+
+        <!-- Tags & Social Sharing -->
+        <div style="margin-top: 3.5rem; padding-top: 2rem; border-top: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; flex-wrap: gap; gap: 1.5rem;">
+          <div id="art-tags" style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <!-- Tags rendered here -->
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span style="font-size: 0.82rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em;">Share:</span>
+            <a href="#" id="share-whatsapp" target="_blank" style="width: 36px; height: 36px; border-radius: 50%; background: #25D366; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1rem;">
+              <i class="fa-brands fa-whatsapp"></i>
+            </a>
+            <a href="#" id="share-linkedin" target="_blank" style="width: 36px; height: 36px; border-radius: 50%; background: #0A66C2; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1rem;">
+              <i class="fa-brands fa-linkedin-in"></i>
+            </a>
+            <a href="#" id="share-twitter" target="_blank" style="width: 36px; height: 36px; border-radius: 50%; background: #000; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1rem;">
+              <i class="fa-brands fa-x-twitter"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Author Bio Card -->
+        <div style="background: var(--paper); border-radius: 20px; padding: 2rem; margin-top: 3rem; display: flex; gap: 1.5rem; align-items: center;">
+          <div style="width: 64px; height: 64px; border-radius: 50%; background: var(--navy); color: var(--yellow); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; font-weight: 800; flex-shrink: 0;">
+            TW
+          </div>
+          <div>
+            <h4 style="font-size: 1.1rem; color: var(--ink); margin-bottom: 4px;">THEWHY Consulting Research &amp; Advisory Practice</h4>
+            <p style="font-size: 0.88rem; color: var(--muted); line-height: 1.5;">
+              Published by the senior advisory team at THEWHY Consulting in affiliation with Wale Kehinde &amp; Co. (Chartered Accountants). Providing authoritative insights to protect balance sheets and scale Nigerian enterprises.
+            </p>
+          </div>
+        </div>
+
+      </article>
+
+      <!-- Back to insights & next steps -->
+      <div style="margin-top: 3rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <a href="/insights" class="btn btn-outline">
+          &larr; Back to All Articles
+        </a>
+        <a href="/contact" class="btn btn-primary">
+          <span>Discuss With a Consultant</span> <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- UNIFIED FOOTER -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col" style="grid-column: span 1.5;">
+          <img src="/assets/img/logo-horizontal-white.svg" alt="THEWHY Consulting" style="height: 44px; margin-bottom: 1.25rem;">
+          <p style="color: #94a3b8; font-size: 0.9rem; line-height: 1.6; margin-bottom: 1.25rem;">
+            A boutique management consulting firm headquartered in Lagos, Nigeria. We provide high-impact, practical solutions in accounting, tax, corporate finance, HR, strategy, and statutory governance to turn SMEs into enduring conglomerates.
+          </p>
+          <div style="font-size: 0.8rem; color: #f8c638; font-weight: 600;">
+            <i class="fa-solid fa-building-shield"></i> An affiliate of Wale Kehinde &amp; Co. (Chartered Accountants)
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Practice Areas</h4>
+          <ul>
+            <li><a href="/services#accounting-tax">Accounting &amp; Tax</a></li>
+            <li><a href="/services#corporate-finance">Corporate Finance</a></li>
+            <li><a href="/services#strategy-solutions">Strategy &amp; AI Solutions</a></li>
+            <li><a href="/services#hr-services">HR Consulting &amp; Training</a></li>
+            <li><a href="/services#audit-assurance">Audit &amp; Forensic Review</a></li>
+            <li><a href="/services#statutory-certification">Statutory Certification</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Explore</h4>
+          <ul>
+            <li><a href="/about">About the Firm</a></li>
+            <li><a href="/industries">Who We Serve</a></li>
+            <li><a href="/team">Our Leadership Team</a></li>
+            <li><a href="/launch">SME Bootcamp (CMD)</a></li>
+            <li><a href="/insights">Articles &amp; Insights</a></li>
+            <li><a href="/admin">Executive Portal</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Contact &amp; Lagos HQ</h4>
+          <p style="color: #cbd5e1; font-size: 0.85rem; margin-bottom: 0.75rem;">
+            <i class="fa-solid fa-location-dot" style="color: #ef4c20; margin-right: 6px;"></i>
+            1a Hughes Avenue, Alagomeji, Yaba, Lagos
+          </p>
+          <p style="color: #cbd5e1; font-size: 0.85rem; margin-bottom: 0.75rem;">
+            <i class="fa-solid fa-location-dot" style="color: #356fb7; margin-right: 6px;"></i>
+            29, Isaac John Street, GRA Ikeja, Lagos
+          </p>
+          <p style="color: #cbd5e1; font-size: 0.85rem; margin-bottom: 0.75rem;">
+            <i class="fa-solid fa-phone" style="color: #f8c638; margin-right: 6px;"></i>
+            <a href="tel:+2348034992318" style="color: inherit;">+234-8034-99-23-18</a>
+          </p>
+          <p style="color: #cbd5e1; font-size: 0.85rem;">
+            <i class="fa-solid fa-envelope" style="color: #ef4c20; margin-right: 6px;"></i>
+            <a href="mailto:info@thewhy.ng" style="color: inherit;">info@thewhy.ng</a>
+          </p>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 THEWHY Consulting. All rights reserved. Registered in the Federal Republic of Nigeria.</p>
+        <div style="display: flex; gap: 1.5rem; font-size: 0.85rem;">
+          <a href="/privacy" style="color: #94a3b8;">Privacy Policy</a>
+          <a href="/terms" style="color: #94a3b8;">Terms of Use</a>
+          <a href="/admin" style="color: #94a3b8;">Admin Portal</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/main.js"></script>
+  <script>
+    async function loadArticle() {
+      const urlParams = new URLSearchParams(window.location.search);
+      let slug = urlParams.get('slug');
+      if (!slug) {
+        const pathParts = window.location.pathname.split('/').filter(Boolean);
+        if (pathParts[0] === 'insights' && pathParts[1]) {
+          slug = pathParts[1];
+        }
+      }
+      if (!slug) slug = 'cac-annual-returns-guide-2026';
+
+      try {
+        const res = await fetch('/api/insights/' + slug);
+        const json = await res.json();
+        if (json.success && json.data) {
+          const art = json.data;
+          document.title = art.title + ' | THEWHY Consulting';
+          document.getElementById('art-title').innerText = art.title;
+          document.getElementById('art-category').innerText = art.category || 'Strategic Insight';
+          document.getElementById('art-author').innerText = art.author || 'THEWHY Practice Team';
+          document.getElementById('art-excerpt').innerText = art.excerpt || '';
+          
+          if (art.readTime) document.getElementById('art-readtime').innerText = art.readTime;
+          if (art.published_at) {
+            const d = new Date(art.published_at);
+            document.getElementById('art-date').innerText = d.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+          }
+
+          // Format content into HTML paragraphs
+          const raw = art.content || '';
+          const paras = raw.split('\n\n').filter(Boolean);
+          const bodyEl = document.getElementById('art-body');
+          bodyEl.innerHTML = '';
+          paras.forEach(p => {
+            if (p.startsWith('### ')) {
+              const h = document.createElement('h3');
+              h.style.fontSize = '1.35rem';
+              h.style.color = 'var(--ink)';
+              h.style.marginTop = '1rem';
+              h.innerText = p.replace('### ', '');
+              bodyEl.appendChild(h);
+            } else if (p.startsWith('## ')) {
+              const h = document.createElement('h2');
+              h.style.fontSize = '1.6rem';
+              h.style.color = 'var(--ink)';
+              h.style.marginTop = '1rem';
+              h.innerText = p.replace('## ', '');
+              bodyEl.appendChild(h);
+            } else if (p.startsWith('- ')) {
+              const ul = document.createElement('ul');
+              ul.style.paddingLeft = '1.5rem';
+              ul.style.display = 'flex';
+              ul.style.flexDirection = 'column';
+              ul.style.gap = '8px';
+              p.split('\n').forEach(li => {
+                const item = document.createElement('li');
+                item.innerHTML = li.replace(/^- \*\*(.*?)\*\*/, '<strong>$1</strong>').replace(/^- /, '');
+                ul.appendChild(item);
+              });
+              bodyEl.appendChild(ul);
+            } else if (p.startsWith('1. ')) {
+              const ol = document.createElement('ol');
+              ol.style.paddingLeft = '1.5rem';
+              ol.style.display = 'flex';
+              ol.style.flexDirection = 'column';
+              ol.style.gap = '8px';
+              p.split('\n').forEach(li => {
+                const item = document.createElement('li');
+                item.innerHTML = li.replace(/^\d+\. \*\*(.*?)\*\*/, '<strong>$1</strong>').replace(/^\d+\. /, '');
+                ol.appendChild(item);
+              });
+              bodyEl.appendChild(ol);
+            } else {
+              const pe = document.createElement('p');
+              pe.innerHTML = p.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+              bodyEl.appendChild(pe);
+            }
+          });
+
+          // Tags
+          const tagsContainer = document.getElementById('art-tags');
+          tagsContainer.innerHTML = '';
+          const tags = Array.isArray(art.tags) ? art.tags : (art.category ? [art.category, 'Consulting'] : ['Advisory']);
+          tags.forEach(t => {
+            const span = document.createElement('span');
+            span.style.background = 'var(--paper)';
+            span.style.padding = '4px 12px';
+            span.style.borderRadius = '6px';
+            span.style.fontSize = '0.8rem';
+            span.style.fontWeight = '600';
+            span.style.color = 'var(--muted)';
+            span.innerText = '#' + t;
+            tagsContainer.appendChild(span);
+          });
+
+          // Social share URLs
+          const currentUrl = encodeURIComponent(window.location.href);
+          const shareTitle = encodeURIComponent(art.title);
+          document.getElementById('share-whatsapp').href = `https://api.whatsapp.com/send?text=${shareTitle}%20${currentUrl}`;
+          document.getElementById('share-linkedin').href = `https://www.linkedin.com/sharing/share-offsite/?url=${currentUrl}`;
+          document.getElementById('share-twitter').href = `https://twitter.com/intent/tweet?text=${shareTitle}&url=${currentUrl}`;
+        }
+      } catch (e) {
+        console.error('Error loading article:', e);
+      }
+    }
+    document.addEventListener('DOMContentLoaded', loadArticle);
+  </script>
+</body>
+</html>

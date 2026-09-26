@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact Us | THEWHY Consulting</title>
+  <meta name="description" content="Get in touch with THEWHY Consulting at 1a Hughes Avenue, Alagomeji, Yaba, Lagos, Nigeria. Send a message or speak with an advisory consultant." />
+  <meta name="theme-color" content="#111820" />
+
+  <!-- Google Fonts: DM Sans & Manrope -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/assets/img/logo-mark.svg">
+
+  <!-- Bespoke Design System CSS -->
+  <link rel="stylesheet" href="/css/custom.css">
+</head>
+<body>
+
+  <!-- PAGE PRELOADER -->
+  <div class="page-preloader" id="pagePreloader">
+    <img src="/assets/img/logo-horizontal-white.svg" alt="THEWHY Consulting" class="preloader-logo">
+    <div class="preloader-bar"></div>
+  </div>
+
+  <!-- SCROLL TO TOP -->
+  <button class="scroll-top" id="scrollTop" aria-label="Scroll to top">
+    <i class="fa-solid fa-chevron-up"></i>
+  </button>
+
+  <!-- MOBILE SLIDE-OVER DRAWER -->
+  <div class="drawer-overlay" id="drawerOverlay"></div>
+  <aside class="drawer" id="drawer">
+    <button class="drawer-close" id="drawerClose" aria-label="Close navigation">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <div class="drawer-nav">
+      <div style="margin-bottom: 16px;">
+        <img src="/assets/img/logo-horizontal-white.svg" alt="THEWHY Consulting" style="height: 40px; width: auto;">
+      </div>
+      <small>THEWHY Practice Directory</small>
+      <a href="/">Home</a>
+      <a href="/about">About Us</a>
+      <a href="/services">Services</a>
+      <a href="/industries">Who We Serve</a>
+      <a href="/team">Our Team</a>
+      <a href="/insights">Insights</a>
+      <a href="/launch">Special Program</a>
+      <a href="/contact" class="active">Contact</a>
+      <a href="/admin">Executive Portal</a>
+      <a href="/contact" class="drawer-cta">Schedule Consultation &rarr;</a>
+    </div>
+  </aside>
+
+  <!-- FLOATING FROSTED GLASS SITE NAVIGATION -->
+  <nav class="site-nav" id="siteNav">
+    <div class="container">
+      <div class="nav-shell">
+        <a class="brand" href="/">
+          <img src="/assets/img/logo-horizontal.svg" alt="THEWHY Consulting" class="brand-logo">
+        </a>
+
+        <div class="nav-links">
+          <a href="/">Home</a>
+          <a href="/about">About</a>
+          <a href="/services">Services</a>
+          <a href="/industries">Industries</a>
+          <a href="/team">Our Team</a>
+          <a href="/insights">Insights</a>
+          <a href="/launch">Special Program</a>
+          <a href="/contact" class="active">Contact</a>
+        </div>
+
+        <div class="nav-actions">
+          <a href="/contact" class="nav-cta">
+            <span>Get In Touch</span> <i class="fa-solid fa-arrow-right" style="font-size:11px;"></i>
+          </a>
+          <button class="menu-btn" id="menuBtn" aria-label="Open navigation">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- SUBPAGE HERO -->
+  <header class="subpage-hero">
+    <div class="subpage-hero-bg" style="background-image: url('/assets/img/banners/contact-desk.jpg');"></div>
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="/">Home</a> <span>/</span> Contact Us
+      </div>
+      <h1 class="reveal">Contact Our Lagos HQ</h1>
+      <p class="hero-lead reveal delay-1">
+        Reach our practice team at our Yaba, Lagos headquarters. We respond to corporate inquiries and emergency client briefings within one business day.
+      </p>
+
+      <div class="hero-stats reveal delay-2">
+        <div class="hero-stat">
+          <strong>Yaba, Lagos</strong>
+          <span>Headquarters Location</span>
+        </div>
+        <div class="hero-stat">
+          <strong>24 Hours</strong>
+          <span>Standard Response SLA</span>
+        </div>
+        <div class="hero-stat">
+          <strong>Mon &ndash; Fri</strong>
+          <span>8:00 AM &ndash; 5:00 PM</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTACT & OFFICE DETAILS SECTION -->
+  <section class="section" style="background:#ffffff;">
+    <div class="container">
+      <div class="contact-grid">
+        
+        <!-- LEFT: CONTACT FORM -->
+        <div class="contact-form-box">
+          <span class="section-kicker">Direct Dispatch</span>
+          <h2 style="font-size:26px; letter-spacing:-0.03em; margin-bottom:6px;">Send Us a Message</h2>
+          <p style="font-size:14px; color:var(--muted); margin-bottom:24px;">Please complete the form below and an advisory consultant will get in touch.</p>
+
+          <div id="contactMsg" class="form-alert" style="display:none;"></div>
+
+          <form id="contactForm">
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Full Name *</label>
+                <input type="text" name="name" class="form-control" placeholder="Adebayo Ogunlesi" required>
+              </div>
+
+              <div class="form-group">
+                <label>Corporate Email *</label>
+                <input type="email" name="email" class="form-control" placeholder="adebayo@company.ng" required>
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Phone Number</label>
+                <input type="tel" name="phone" class="form-control" placeholder="+234 803 000 0000">
+              </div>
+
+              <div class="form-group">
+                <label>Subject *</label>
+                <input type="text" name="subject" class="form-control" placeholder="e.g. Excess Bank Charges Audit Inquiry" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Message *</label>
+              <textarea name="message" class="form-control" placeholder="Describe your inquiry or scenario in detail..." required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width:100%; min-height:52px; font-size:15px;">
+              <span>Send Message</span> <i class="fa-solid fa-paper-plane"></i>
+            </button>
+          </form>
+        </div>
+
+        <!-- RIGHT: OFFICE INFORMATION & DIRECT CONTACT -->
+        <div class="contact-sidebar">
+          
+          <!-- Office Image Card -->
+          <div style="border-radius:26px; overflow:hidden; border:1px solid var(--line); box-shadow:var(--shadow-soft);">
+            <div style="height:200px; overflow:hidden;">
+              <img src="/assets/img/bg/2.jpg" alt="THEWHY Consulting Lagos Headquarters" style="width:100%; height:100%; object-fit:cover;">
+            </div>
+            <div style="padding:24px; background:#ffffff;">
+              <div style="font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:0.16em; color:var(--orange); margin-bottom:4px;">
+                Head Office
+              </div>
+              <h3 style="font-size:18px; margin-bottom:12px; color:var(--ink);">Lagos Practice Headquarters</h3>
+              
+              <div class="contact-line">
+                <i class="fa-solid fa-location-dot"></i>
+                <span style="color:#2c2824; font-weight:600;">1a Hughes Avenue, Alagomeji, Yaba, Lagos State, Nigeria</span>
+              </div>
+              <div class="contact-line">
+                <i class="fa-solid fa-phone"></i>
+                <span><a href="tel:+2348034992318" style="color:#2c2824; font-weight:600;">+234-8034-99-23-18</a></span>
+              </div>
+              <div class="contact-line">
+                <i class="fa-solid fa-envelope"></i>
+                <span><a href="mailto:info@thewhy.ng" style="color:#2c2824; font-weight:600;">info@thewhy.ng</a></span>
+              </div>
+              <div class="contact-line">
+                <i class="fa-solid fa-clock"></i>
+                <span style="color:#2c2824; font-weight:600;">Monday &ndash; Friday: 8:00 AM &ndash; 5:00 PM</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- WhatsApp Connect Box -->
+          <div style="background:#111820; color:#ffffff; border-radius:26px; padding:24px; display:flex; align-items:center; justify-content:space-between; gap:16px;">
+            <div>
+              <div style="font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:0.18em; color:var(--yellow); margin-bottom:4px;">
+                Immediate Assistance
+              </div>
+              <div style="font-size:15px; font-weight:700;">Connect on WhatsApp</div>
+              <div style="font-size:12px; color:#a2adba; margin-top:2px;">Direct dispatch line to practice desk</div>
+            </div>
+            <a href="https://wa.me/2348034992318?text=Hello%20THEWHY%20Consulting%2C%20I%20would%20like%20to%20inquire%20about%20your%20services." target="_blank" class="btn" style="background:#25D366; color:#ffffff; min-height:44px; padding:0 18px; font-size:13px; gap:8px;">
+              <i class="fa-brands fa-whatsapp"></i> Chat Now
+            </a>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- INTERACTIVE MAP EMBED SECTION -->
+  <section class="section" style="background:var(--paper); padding: 75px 0 90px;">
+    <div class="container">
+      <div class="section-head reveal" style="margin-bottom:24px;">
+        <div>
+          <span class="section-kicker">Find Our Office</span>
+          <h2 class="section-title">Hughes Avenue, Yaba</h2>
+        </div>
+        <p class="section-copy">Conveniently situated in the commercial hub of Yaba, Lagos, easily accessible from the Island and Mainland.</p>
+      </div>
+
+      <div style="border-radius:26px; overflow:hidden; border:1px solid var(--line); box-shadow:var(--shadow-soft); height:400px; background:#e0dbd3;">
+        <iframe 
+          title="THEWHY Consulting Lagos HQ Map"
+          src="https://www.openstreetmap.org/export/embed.html?bbox=3.370%2C6.495%2C3.395%2C6.515&amp;layer=mapnik&amp;marker=6.505%2C3.382" 
+          style="width:100%; height:100%; border:0;"
+          loading="lazy">
+        </iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEDICATED TELEPHONE CONSULTATION BANNER -->
+  <section class="section" style="padding: 0 0 90px; background: var(--paper);">
+    <div class="container">
+      <div class="mono-promo reveal">
+        <img src="/assets/img/banners/contact-desk.jpg" alt="Direct Client Consultation &amp; Dispatch Desk">
+        <div class="mono-promo-overlay">
+          <div class="mono-promo-text">
+            <span class="section-kicker yellow">Immediate Consultation</span>
+            <h3>Need Urgent Boardroom Triage?</h3>
+            <p>For urgent tax demand notices, hostile bank debt recovery, or CAC compliance deadlines, speak directly with our managing partners.</p>
+            <div style="display:flex; gap:14px; flex-wrap:wrap;">
+              <a href="tel:+2348034992318" class="btn btn-primary">
+                <i class="fa-solid fa-phone"></i> <span>Call +234-8034-99-23-18</span>
+              </a>
+              <a href="https://wa.me/2348034992318" target="_blank" class="btn btn-outline-light">
+                <i class="fa-brands fa-whatsapp" style="color:#25D366;"></i> <span>WhatsApp Desk</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- UNIFIED FOOTER -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col" style="grid-column: span 1.5;">
+          <img src="/assets/img/logo-horizontal-white.svg" alt="THEWHY Consulting" style="height: 44px; margin-bottom: 1.25rem;">
+          <p style="color: #94a3b8; font-size: 0.9rem; line-height: 1.6; margin-bottom: 1.25rem;">
+            A boutique management consulting firm headquartered in Lagos, Nigeria. We provide high-impact, practical solutions in accounting, tax, corporate finance, HR, strategy, and statutory governance to turn SMEs into enduring conglomerates.
+          </p>
+          <div style="font-size: 0.8rem; color: #f8c638; font-weight: 600;">
+            <i class="fa-solid fa-building-shield"></i> An affiliate of Wale Kehinde &amp; Co. (Chartered Accountants)
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Practice Areas</h4>
+          <ul>
+            <li><a href="/services#accounting-tax">Accounting &amp; Tax</a></li>
+            <li><a href="/services#corporate-finance">Corporate Finance</a></li>
+            <li><a href="/services#strategy-solutions">Strategy &amp; AI Solutions</a></li>
+            <li><a href="/services#hr-services">HR Consulting &amp; Training</a></li>
+            <li><a href="/services#audit-assurance">Audit &amp; Forensic Review</a></li>
+            <li><a href="/services#statutory-certification">Statutory Certification</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Explore</h4>
+          <ul>
+            <li><a href="/about">About the Firm</a></li>
+            <li><a href="/industries">Who We Serve</a></li>
+            <li><a href="/team">Our Leadership Team</a></li>
+            <li><a href="/launch">SME Bootcamp (CMD)</a></li>
+            <li><a href="/insights">Articles &amp; Insights</a></li>
+            <li><a href="/admin">Executive Portal</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Contact &amp; Lagos HQ</h4>
+          <p style="color: #cbd5e1; font-size: 0.85rem; margin-bottom: 0.75rem;">
+            <i class="fa-solid fa-location-dot" style="color: #ef4c20; margin-right: 6px;"></i>
+            1a Hughes Avenue, Alagomeji, Yaba, Lagos
+          </p>
+          <p style="color: #cbd5e1; font-size: 0.85rem; margin-bottom: 0.75rem;">
+            <i class="fa-solid fa-location-dot" style="color: #356fb7; margin-right: 6px;"></i>
+            29, Isaac John Street, GRA Ikeja, Lagos
+          </p>
+          <p style="color: #cbd5e1; font-size: 0.85rem; margin-bottom: 0.75rem;">
+            <i class="fa-solid fa-phone" style="color: #f8c638; margin-right: 6px;"></i>
+            <a href="tel:+2348034992318" style="color: inherit;">+234-8034-99-23-18</a>
+          </p>
+          <p style="color: #cbd5e1; font-size: 0.85rem;">
+            <i class="fa-solid fa-envelope" style="color: #ef4c20; margin-right: 6px;"></i>
+            <a href="mailto:info@thewhy.ng" style="color: inherit;">info@thewhy.ng</a>
+          </p>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 THEWHY Consulting. All rights reserved. Registered in the Federal Republic of Nigeria.</p>
+        <div style="display: flex; gap: 1.5rem; font-size: 0.85rem;">
+          <a href="/privacy" style="color: #94a3b8;">Privacy Policy</a>
+          <a href="/terms" style="color: #94a3b8;">Terms of Use</a>
+          <a href="/admin" style="color: #94a3b8;">Admin Portal</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="/js/main.js"></script>
+</body>
+</html>
