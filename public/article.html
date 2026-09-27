@@ -28,6 +28,28 @@
     <img src="/assets/img/logo-horizontal-white.svg" alt="THEWHY Consulting" class="preloader-logo">
     <div class="preloader-bar"></div>
   </div>
+  <script>
+    (function(){
+      var p = document.getElementById('pagePreloader');
+      if (!p) return;
+      function dismiss() {
+        if (p.dataset.dismissed) return;
+        p.dataset.dismissed = 'true';
+        p.classList.add('done');
+        p.classList.add('loaded');
+        setTimeout(function(){ p.style.display = 'none'; }, 400);
+      }
+      if (document.readyState === 'complete') {
+        dismiss();
+      } else if (document.readyState === 'interactive') {
+        setTimeout(dismiss, 100);
+      } else {
+        document.addEventListener('DOMContentLoaded', function(){ setTimeout(dismiss, 100); });
+      }
+      window.addEventListener('load', dismiss);
+      setTimeout(dismiss, 800);
+    })();
+  </script>
 
   <!-- SCROLL TO TOP -->
   <button class="scroll-top" id="scrollTop" aria-label="Scroll to top">

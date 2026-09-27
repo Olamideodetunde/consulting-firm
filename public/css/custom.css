@@ -2293,19 +2293,31 @@ textarea.form-control {
 .page-preloader {
   position: fixed;
   inset: 0;
-  z-index: 9999;
+  z-index: 99999;
   background: var(--dark);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 22px;
-  transition: opacity 0.55s ease, visibility 0.55s ease;
+  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  /* CSS-only fallback: auto-dismiss preloader smoothly after 1.8s even if JS fails or is blocked */
+  animation: preloaderAutoDismiss 0.4s cubic-bezier(0.4, 0, 0.2, 1) 1.8s forwards;
 }
-.page-preloader.done {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
+
+@keyframes preloaderAutoDismiss {
+  to {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+}
+
+.page-preloader.done,
+.page-preloader.loaded {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
 }
 .preloader-logo {
   height: 52px;
