@@ -2150,6 +2150,148 @@ textarea.form-control {
 }
 
 /* ==========================================================================
+   CONSULTING PRACTICE & SECTOR COMPONENT CLASSES
+   ========================================================================== */
+.practice-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: clamp(1.5rem, 4vw, 3rem);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-soft);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.practice-card:hover {
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+}
+.practice-subgrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+.practice-jump-bar {
+  background: var(--white);
+  border-bottom: 1px solid var(--line);
+  position: sticky;
+  top: 70px;
+  z-index: 25;
+  padding: 0.75rem 0;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.03);
+}
+.practice-pills-scroll {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  white-space: nowrap;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.practice-pills-scroll::-webkit-scrollbar {
+  display: none;
+}
+.practice-pill {
+  font-size: 0.8rem;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration: none;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+  flex: 0 0 auto;
+}
+.practice-pill:hover,
+.practice-pill.active {
+  background: var(--navy);
+  color: #ffffff;
+  border-color: var(--navy);
+}
+
+.industry-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+}
+.industry-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  border: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: var(--shadow-soft);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.industry-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 34px rgba(0,0,0,0.06);
+}
+.team-grid-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+}
+.team-card-profile {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-soft);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.team-card-profile:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 34px rgba(0,0,0,0.06);
+}
+.creds-block {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: clamp(1.75rem, 4vw, 3rem);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-soft);
+  margin-bottom: 3.5rem;
+}
+.creds-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  align-items: center;
+}
+.bootcamp-syllabus-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+.bootcamp-register-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: clamp(1.75rem, 4.5vw, 3.5rem);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  margin-bottom: 4rem;
+}
+.bootcamp-register-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2.5rem;
+  align-items: start;
+}
+.mono-promo-shell {
+  background: var(--navy);
+  border-radius: var(--radius);
+  padding: clamp(2rem, 5vw, 3.5rem);
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+
+/* ==========================================================================
    RESPONSIVE MEDIA QUERIES
    ========================================================================== */
 @media (max-width: 1100px) {
@@ -3349,27 +3491,60 @@ textarea.form-control {
   }
 
   .container {
-    width: min(var(--max), calc(100% - 34px));
+    width: min(var(--max), calc(100% - 32px));
+    padding: 0;
   }
 
   .section {
-    padding: 60px 0;
+    padding: 50px 0;
   }
   .section-sm {
-    padding: 40px 0;
+    padding: 35px 0;
+  }
+
+  /* Universal Responsive Overrides for Hardcoded Grids & Inline Paddings */
+  [style*="minmax(3"],
+  [style*="minmax(280px"],
+  [style*="minmax(300px"],
+  [style*="minmax(320px"],
+  [style*="minmax(340px"],
+  [style*="minmax(360px"] {
+    grid-template-columns: 1fr !important;
+    gap: 1.25rem !important;
+  }
+
+  .practice-card,
+  .mono-card,
+  [style*="padding: 3.5rem"],
+  [style*="padding: 3rem"],
+  [style*="padding: 2.5rem"] {
+    padding: clamp(1.25rem, 4vw, 1.75rem) !important;
+  }
+
+  /* Subpage Hero & Main Content Responsive Height & Padding */
+  .subpage-hero,
+  header.subpage-hero[style*="padding: 10rem"],
+  header.subpage-hero[style*="padding:10rem"] {
+    padding: clamp(90px, 18vw, 125px) 0 clamp(32px, 6vw, 48px) 0 !important;
+    min-height: auto !important;
+  }
+  main.page-content,
+  main.page-content[style*="padding: 5rem"],
+  main.page-content[style*="padding: 4rem"] {
+    padding: clamp(2rem, 5vw, 3.5rem) 0 !important;
   }
 
   /* Typography */
   .section-title {
-    font-size: clamp(2rem, 7vw, 2.8rem);
-    line-height: 1.05;
-    letter-spacing: -0.04em;
+    font-size: clamp(1.85rem, 6.8vw, 2.5rem);
+    line-height: 1.1;
+    letter-spacing: -0.035em;
   }
   .section-head {
     flex-direction: column;
     align-items: flex-start;
-    gap: 14px;
-    margin-bottom: 32px;
+    gap: 12px;
+    margin-bottom: 28px;
   }
   .section-copy {
     font-size: 15px;
@@ -3378,38 +3553,98 @@ textarea.form-control {
 
   /* Navigation Bar */
   .site-nav {
-    padding: 10px 0;
-  }
-  .site-nav.scrolled {
     padding: 8px 0;
   }
+  .site-nav.scrolled {
+    padding: 6px 0;
+  }
   .nav-shell {
-    padding: 6px 8px 6px 14px;
+    padding: 6px 10px 6px 14px;
     border-radius: 999px;
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.75);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
   }
   .brand-logo {
-    height: 34px;
+    height: 32px;
   }
   .menu-btn {
-    width: 40px;
-    height: 40px;
-    font-size: 15px;
+    width: 38px;
+    height: 38px;
+    font-size: 14px;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    background: var(--navy);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.12);
   }
 
-  /* Mobile Drawer Safe Insets */
+  /* Mobile Drawer Safe Insets & Sleek Frosted Theme */
   .drawer {
-    width: min(88vw, 340px);
-    padding: max(75px, env(safe-area-inset-top)) 22px max(30px, env(safe-area-inset-bottom));
+    width: min(88vw, 360px);
+    background: #0f172a;
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-left: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: -10px 0 36px rgba(0, 0, 0, 0.45);
+    padding: max(75px, env(safe-area-inset-top)) 24px max(30px, env(safe-area-inset-bottom));
   }
   .drawer-nav a {
-    font-size: 19px;
+    font-size: 18px;
     padding: 10px 0;
+    color: #f8fafc;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: color 0.2s ease, padding 0.2s ease;
+  }
+  .drawer-nav a.active {
+    color: var(--yellow);
+    font-weight: 800;
+  }
+  .drawer-nav a:hover,
+  .drawer-nav a:active {
+    color: var(--yellow);
+    padding-left: 4px;
+  }
+  .drawer-contact-strip {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px dashed rgba(255, 255, 255, 0.12);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .drawer-contact-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #94a3b8;
+    text-decoration: none;
+    padding: 8px 12px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.04);
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .drawer-contact-link:active {
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+  }
+  .drawer-contact-link i {
+    width: 16px;
+    color: var(--orange);
+    text-align: center;
   }
 
   /* Hero Section */
   .hero {
     min-height: auto;
-    padding: 105px 0 45px;
+    padding: 95px 0 40px;
   }
   .hero-grid {
     grid-template-columns: 1fr;
@@ -3427,59 +3662,114 @@ textarea.form-control {
     display: none;
   }
   .hero-particle {
-    opacity: 0.22;
+    opacity: 0.18;
   }
   .hero h1 {
-    font-size: clamp(2.2rem, 7.8vw, 3.4rem);
-    line-height: 1.04;
-    letter-spacing: -0.04em;
+    font-size: clamp(2.1rem, 7.5vw, 3rem);
+    line-height: 1.08;
+    letter-spacing: -0.035em;
     max-width: 100%;
   }
   .hero-lead {
-    font-size: 15.5px;
-    margin: 16px 0 22px;
-    line-height: 1.68;
+    font-size: 15px;
+    margin: 14px 0 20px;
+    line-height: 1.65;
     max-width: 100%;
   }
   .hero-actions {
     flex-direction: column;
     align-items: stretch;
-    gap: 12px;
+    gap: 10px;
     width: 100%;
   }
   .hero-actions .btn {
     width: 100%;
-    min-height: 50px;
+    min-height: 48px;
     font-size: 14px;
+    justify-content: center;
   }
   .hero-note {
     font-size: 11px;
-    margin-top: 18px;
+    margin-top: 16px;
     text-align: left;
     align-items: flex-start;
   }
 
   /* Subpage Hero */
-  .subpage-hero {
-    padding: 110px 0 45px;
-    min-height: auto;
-  }
   .subpage-hero h1 {
-    font-size: clamp(2rem, 7vw, 3rem);
-    line-height: 1.05;
+    font-size: clamp(1.9rem, 6.8vw, 2.6rem);
+    line-height: 1.1;
   }
   .subpage-hero .hero-lead {
-    font-size: 15px;
+    font-size: 14.5px;
   }
   .hero-stats {
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 24px;
-    width: 100%;
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+    margin-top: 20px !important;
+    width: 100% !important;
   }
   .hero-stat {
-    width: 100%;
-    padding: 12px 16px;
+    width: 100% !important;
+    padding: 12px 14px !important;
+    border-radius: 12px !important;
+    background: rgba(255, 255, 255, 0.06) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    text-align: left;
+  }
+  .hero-stat strong {
+    font-size: 1.35rem !important;
+    display: block;
+    line-height: 1.1;
+  }
+  .hero-stat span {
+    font-size: 11px !important;
+    color: #cbd5e1 !important;
+    margin-top: 4px;
+    display: block;
+    line-height: 1.35;
+  }
+
+  /* Practice Jump Bar */
+  .practice-jump-bar {
+    position: sticky !important;
+    top: 54px !important;
+    z-index: 30 !important;
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    border-bottom: 1px solid var(--line) !important;
+    padding: 8px 0 !important;
+    overflow-x: auto !important;
+  }
+  .practice-pills-scroll {
+    display: flex !important;
+    gap: 8px !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+    padding: 2px 0 !important;
+    white-space: nowrap !important;
+  }
+  .practice-pills-scroll::-webkit-scrollbar {
+    display: none !important;
+  }
+  .practice-pill {
+    flex: 0 0 auto !important;
+    font-size: 12px !important;
+    padding: 7px 14px !important;
+    border-radius: 999px !important;
+    border: 1px solid var(--line) !important;
+    background: var(--paper) !important;
+    color: var(--ink) !important;
+    font-weight: 700 !important;
+  }
+  .practice-pill:active,
+  .practice-pill.active {
+    background: var(--navy) !important;
+    color: #ffffff !important;
+    border-color: var(--navy) !important;
   }
 
   /* Trust Strip & Partner Logos */
@@ -4027,6 +4317,9 @@ textarea.form-control {
    BREAKPOINT: Compact Mobile Phones (<= 440px)
    ========================================================================== */
 @media (max-width: 440px) {
+  .hero-stats {
+    grid-template-columns: 1fr !important;
+  }
   .container {
     width: min(var(--max), calc(100% - 24px));
   }
