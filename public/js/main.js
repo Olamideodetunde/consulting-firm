@@ -95,7 +95,14 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
 
-    revealElements.forEach(el => revealObserver.observe(el));
+    revealElements.forEach(el => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight && rect.bottom > 0) {
+        el.classList.add('show');
+      } else {
+        revealObserver.observe(el);
+      }
+    });
   } else {
     revealElements.forEach(el => el.classList.add('show'));
   }
@@ -264,6 +271,7 @@ document.addEventListener('DOMContentLoaded', () => {
           item.classList.add('open');
         }
       });
+    }
   });
 
   // 7b. PRACTICE JUMP BAR SCROLL SPY & AUTO-SCROLL

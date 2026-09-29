@@ -97,7 +97,9 @@ h1, h2, h3, h4, h5, h6 {
   transform: translateY(24px);
   transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.reveal.show {
+.reveal.show,
+.hero .reveal,
+.subpage-hero .reveal {
   opacity: 1;
   transform: none;
 }
