@@ -264,8 +264,61 @@ document.addEventListener('DOMContentLoaded', () => {
           item.classList.add('open');
         }
       });
-    }
   });
+
+  // 7b. PRACTICE JUMP BAR SCROLL SPY & AUTO-SCROLL
+  const practiceJumpBar = document.querySelector('.practice-jump-bar');
+  if (practiceJumpBar) {
+    const pills = practiceJumpBar.querySelectorAll('.practice-pill');
+    const scrollContainer = practiceJumpBar.querySelector('.practice-pills-scroll');
+    const sections = Array.from(pills).map(pill => {
+      const id = pill.getAttribute('href')?.replace('#', '');
+      return id ? document.getElementById(id) : null;
+    }).filter(Boolean);
+
+    function updateActivePill() {
+      const scrollPos = window.scrollY + 170;
+      let activeIndex = -1;
+
+      sections.forEach((sec, idx) => {
+        if (sec.offsetTop <= scrollPos) {
+          activeIndex = idx;
+        }
+      });
+
+      pills.forEach((pill, idx) => {
+        if (idx === activeIndex) {
+          if (!pill.classList.contains('active')) {
+            pill.classList.add('active');
+            if (scrollContainer) {
+              const pillLeft = pill.offsetLeft;
+              const pillWidth = pill.offsetWidth;
+              const contWidth = scrollContainer.offsetWidth;
+              scrollContainer.scrollTo({
+                left: pillLeft - contWidth / 2 + pillWidth / 2,
+                behavior: 'smooth'
+              });
+            }
+          }
+        } else {
+          pill.classList.remove('active');
+        }
+      });
+    }
+
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          updateActivePill();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, { passive: true });
+
+    updateActivePill();
+  }
 
   // 8. INTERACTIVE FEE CALCULATOR
   const calcForm = document.getElementById('calcForm');

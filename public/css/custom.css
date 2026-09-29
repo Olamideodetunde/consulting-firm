@@ -39,7 +39,13 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 90px;
+  scroll-padding-top: 155px;
+}
+
+[id],
+section[id],
+.practice-card {
+  scroll-margin-top: 155px;
 }
 
 body {
@@ -232,6 +238,14 @@ h1, h2, h3, h4, h5, h6 {
   max-width: 680px;
   position: relative;
   z-index: 2;
+}
+
+/* BASE SUBPAGE CONTENT WRAPPER */
+.page-content,
+main.page-content {
+  position: relative;
+  width: 100%;
+  padding: clamp(50px, 6vw, 80px) 0 clamp(85px, 10vw, 130px) 0;
 }
 
 /* SECTION UTILITIES */
@@ -2306,6 +2320,7 @@ textarea.form-control {
   border: 1px solid var(--line);
   box-shadow: var(--shadow-soft);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  scroll-margin-top: 155px;
 }
 .practice-card:hover {
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
@@ -3406,7 +3421,7 @@ textarea.form-control {
   position: relative;
   overflow: hidden;
   border-radius: 32px;
-  margin: 0 20px;
+  margin: 0 20px clamp(60px, 8vw, 95px);
 }
 .mono-promo img {
   width: 100%;
@@ -3677,10 +3692,20 @@ textarea.form-control {
     padding: clamp(90px, 18vw, 125px) 0 clamp(32px, 6vw, 48px) 0 !important;
     min-height: auto !important;
   }
+  .page-content,
   main.page-content,
   main.page-content[style*="padding: 5rem"],
   main.page-content[style*="padding: 4rem"] {
-    padding: clamp(2rem, 5vw, 3.5rem) 0 !important;
+    padding: clamp(2rem, 5vw, 3rem) 0 clamp(4.5rem, 9vw, 6.5rem) 0 !important;
+  }
+
+  html {
+    scroll-padding-top: 115px;
+  }
+  [id],
+  section[id],
+  .practice-card {
+    scroll-margin-top: 115px;
   }
 
   /* Typography */
@@ -4210,7 +4235,7 @@ textarea.form-control {
     width: 100%;
   }
   .mono-promo {
-    margin: 0;
+    margin: 0 0 clamp(40px, 6vw, 65px);
     border-radius: 20px;
   }
   .mono-promo img {
