@@ -3,48 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow">
   <title>THEWHY Consulting | Executive Management Portal</title>
-  
+
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  
+
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            brandOrange: '#EF4C20',
-            brandOrangeDark: '#D83D16',
-            brandGold: '#F8C638',
-            brandBlue: '#356FB7',
-            brandDark: '#0F172A',
-            brandNavy: '#16202D',
-            brandSlate: '#334155',
-            brandLight: '#F8FAFC'
-          },
-          fontFamily: {
-            sans: ['DM Sans', 'system-ui', 'sans-serif'],
-            heading: ['Manrope', 'DM Sans', 'sans-serif']
-          }
-        }
-      }
-    }
-  </script>
 
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="/assets/img/logo-mark.svg">
   <link rel="stylesheet" href="/css/custom.css">
+
+  <!-- Prebuilt Tailwind stylesheet, loaded last so utilities win (regenerate: see README "Admin stylesheet") -->
+  <link rel="stylesheet" href="/css/admin.css?v=3">
 </head>
 <body class="bg-slate-100 text-slate-800 antialiased min-h-screen flex flex-col font-sans">
 
-  <!-- PASSCODE GATE MODAL (Basic Security) -->
+  <!-- SIGN-IN MODAL (shown until GET /api/admin/session succeeds) -->
   <div id="auth-modal" class="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl max-w-md w-full p-8 shadow-2xl border border-slate-200 text-center space-y-5">
       <div class="w-16 h-16 bg-orange-50 text-brandOrange rounded-2xl flex items-center justify-center mx-auto text-2xl">
@@ -56,7 +35,7 @@
       </div>
       <form id="auth-form" class="space-y-4">
         <div>
-          <input type="password" id="auth-passcode" required placeholder="Enter passcode" class="w-full text-center tracking-widest px-4 py-3 rounded-xl border border-slate-300 text-sm focus:outline-none focus:border-brandOrange">
+          <input type="password" id="auth-passcode" required autocomplete="current-password" maxlength="256" placeholder="Enter passcode" class="w-full text-center tracking-widest px-4 py-3 rounded-xl border border-slate-300 text-sm focus:outline-none focus:border-brandOrange">
         </div>
         <button type="submit" id="auth-btn" class="w-full py-3 bg-brandOrange hover:bg-brandOrangeDark text-white font-bold rounded-xl shadow-md transition-all text-xs">
           Verify &amp; Enter Dashboard
@@ -64,7 +43,7 @@
         <div id="auth-error" class="hidden text-xs text-red-600 font-semibold"></div>
       </form>
       <div class="text-[11px] text-slate-400">
-        Default key configured in environment. Never share credentials publicly.
+        Sessions expire after 8 hours. Never share credentials.
       </div>
     </div>
   </div>
@@ -73,7 +52,7 @@
   <header class="bg-brandDark text-white border-b border-slate-800 sticky top-0 z-30 shadow-md">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center h-16">
-        
+
         <!-- Brand -->
         <a href="/" class="flex items-center gap-3">
           <img src="/assets/img/logo-horizontal-white.svg" alt="THEWHY Consulting" style="height: 38px; width: auto;">
@@ -82,11 +61,11 @@
 
         <!-- Top Actions -->
         <div class="flex items-center space-x-3 text-xs">
-          <a href="/" target="_blank" class="px-3.5 py-2 rounded-xl bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition-colors flex items-center gap-1.5">
+          <a href="/" target="_blank" rel="noopener" class="px-3.5 py-2 rounded-xl bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition-colors flex items-center gap-1.5">
             <i class="fa-solid fa-arrow-up-right-from-square"></i> Live Website
           </a>
           <button id="admin-logout-btn" class="px-3.5 py-2 rounded-xl bg-slate-800 text-slate-300 hover:text-red-400 hover:bg-slate-700 transition-colors flex items-center gap-1.5">
-            <i class="fa-solid fa-arrow-right-from-bracket"></i> Lock
+            <i class="fa-solid fa-arrow-right-from-bracket"></i> Sign out
           </button>
         </div>
 
@@ -97,20 +76,29 @@
   <!-- ADMIN NAVIGATION TABS -->
   <div class="bg-white border-b border-slate-200 sticky top-16 z-20">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <nav class="flex space-x-6 overflow-x-auto text-xs font-bold py-3" id="admin-tabs">
-        <button data-tab="tab-insights" class="tab-btn active text-brandOrange border-b-2 border-brandOrange pb-1 flex items-center gap-2">
+      <nav class="flex space-x-6 overflow-x-auto whitespace-nowrap text-xs font-bold py-3" id="admin-tabs">
+        <button data-tab="tab-insights" class="admin-tab-btn active text-brandOrange border-b-2 border-brandOrange pb-1 flex items-center gap-2">
           <i class="fa-regular fa-newspaper"></i> Blog &amp; Insights
         </button>
-        <button data-tab="tab-inquiries" class="tab-btn text-slate-500 hover:text-slate-800 pb-1 flex items-center gap-2">
-          <i class="fa-regular fa-envelope"></i> Inquiries &amp; Contacts
+        <button data-tab="tab-bookings" class="admin-tab-btn text-slate-500 hover:text-slate-800 pb-1 flex items-center gap-2">
+          <i class="fa-regular fa-calendar-check"></i> Bookings
         </button>
-        <button data-tab="tab-launch" class="tab-btn text-slate-500 hover:text-slate-800 pb-1 flex items-center gap-2">
+        <button data-tab="tab-inquiries" class="admin-tab-btn text-slate-500 hover:text-slate-800 pb-1 flex items-center gap-2">
+          <i class="fa-regular fa-envelope"></i> Inquiries &amp; Applications
+        </button>
+        <button data-tab="tab-contacts" class="admin-tab-btn text-slate-500 hover:text-slate-800 pb-1 flex items-center gap-2">
+          <i class="fa-regular fa-comments"></i> Contact Messages
+        </button>
+        <button data-tab="tab-newsletter" class="admin-tab-btn text-slate-500 hover:text-slate-800 pb-1 flex items-center gap-2">
+          <i class="fa-regular fa-paper-plane"></i> Newsletter
+        </button>
+        <button data-tab="tab-launch" class="admin-tab-btn text-slate-500 hover:text-slate-800 pb-1 flex items-center gap-2">
           <i class="fa-solid fa-rocket"></i> Product Launch Page
         </button>
-        <button data-tab="tab-website-text" class="tab-btn text-slate-500 hover:text-slate-800 pb-1 flex items-center gap-2">
+        <button data-tab="tab-website-text" class="admin-tab-btn text-slate-500 hover:text-slate-800 pb-1 flex items-center gap-2">
           <i class="fa-solid fa-pen-to-square"></i> Website Text &amp; Banner
         </button>
-        <button data-tab="tab-media" class="tab-btn text-slate-500 hover:text-slate-800 pb-1 flex items-center gap-2">
+        <button data-tab="tab-media" class="admin-tab-btn text-slate-500 hover:text-slate-800 pb-1 flex items-center gap-2">
           <i class="fa-regular fa-image"></i> Media Library
         </button>
       </nav>
@@ -120,7 +108,7 @@
   <!-- MAIN ADMIN DASHBOARD CONTENT -->
   <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
 
-    <!-- TAB 1: BLOG & INSIGHTS MANAGER -->
+    <!-- TAB: BLOG & INSIGHTS MANAGER -->
     <section id="tab-insights" class="tab-content space-y-6">
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
         <div>
@@ -132,7 +120,6 @@
         </button>
       </div>
 
-      <!-- Articles Grid / Table -->
       <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
         <div class="overflow-x-auto">
           <table class="w-full text-left border-collapse text-xs">
@@ -155,12 +142,61 @@
       </div>
     </section>
 
-    <!-- TAB 2: INQUIRIES & CONTACT SUBMISSIONS -->
+    <!-- TAB: CONSULTATION BOOKINGS -->
+    <section id="tab-bookings" class="tab-content hidden space-y-6">
+      <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+        <div>
+          <h2 class="font-heading text-xl font-bold text-brandDark">Consultation Bookings</h2>
+          <p class="text-xs text-slate-500">Requests from the booking page. Update status, remove records, or export to CSV.</p>
+        </div>
+        <div class="flex flex-wrap items-center gap-2 text-xs">
+          <input type="search" id="bookings-search" maxlength="100" placeholder="Search name, email, ref..." class="px-3 py-2 rounded-xl border border-slate-300 w-48">
+          <select id="bookings-status-filter" class="px-3 py-2 rounded-xl border border-slate-300 bg-white">
+            <option value="ALL">All statuses</option>
+            <option value="PENDING">Pending</option>
+            <option value="CONFIRMED">Confirmed</option>
+            <option value="COMPLETED">Completed</option>
+            <option value="CANCELLED">Cancelled</option>
+          </select>
+          <button id="btn-refresh-bookings" class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold">
+            <i class="fa-solid fa-arrows-rotate"></i> Refresh
+          </button>
+          <button id="btn-export-bookings" class="px-3 py-2 rounded-xl bg-brandOrange hover:bg-brandOrangeDark text-white font-bold shadow-md">
+            <i class="fa-solid fa-file-csv"></i> Export CSV
+          </button>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr class="bg-slate-50 text-[11px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-100">
+                <th class="py-3 px-4">Reference</th>
+                <th class="py-3 px-4">Client</th>
+                <th class="py-3 px-4">Contact</th>
+                <th class="py-3 px-4">Service &amp; Format</th>
+                <th class="py-3 px-4">Date &amp; Slot</th>
+                <th class="py-3 px-4">Status</th>
+                <th class="py-3 px-4 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="bookings-tbody">
+              <tr>
+                <td colspan="7" class="py-8 text-center text-slate-400">Loading bookings...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB: INQUIRIES & PROGRAMME APPLICATIONS -->
     <section id="tab-inquiries" class="tab-content hidden space-y-6">
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
         <div>
-          <h2 class="font-heading text-xl font-bold text-brandDark">Inbound Inquiries &amp; Consultations</h2>
-          <p class="text-xs text-slate-500">Submissions from contact forms, diagnostic requests, and programme applications.</p>
+          <h2 class="font-heading text-xl font-bold text-brandDark">Inquiries &amp; Programme Applications</h2>
+          <p class="text-xs text-slate-500">Service inquiries and launch / bootcamp applications.</p>
         </div>
         <div class="flex items-center gap-2">
           <button id="btn-refresh-inquiries" class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold">
@@ -170,14 +206,73 @@
       </div>
 
       <div class="grid md:grid-cols-2 gap-4" id="inquiries-list">
-        <!-- Rendered via admin.js -->
         <div class="col-span-2 py-8 text-center text-slate-400 bg-white rounded-3xl border border-slate-200 text-xs">
           Loading inquiries...
         </div>
       </div>
     </section>
 
-    <!-- TAB 3: PRODUCT LAUNCH PAGE MANAGER -->
+    <!-- TAB: CONTACT MESSAGES -->
+    <section id="tab-contacts" class="tab-content hidden space-y-6">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+        <div>
+          <h2 class="font-heading text-xl font-bold text-brandDark">Contact Messages</h2>
+          <p class="text-xs text-slate-500">Messages sent from the contact page.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="btn-refresh-contacts" class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold">
+            <i class="fa-solid fa-arrows-rotate"></i> Refresh
+          </button>
+        </div>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-4" id="contacts-list">
+        <div class="col-span-2 py-8 text-center text-slate-400 bg-white rounded-3xl border border-slate-200 text-xs">
+          Loading messages...
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB: NEWSLETTER SUBSCRIBERS -->
+    <section id="tab-newsletter" class="tab-content hidden space-y-6">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+        <div>
+          <h2 class="font-heading text-xl font-bold text-brandDark">Newsletter Subscribers</h2>
+          <p class="text-xs text-slate-500"><span id="newsletter-count">0</span> subscribers to the Executive Advisory Briefs.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="btn-copy-newsletter" class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold">
+            <i class="fa-regular fa-copy"></i> Copy all emails
+          </button>
+          <button id="btn-refresh-newsletter" class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold">
+            <i class="fa-solid fa-arrows-rotate"></i> Refresh
+          </button>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr class="bg-slate-50 text-[11px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-100">
+                <th class="py-3 px-4">Email</th>
+                <th class="py-3 px-4">Name</th>
+                <th class="py-3 px-4">Source</th>
+                <th class="py-3 px-4">Subscribed</th>
+                <th class="py-3 px-4 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="newsletter-tbody">
+              <tr>
+                <td colspan="5" class="py-8 text-center text-slate-400">Loading subscribers...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB: PRODUCT LAUNCH PAGE MANAGER -->
     <section id="tab-launch" class="tab-content hidden space-y-6">
       <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
         <div>
@@ -189,32 +284,32 @@
           <div class="grid md:grid-cols-2 gap-4">
             <div>
               <label class="block font-bold text-slate-700 mb-1">Programme Title *</label>
-              <input type="text" id="lp-title" required class="w-full px-3 py-2 rounded-xl border border-slate-300">
+              <input type="text" id="lp-title" required maxlength="300" class="w-full px-3 py-2 rounded-xl border border-slate-300">
             </div>
             <div>
               <label class="block font-bold text-slate-700 mb-1">Badge Tagline</label>
-              <input type="text" id="lp-badge" placeholder="e.g. CMD-Certified Executive Programme" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+              <input type="text" id="lp-badge" maxlength="200" placeholder="e.g. CMD-Certified Executive Programme" class="w-full px-3 py-2 rounded-xl border border-slate-300">
             </div>
           </div>
 
           <div>
             <label class="block font-bold text-slate-700 mb-1">Hero Main Headline *</label>
-            <input type="text" id="lp-headline" required class="w-full px-3 py-2 rounded-xl border border-slate-300">
+            <input type="text" id="lp-headline" required maxlength="300" class="w-full px-3 py-2 rounded-xl border border-slate-300">
           </div>
 
           <div>
             <label class="block font-bold text-slate-700 mb-1">Subtitle / Value Proposition *</label>
-            <textarea id="lp-subtitle" rows="3" required class="w-full px-3 py-2 rounded-xl border border-slate-300"></textarea>
+            <textarea id="lp-subtitle" rows="3" required maxlength="1000" class="w-full px-3 py-2 rounded-xl border border-slate-300"></textarea>
           </div>
 
           <div class="grid md:grid-cols-2 gap-4">
             <div>
               <label class="block font-bold text-slate-700 mb-1">Start Date / Next Cohort</label>
-              <input type="text" id="lp-date" placeholder="e.g. November 2026" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+              <input type="text" id="lp-date" maxlength="100" placeholder="e.g. November 2026" class="w-full px-3 py-2 rounded-xl border border-slate-300">
             </div>
             <div>
               <label class="block font-bold text-slate-700 mb-1">Target Audience</label>
-              <input type="text" id="lp-audience" placeholder="Founders, CEOs, Finance Controllers" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+              <input type="text" id="lp-audience" maxlength="500" placeholder="Founders, CEOs, Finance Controllers" class="w-full px-3 py-2 rounded-xl border border-slate-300">
             </div>
           </div>
 
@@ -228,7 +323,7 @@
       </div>
     </section>
 
-    <!-- TAB 4: WEBSITE TEXT & ANNOUNCEMENTS -->
+    <!-- TAB: WEBSITE TEXT & ANNOUNCEMENTS -->
     <section id="tab-website-text" class="tab-content hidden space-y-6">
       <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
         <div>
@@ -239,28 +334,28 @@
         <form id="settings-form" class="space-y-4 text-xs">
           <div>
             <label class="block font-bold text-slate-700 mb-1">Top Announcement Banner</label>
-            <input type="text" id="set-announcement" placeholder="e.g. Now Enrolling: THEWHY SME Strategic Bootcamp (CMD Certified)" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+            <input type="text" id="set-announcement" maxlength="300" placeholder="e.g. Now Enrolling: THEWHY SME Strategic Bootcamp (CMD Certified)" class="w-full px-3 py-2 rounded-xl border border-slate-300">
           </div>
 
           <div class="grid md:grid-cols-2 gap-4">
             <div>
               <label class="block font-bold text-slate-700 mb-1">Official Contact Phone</label>
-              <input type="text" id="set-phone" placeholder="+234-8034-99-23-18" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+              <input type="text" id="set-phone" maxlength="40" placeholder="+234-8034-99-23-18" class="w-full px-3 py-2 rounded-xl border border-slate-300">
             </div>
             <div>
               <label class="block font-bold text-slate-700 mb-1">Official Inquiries Email</label>
-              <input type="email" id="set-email" placeholder="info@thewhy.ng" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+              <input type="email" id="set-email" maxlength="160" placeholder="info@thewhy.ng" class="w-full px-3 py-2 rounded-xl border border-slate-300">
             </div>
           </div>
 
           <div class="grid md:grid-cols-2 gap-4">
             <div>
               <label class="block font-bold text-slate-700 mb-1">Lagos Yaba HQ Address</label>
-              <input type="text" id="set-address-yaba" placeholder="1a Hughes Avenue, Alagomeji, Yaba, Lagos" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+              <input type="text" id="set-address-yaba" maxlength="300" placeholder="1a Hughes Avenue, Alagomeji, Yaba, Lagos" class="w-full px-3 py-2 rounded-xl border border-slate-300">
             </div>
             <div>
               <label class="block font-bold text-slate-700 mb-1">Lagos Ikeja Office Address</label>
-              <input type="text" id="set-address-ikeja" placeholder="29, Isaac John Street, GRA Ikeja, Lagos" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+              <input type="text" id="set-address-ikeja" maxlength="300" placeholder="29, Isaac John Street, GRA Ikeja, Lagos" class="w-full px-3 py-2 rounded-xl border border-slate-300">
             </div>
           </div>
 
@@ -274,7 +369,7 @@
       </div>
     </section>
 
-    <!-- TAB 5: MEDIA & IMAGES -->
+    <!-- TAB: MEDIA & IMAGES -->
     <section id="tab-media" class="tab-content hidden space-y-6">
       <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
         <div>
@@ -304,7 +399,7 @@
 
         <div>
           <label class="block font-bold text-slate-700 mb-1">Article Title *</label>
-          <input type="text" id="modal-art-title" required placeholder="e.g. Navigating FIRS Annual Returns in 2026" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+          <input type="text" id="modal-art-title" required maxlength="300" placeholder="e.g. Navigating FIRS Annual Returns in 2026" class="w-full px-3 py-2 rounded-xl border border-slate-300">
         </div>
 
         <div class="grid grid-cols-2 gap-3">
@@ -317,28 +412,29 @@
               <option value="Tax & Fiscal Policy">Tax &amp; Fiscal Policy</option>
               <option value="Strategy & AI">Strategy &amp; AI</option>
               <option value="SME Scaling">SME Scaling</option>
+              <option value="Turnaround Strategy">Turnaround Strategy</option>
             </select>
           </div>
           <div>
             <label class="block font-bold text-slate-700 mb-1">Author</label>
-            <input type="text" id="modal-art-author" value="THEWHY Practice Team" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+            <input type="text" id="modal-art-author" maxlength="200" value="THEWHY Practice Team" class="w-full px-3 py-2 rounded-xl border border-slate-300">
           </div>
         </div>
 
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="block font-bold text-slate-700 mb-1">Featured Cover Image</label>
-            <input type="text" id="modal-art-image" placeholder="assets/img/blog/1.jpg" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+            <input type="text" id="modal-art-image" maxlength="500" placeholder="assets/img/blog/1.jpg" class="w-full px-3 py-2 rounded-xl border border-slate-300">
           </div>
           <div>
             <label class="block font-bold text-slate-700 mb-1">Estimated Reading Time</label>
-            <input type="text" id="modal-art-readtime" value="4 min read" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+            <input type="text" id="modal-art-readtime" maxlength="50" value="4 min read" class="w-full px-3 py-2 rounded-xl border border-slate-300">
           </div>
         </div>
 
         <div>
           <label class="block font-bold text-slate-700 mb-1">Short Summary / Excerpt *</label>
-          <textarea id="modal-art-excerpt" rows="2" required placeholder="Brief summary displayed on listings and cards..." class="w-full px-3 py-2 rounded-xl border border-slate-300"></textarea>
+          <textarea id="modal-art-excerpt" rows="2" required maxlength="1000" placeholder="Brief summary displayed on listings and cards..." class="w-full px-3 py-2 rounded-xl border border-slate-300"></textarea>
         </div>
 
         <div>
@@ -350,6 +446,8 @@
           <input type="checkbox" id="modal-art-published" checked class="w-4 h-4 text-brandOrange rounded">
           <label for="modal-art-published" class="font-bold text-slate-700">Publish immediately to live site</label>
         </div>
+
+        <div id="article-error" class="hidden text-xs text-red-600 font-semibold"></div>
 
         <div class="pt-3">
           <button type="submit" id="btn-save-article" class="w-full py-3 bg-brandOrange hover:bg-brandOrangeDark text-white font-bold rounded-xl shadow-md transition-all text-xs">
@@ -364,6 +462,6 @@
     THEWHY Consulting Executive Portal &copy; 2026. An affiliate of Wale Kehinde &amp; Co. (Chartered Accountants).
   </footer>
 
-  <script src="/js/admin.js"></script>
+  <script src="/js/admin.js?v=3"></script>
 </body>
 </html>

@@ -5,7 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Executive Insight | THEWHY Consulting</title>
   <meta name="description" content="Authoritative business intelligence, Nigerian tax policy, and corporate restructuring insights from THEWHY Consulting." />
-  <meta name="theme-color" content="#111820" />
+  <link rel="canonical" href="https://why.ng/insights">
+  <meta name="theme-color" content="#0f172a" />
+
+  <!-- Open Graph / Social -->
+  <meta property="og:site_name" content="THEWHY Consulting" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Executive Insight | THEWHY Consulting" />
+  <meta property="og:description" content="Authoritative business intelligence, Nigerian tax policy, and corporate restructuring insights from THEWHY Consulting." />
+  <meta property="og:url" content="https://why.ng/insights" />
+  <meta property="og:image" content="https://why.ng/assets/img/banners/boardroom-strategy.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Executive Insight | THEWHY Consulting" />
+  <meta name="twitter:description" content="Authoritative business intelligence, Nigerian tax policy, and corporate restructuring insights from THEWHY Consulting." />
 
   <!-- Google Fonts: DM Sans & Manrope -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,9 +29,11 @@
 
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="/assets/img/logo-mark.svg">
+  <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
 
   <!-- Bespoke Design System CSS -->
   <link rel="stylesheet" href="/css/custom.css">
+  <script>try{if(sessionStorage.getItem('why_preloader_seen'))document.documentElement.classList.add('why-preloader-seen')}catch(e){}</script>
 </head>
 <body>
 
@@ -72,11 +86,10 @@
       <a href="/services">Services</a>
       <a href="/industries">Who We Serve</a>
       <a href="/team">Our Team</a>
-      <a href="/insights" class="active">Insights</a>
+      <a href="/insights" class="active" aria-current="page">Insights</a>
       <a href="/launch">Special Program</a>
       <a href="/contact">Contact</a>
-      <a href="/admin">Executive Portal</a>
-      <a href="/contact" class="drawer-cta">Schedule Consultation &rarr;</a>
+      <a href="/booking" class="drawer-cta">Schedule Consultation &rarr;</a>
       <div class="drawer-contact-strip">
         <a href="tel:+2348034992318" class="drawer-contact-link">
           <i class="fa-solid fa-phone"></i> <span>+234-8034-99-23-18</span>
@@ -105,14 +118,14 @@
           <a href="/services">Services</a>
           <a href="/industries">Industries</a>
           <a href="/team">Our Team</a>
-          <a href="/insights" class="active">Insights</a>
+          <a href="/insights" class="active" aria-current="page">Insights</a>
           <a href="/launch">Special Program</a>
           <a href="/contact">Contact</a>
         </div>
 
         <div class="nav-actions">
-          <a href="/contact" class="nav-cta">
-            <span>Get In Touch</span> <i class="fa-solid fa-arrow-right" style="font-size:11px;"></i>
+          <a href="/booking" class="nav-cta">
+            <span>Book Consultation</span> <i class="fa-solid fa-arrow-right" style="font-size:11px;"></i>
           </a>
           <button class="menu-btn" id="menuBtn" aria-label="Open navigation">
             <i class="fa-solid fa-bars"></i>
@@ -184,13 +197,13 @@
 
           <div style="display: flex; align-items: center; gap: 12px;">
             <span style="font-size: 0.82rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em;">Share:</span>
-            <a href="#" id="share-whatsapp" target="_blank" style="width: 36px; height: 36px; border-radius: 50%; background: #25D366; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1rem;">
+            <a href="https://api.whatsapp.com/send?text=THEWHY%20Consulting%20Insights%20https%3A%2F%2Fwhy.ng%2Finsights" id="share-whatsapp" target="_blank" rel="noopener" aria-label="Share on WhatsApp" style="width: 36px; height: 36px; border-radius: 50%; background: #25D366; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1rem;">
               <i class="fa-brands fa-whatsapp"></i>
             </a>
-            <a href="#" id="share-linkedin" target="_blank" style="width: 36px; height: 36px; border-radius: 50%; background: #0A66C2; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1rem;">
+            <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fwhy.ng%2Finsights" id="share-linkedin" target="_blank" rel="noopener" aria-label="Share on LinkedIn" style="width: 36px; height: 36px; border-radius: 50%; background: #0A66C2; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1rem;">
               <i class="fa-brands fa-linkedin-in"></i>
             </a>
-            <a href="#" id="share-twitter" target="_blank" style="width: 36px; height: 36px; border-radius: 50%; background: #000; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1rem;">
+            <a href="https://twitter.com/intent/tweet?text=THEWHY%20Consulting%20Insights&amp;url=https%3A%2F%2Fwhy.ng%2Finsights" id="share-twitter" target="_blank" rel="noopener" aria-label="Share on X (Twitter)" style="width: 36px; height: 36px; border-radius: 50%; background: #000; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1rem;">
               <i class="fa-brands fa-x-twitter"></i>
             </a>
           </div>
@@ -202,7 +215,7 @@
             TW
           </div>
           <div>
-            <h4 style="font-size: 1.1rem; color: var(--ink); margin-bottom: 4px;">THEWHY Consulting Research &amp; Advisory Practice</h4>
+            <h2 style="font-size: 1.1rem; line-height: 1.3; color: var(--ink); margin-bottom: 4px;">THEWHY Consulting Research &amp; Advisory Practice</h2>
             <p style="font-size: 0.88rem; color: var(--muted); line-height: 1.5;">
               Published by the senior advisory team at THEWHY Consulting in affiliation with Wale Kehinde &amp; Co. (Chartered Accountants). Providing authoritative insights to protect balance sheets and scale Nigerian enterprises.
             </p>
@@ -256,9 +269,10 @@
             <li><a href="/about">About the Firm</a></li>
             <li><a href="/industries">Who We Serve</a></li>
             <li><a href="/team">Our Leadership Team</a></li>
+            <li><a href="/case-studies">Case Studies</a></li>
+            <li><a href="/calculator">Fee Calculator</a></li>
             <li><a href="/launch">SME Bootcamp (CMD)</a></li>
             <li><a href="/insights">Articles &amp; Insights</a></li>
-            <li><a href="/admin">Executive Portal</a></li>
           </ul>
         </div>
 
@@ -284,11 +298,10 @@
       </div>
 
       <div class="footer-bottom">
-        <p>&copy; 2026 THEWHY Consulting. All rights reserved. Registered in the Federal Republic of Nigeria.</p>
+        <p>&copy; <span data-year>2026</span> THEWHY Consulting. All rights reserved. Registered in the Federal Republic of Nigeria.</p>
         <div style="display: flex; gap: 1.5rem; font-size: 0.85rem;">
           <a href="/privacy" style="color: #94a3b8;">Privacy Policy</a>
           <a href="/terms" style="color: #94a3b8;">Terms of Use</a>
-          <a href="/admin" style="color: #94a3b8;">Admin Portal</a>
         </div>
       </div>
     </div>
@@ -296,6 +309,14 @@
 
   <script src="/js/main.js"></script>
   <script>
+    var escapeHtml = (window.WHY && window.WHY.escapeHtml) || function (s) {
+      return String(s == null ? '' : s)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    };
+    function inlineMd(text) {
+      return escapeHtml(text).replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    }
     async function loadArticle() {
       const urlParams = new URLSearchParams(window.location.search);
       let slug = urlParams.get('slug');
@@ -308,41 +329,41 @@
       if (!slug) slug = 'cac-annual-returns-guide-2026';
 
       try {
-        const res = await fetch('/api/insights/' + slug);
+        const res = await fetch('/api/insights/' + encodeURIComponent(slug));
         const json = await res.json();
         if (json.success && json.data) {
           const art = json.data;
-          document.title = art.title + ' | THEWHY Consulting';
-          document.getElementById('art-title').innerText = art.title;
-          document.getElementById('art-category').innerText = art.category || 'Strategic Insight';
-          document.getElementById('art-author').innerText = art.author || 'THEWHY Practice Team';
-          document.getElementById('art-excerpt').innerText = art.excerpt || '';
+          document.title = (art.title || 'Executive Insight') + ' | THEWHY Consulting';
+          document.getElementById('art-title').textContent = art.title || '';
+          document.getElementById('art-category').textContent = art.category || 'Strategic Insight';
+          document.getElementById('art-author').textContent = art.author || 'THEWHY Practice Team';
+          document.getElementById('art-excerpt').textContent = art.excerpt || '';
           
-          if (art.readTime) document.getElementById('art-readtime').innerText = art.readTime;
+          if (art.readTime) document.getElementById('art-readtime').textContent = art.readTime;
           if (art.published_at) {
             const d = new Date(art.published_at);
-            document.getElementById('art-date').innerText = d.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+            if (!isNaN(d)) document.getElementById('art-date').textContent = d.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
           }
 
           // Format content into HTML paragraphs
           const raw = art.content || '';
           const paras = raw.split('\n\n').filter(Boolean);
           const bodyEl = document.getElementById('art-body');
-          bodyEl.innerHTML = '';
+          bodyEl.textContent = '';
           paras.forEach(p => {
             if (p.startsWith('### ')) {
               const h = document.createElement('h3');
               h.style.fontSize = '1.35rem';
               h.style.color = 'var(--ink)';
               h.style.marginTop = '1rem';
-              h.innerText = p.replace('### ', '');
+              h.textContent = p.replace('### ', '');
               bodyEl.appendChild(h);
             } else if (p.startsWith('## ')) {
               const h = document.createElement('h2');
               h.style.fontSize = '1.6rem';
               h.style.color = 'var(--ink)';
               h.style.marginTop = '1rem';
-              h.innerText = p.replace('## ', '');
+              h.textContent = p.replace('## ', '');
               bodyEl.appendChild(h);
             } else if (p.startsWith('- ')) {
               const ul = document.createElement('ul');
@@ -352,7 +373,7 @@
               ul.style.gap = '8px';
               p.split('\n').forEach(li => {
                 const item = document.createElement('li');
-                item.innerHTML = li.replace(/^- \*\*(.*?)\*\*/, '<strong>$1</strong>').replace(/^- /, '');
+                item.innerHTML = inlineMd(li.replace(/^- /, ''));
                 ul.appendChild(item);
               });
               bodyEl.appendChild(ul);
@@ -364,20 +385,20 @@
               ol.style.gap = '8px';
               p.split('\n').forEach(li => {
                 const item = document.createElement('li');
-                item.innerHTML = li.replace(/^\d+\. \*\*(.*?)\*\*/, '<strong>$1</strong>').replace(/^\d+\. /, '');
+                item.innerHTML = inlineMd(li.replace(/^\d+\. /, ''));
                 ol.appendChild(item);
               });
               bodyEl.appendChild(ol);
             } else {
               const pe = document.createElement('p');
-              pe.innerHTML = p.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+              pe.innerHTML = inlineMd(p);
               bodyEl.appendChild(pe);
             }
           });
 
           // Tags
           const tagsContainer = document.getElementById('art-tags');
-          tagsContainer.innerHTML = '';
+          tagsContainer.textContent = '';
           const tags = Array.isArray(art.tags) ? art.tags : (art.category ? [art.category, 'Consulting'] : ['Advisory']);
           tags.forEach(t => {
             const span = document.createElement('span');
@@ -387,13 +408,13 @@
             span.style.fontSize = '0.8rem';
             span.style.fontWeight = '600';
             span.style.color = 'var(--muted)';
-            span.innerText = '#' + t;
+            span.textContent = '#' + t;
             tagsContainer.appendChild(span);
           });
 
           // Social share URLs
           const currentUrl = encodeURIComponent(window.location.href);
-          const shareTitle = encodeURIComponent(art.title);
+          const shareTitle = encodeURIComponent(art.title || '');
           document.getElementById('share-whatsapp').href = `https://api.whatsapp.com/send?text=${shareTitle}%20${currentUrl}`;
           document.getElementById('share-linkedin').href = `https://www.linkedin.com/sharing/share-offsite/?url=${currentUrl}`;
           document.getElementById('share-twitter').href = `https://twitter.com/intent/tweet?text=${shareTitle}&url=${currentUrl}`;

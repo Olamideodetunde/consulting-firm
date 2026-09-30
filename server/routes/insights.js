@@ -1,82 +1,51 @@
 /**
- * Insights & Blog Articles Route
- * Exposes business articles, compliance updates, and full Admin CRUD.
+ * Insights / blog articles.
+ *   GET    /api/insights        public, published articles only
+ *   GET    /api/insights/:slug  public; drafts are only visible to a signed-in admin
+ *   POST   /api/insights        admin
+ *   PUT    /api/insights/:slug  admin
+ *   DELETE /api/insights/:slug  admin
+ *
+ * Article bodies can be long, so this router parses JSON itself with a larger
+ * limit, and only after the admin check (the global parser skips /api/insights).
  */
 const express = require('express');
 const router = express.Router();
 const db = require('../db/db');
+const { requireAdmin, isAdminRequest } = require('../lib/auth');
+const { validateBody, schemas } = require('../lib/validate');
+const { wrap } = require('../lib/util');
 
-// GET /api/insights - list all published articles
-router.get('/', async (req, res) => {
-  try {
-    const articles = await db.getAllInsights();
-    res.json({ success: true, count: articles.length, data: articles });
-  } catch (err) {
-    res.status(500).json({ success: false, error: err.message });
-  }
-});
+const articleJson = express.json({ limit: '300kb' });
 
-// GET /api/insights/:slug - get single article by slug
-router.get('/:slug', async (req, res) => {
-  try {
-    const article = await db.getInsightBySlug(req.params.slug);
-    if (!article) {
-      return res.status(404).json({ success: false, error: 'Article not found.' });
-    }
-    res.json({ success: true, data: article });
-  } catch (err) {
-    res.status(500).json({ success: false, error: err.message });
-  }
-});
+router.get('/', wrap(async (req, res) => {
+  const articles = await db.getAllInsights();
+  res.json({ success: true, count: articles.length, data: articles });
+}));
 
-// POST /api/insights - create new article
-router.post('/', async (req, res) => {
-  try {
-    const { title, category, excerpt, content, cover_image, author, readTime, tags, is_published } = req.body;
-    if (!title || !content) {
-      return res.status(400).json({ success: false, error: 'Title and content are required.' });
-    }
-    const created = await db.createInsight({
-      title,
-      category,
-      excerpt,
-      content,
-      cover_image,
-      author,
-      readTime,
-      tags,
-      is_published
-    });
-    res.status(201).json({ success: true, data: created });
-  } catch (err) {
-    res.status(500).json({ success: false, error: err.message });
+router.get('/:slug', wrap(async (req, res) => {
+  const article = await db.getInsightBySlug(req.params.slug);
+  if (!article || (article.is_published === false && !isAdminRequest(req))) {
+    return res.status(404).json({ success: false, error: 'Article not found.' });
   }
-});
+  res.json({ success: true, data: article });
+}));
 
-// PUT /api/insights/:slug - update existing article
-router.put('/:slug', async (req, res) => {
-  try {
-    const updated = await db.updateInsight(req.params.slug, req.body);
-    if (!updated) {
-      return res.status(404).json({ success: false, error: 'Article not found.' });
-    }
-    res.json({ success: true, data: updated });
-  } catch (err) {
-    res.status(500).json({ success: false, error: err.message });
-  }
-});
+router.post('/', requireAdmin, articleJson, validateBody(schemas.insight), wrap(async (req, res) => {
+  const created = await db.createInsight(req.valid);
+  res.status(201).json({ success: true, data: created });
+}));
 
-// DELETE /api/insights/:slug - delete article
-router.delete('/:slug', async (req, res) => {
-  try {
-    const success = await db.deleteInsight(req.params.slug);
-    if (!success) {
-      return res.status(404).json({ success: false, error: 'Article not found.' });
-    }
-    res.json({ success: true, message: 'Article deleted successfully.' });
-  } catch (err) {
-    res.status(500).json({ success: false, error: err.message });
-  }
-});
+router.put('/:slug', requireAdmin, articleJson, validateBody(schemas.insight, { partial: true }), wrap(async (req, res) => {
+  const updated = await db.updateInsight(req.params.slug, req.valid);
+  if (!updated) return res.status(404).json({ success: false, error: 'Article not found.' });
+  res.json({ success: true, data: updated });
+}));
+
+router.delete('/:slug', requireAdmin, wrap(async (req, res) => {
+  const ok = await db.deleteInsight(req.params.slug);
+  if (!ok) return res.status(404).json({ success: false, error: 'Article not found.' });
+  res.json({ success: true, message: 'Article deleted successfully.' });
+}));
 
 module.exports = router;

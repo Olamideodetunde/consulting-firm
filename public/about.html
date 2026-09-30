@@ -5,7 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>About Us | THEWHY Consulting</title>
   <meta name="description" content="Learn about THEWHY Consulting, our founding pedigree, practice leadership, and partnership with Wale Kehinde & Co. (Chartered Accountants)." />
-  <meta name="theme-color" content="#111820" />
+  <link rel="canonical" href="https://why.ng/about">
+  <meta name="theme-color" content="#0f172a" />
+
+  <!-- Open Graph / Social -->
+  <meta property="og:site_name" content="THEWHY Consulting" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="About Us | THEWHY Consulting" />
+  <meta property="og:description" content="Learn about THEWHY Consulting, our founding pedigree, practice leadership, and partnership with Wale Kehinde &amp; Co. (Chartered Accountants)." />
+  <meta property="og:url" content="https://why.ng/about" />
+  <meta property="og:image" content="https://why.ng/assets/img/banners/boardroom-strategy.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="About Us | THEWHY Consulting" />
+  <meta name="twitter:description" content="Learn about THEWHY Consulting, our founding pedigree, practice leadership, and partnership with Wale Kehinde &amp; Co. (Chartered Accountants)." />
 
   <!-- Google Fonts: DM Sans & Manrope -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,9 +29,11 @@
 
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="/assets/img/logo-mark.svg">
+  <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
 
   <!-- Bespoke Design System CSS -->
   <link rel="stylesheet" href="/css/custom.css">
+  <script>try{if(sessionStorage.getItem('why_preloader_seen'))document.documentElement.classList.add('why-preloader-seen')}catch(e){}</script>
 </head>
 <body>
 
@@ -68,15 +82,14 @@
       </div>
       <small>THEWHY Practice Directory</small>
       <a href="/">Home</a>
-      <a href="/about" class="active">About Us</a>
+      <a href="/about" class="active" aria-current="page">About Us</a>
       <a href="/services">Services</a>
       <a href="/industries">Who We Serve</a>
       <a href="/team">Our Team</a>
       <a href="/insights">Insights</a>
       <a href="/launch">Special Program</a>
       <a href="/contact">Contact</a>
-      <a href="/admin">Executive Portal</a>
-      <a href="/contact" class="drawer-cta">Schedule Consultation &rarr;</a>
+      <a href="/booking" class="drawer-cta">Schedule Consultation &rarr;</a>
       <div class="drawer-contact-strip">
         <a href="tel:+2348034992318" class="drawer-contact-link">
           <i class="fa-solid fa-phone"></i> <span>+234-8034-99-23-18</span>
@@ -101,7 +114,7 @@
 
         <div class="nav-links">
           <a href="/">Home</a>
-          <a href="/about" class="active">About</a>
+          <a href="/about" class="active" aria-current="page">About</a>
           <a href="/services">Services</a>
           <a href="/industries">Industries</a>
           <a href="/team">Our Team</a>
@@ -111,8 +124,8 @@
         </div>
 
         <div class="nav-actions">
-          <a href="/contact" class="nav-cta">
-            <span>Get In Touch</span> <i class="fa-solid fa-arrow-right" style="font-size:11px;"></i>
+          <a href="/booking" class="nav-cta">
+            <span>Book Consultation</span> <i class="fa-solid fa-arrow-right" style="font-size:11px;"></i>
           </a>
           <button class="menu-btn" id="menuBtn" aria-label="Open navigation">
             <i class="fa-solid fa-bars"></i>
@@ -158,7 +171,7 @@
         
         <div class="about-visual reveal">
           <div class="about-visual-img">
-            <img src="/assets/img/banners/contract-signing.jpg" alt="Accredited Stewardship &amp; Statutory Pedigree">
+            <img src="/assets/img/banners/contract-signing.jpg" alt="Accredited Stewardship &amp; Statutory Pedigree" width="1024" height="682" loading="lazy" decoding="async">
           </div>
           <div class="about-visual-overlay"></div>
           <div class="about-badge">
@@ -265,7 +278,7 @@
           <p>We treat every client enterprise with individual stewardship, providing direct partner accessibility, rapid response, and dedicated project leadership.</p>
         </div>
 
-        <div class="value-card reveal delay-3" style="--accent: #059669;">
+        <div class="value-card reveal delay-3" style="--accent: #047857;">
           <div class="value-icon"><i class="fa-solid fa-shield-heart"></i></div>
           <h3>Confidentiality</h3>
           <p>We enforce strict non-disclosure safeguards across all financial reconstructions, merger negotiations, and creditor settlements.</p>
@@ -285,14 +298,14 @@
         <p class="section-copy">Experienced professionals who take personal responsibility for the turnaround and growth of your business.</p>
       </div>
 
+      <!-- TODO(client-assets): replace stock team photos with real partner headshots -->
       <div class="team-grid">
         
         <!-- Leader 1 -->
         <div class="team-card reveal">
           <div class="team-photo">
-            <img src="/assets/img/team/1.jpg" alt="Mr. Kehinde Adewale">
+            <img src="/assets/img/team/1.jpg" alt="Mr. Kehinde Adewale" width="800" height="1068" loading="lazy" decoding="async">
             <div class="team-photo-overlay">
-              <a href="https://linkedin.com" target="_blank" class="team-social-btn" aria-label="LinkedIn Profile"><i class="fa-brands fa-linkedin-in"></i></a>
               <a href="mailto:info@thewhy.ng" class="team-social-btn" aria-label="Email Partner"><i class="fa-solid fa-envelope"></i></a>
             </div>
           </div>
@@ -307,9 +320,8 @@
         <!-- Leader 2 -->
         <div class="team-card reveal delay-1">
           <div class="team-photo">
-            <img src="/assets/img/team/2.jpg" alt="Mr. Seun Olaniyi">
+            <img src="/assets/img/team/2.jpg" alt="Mr. Seun Olaniyi" width="369" height="493" loading="lazy" decoding="async">
             <div class="team-photo-overlay">
-              <a href="https://linkedin.com" target="_blank" class="team-social-btn" aria-label="LinkedIn Profile"><i class="fa-brands fa-linkedin-in"></i></a>
               <a href="mailto:info@thewhy.ng" class="team-social-btn" aria-label="Email Partner"><i class="fa-solid fa-envelope"></i></a>
             </div>
           </div>
@@ -324,9 +336,8 @@
         <!-- Leader 3 -->
         <div class="team-card reveal delay-2">
           <div class="team-photo">
-            <img src="/assets/img/team/3.jpg" alt="Mrs. Dolapo Wale-Kehinde">
+            <img src="/assets/img/team/3.jpg" alt="Mrs. Dolapo Wale-Kehinde" width="800" height="1067" loading="lazy" decoding="async">
             <div class="team-photo-overlay">
-              <a href="https://linkedin.com" target="_blank" class="team-social-btn" aria-label="LinkedIn Profile"><i class="fa-brands fa-linkedin-in"></i></a>
               <a href="mailto:info@thewhy.ng" class="team-social-btn" aria-label="Email Partner"><i class="fa-solid fa-envelope"></i></a>
             </div>
           </div>
@@ -383,13 +394,14 @@
       <div style="font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:0.18em; color:var(--muted); margin-bottom:16px;">
         Institutional Partners &bull; Professional Standards &bull; Audit Affiliations
       </div>
+      <!-- TODO(client-assets): replace with real partner/accreditation logos -->
       <div class="partner-logo-strip">
-        <img src="/assets/img/partner/1.png" alt="Institutional Partner 1" class="partner-logo-item">
-        <img src="/assets/img/partner/2.png" alt="Institutional Partner 2" class="partner-logo-item">
-        <img src="/assets/img/partner/3.png" alt="Institutional Partner 3" class="partner-logo-item">
-        <img src="/assets/img/partner/4.png" alt="Institutional Partner 4" class="partner-logo-item">
-        <img src="/assets/img/partner/5.png" alt="Institutional Partner 5" class="partner-logo-item">
-        <img src="/assets/img/partner/6.png" alt="Institutional Partner 6" class="partner-logo-item">
+        <img src="/assets/img/partner/1.png" alt="Partner logo placeholder" class="partner-logo-item" width="150" height="150" loading="lazy" decoding="async">
+        <img src="/assets/img/partner/2.png" alt="Partner logo placeholder" class="partner-logo-item" width="150" height="150" loading="lazy" decoding="async">
+        <img src="/assets/img/partner/3.png" alt="Partner logo placeholder" class="partner-logo-item" width="150" height="150" loading="lazy" decoding="async">
+        <img src="/assets/img/partner/4.png" alt="Partner logo placeholder" class="partner-logo-item" width="150" height="150" loading="lazy" decoding="async">
+        <img src="/assets/img/partner/5.png" alt="Partner logo placeholder" class="partner-logo-item" width="150" height="150" loading="lazy" decoding="async">
+        <img src="/assets/img/partner/6.png" alt="Partner logo placeholder" class="partner-logo-item" width="150" height="150" loading="lazy" decoding="async">
       </div>
     </div>
   </section>
@@ -398,7 +410,7 @@
   <section class="section" style="padding: 60px 0 80px;">
     <div class="container">
       <div class="mono-promo reveal">
-        <img src="/assets/img/banners/boardroom-strategy.jpg" alt="THEWHY Practice Leadership &amp; Boardroom Advisory">
+        <img src="/assets/img/banners/boardroom-strategy.jpg" alt="THEWHY Practice Leadership &amp; Boardroom Advisory" width="1024" height="616" loading="lazy" decoding="async">
         <div class="mono-promo-overlay">
           <div class="mono-promo-text">
             <span class="section-kicker yellow">Chartered Authority</span>
@@ -461,9 +473,10 @@
             <li><a href="/about">About the Firm</a></li>
             <li><a href="/industries">Who We Serve</a></li>
             <li><a href="/team">Our Leadership Team</a></li>
+            <li><a href="/case-studies">Case Studies</a></li>
+            <li><a href="/calculator">Fee Calculator</a></li>
             <li><a href="/launch">SME Bootcamp (CMD)</a></li>
             <li><a href="/insights">Articles &amp; Insights</a></li>
-            <li><a href="/admin">Executive Portal</a></li>
           </ul>
         </div>
 
@@ -489,11 +502,10 @@
       </div>
 
       <div class="footer-bottom">
-        <p>&copy; 2026 THEWHY Consulting. All rights reserved. Registered in the Federal Republic of Nigeria.</p>
+        <p>&copy; <span data-year>2026</span> THEWHY Consulting. All rights reserved. Registered in the Federal Republic of Nigeria.</p>
         <div style="display: flex; gap: 1.5rem; font-size: 0.85rem;">
           <a href="/privacy" style="color: #94a3b8;">Privacy Policy</a>
           <a href="/terms" style="color: #94a3b8;">Terms of Use</a>
-          <a href="/admin" style="color: #94a3b8;">Admin Portal</a>
         </div>
       </div>
     </div>

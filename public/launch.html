@@ -5,7 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SME Executive Scaling Bootcamp (CMD-Certified) | THEWHY Consulting</title>
   <meta name="description" content="THEWHY Executive Business Acceleration &amp; SME Scaling Bootcamp. A high-impact 6-week strategic immersion certified by the Centre for Management Development (CMD) for Nigerian business owners and CEOs." />
-  <meta name="theme-color" content="#111820" />
+  <link rel="canonical" href="https://why.ng/launch">
+  <meta name="theme-color" content="#0f172a" />
+
+  <!-- Open Graph / Social -->
+  <meta property="og:site_name" content="THEWHY Consulting" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="SME Executive Scaling Bootcamp (CMD-Certified) | THEWHY Consulting" />
+  <meta property="og:description" content="THEWHY Executive Business Acceleration &amp; SME Scaling Bootcamp. A high-impact 6-week strategic immersion certified by the Centre for Management Development (CMD) for Nigerian business owners and CEOs." />
+  <meta property="og:url" content="https://why.ng/launch" />
+  <meta property="og:image" content="https://why.ng/assets/img/banners/boardroom-strategy.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="SME Executive Scaling Bootcamp (CMD-Certified) | THEWHY Consulting" />
+  <meta name="twitter:description" content="THEWHY Executive Business Acceleration &amp; SME Scaling Bootcamp. A high-impact 6-week strategic immersion certified by the Centre for Management Development (CMD) for Nigerian business owners and CEOs." />
 
   <!-- Google Fonts: DM Sans & Manrope -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,9 +29,11 @@
 
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="/assets/img/logo-mark.svg">
+  <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
 
   <!-- Bespoke Design System CSS -->
   <link rel="stylesheet" href="/css/custom.css">
+  <script>try{if(sessionStorage.getItem('why_preloader_seen'))document.documentElement.classList.add('why-preloader-seen')}catch(e){}</script>
 </head>
 <body>
 
@@ -73,10 +87,9 @@
       <a href="/industries">Who We Serve</a>
       <a href="/team">Our Team</a>
       <a href="/insights">Insights</a>
-      <a href="/launch" class="active">Special Program</a>
+      <a href="/launch" class="active" aria-current="page">Special Program</a>
       <a href="/contact">Contact</a>
-      <a href="/admin">Executive Portal</a>
-      <a href="#register" class="drawer-cta">Apply for Bootcamp &rarr;</a>
+      <a href="/booking" class="drawer-cta">Schedule Consultation &rarr;</a>
       <div class="drawer-contact-strip">
         <a href="tel:+2348034992318" class="drawer-contact-link">
           <i class="fa-solid fa-phone"></i> <span>+234-8034-99-23-18</span>
@@ -84,7 +97,7 @@
         <a href="mailto:info@thewhy.ng" class="drawer-contact-link">
           <i class="fa-solid fa-envelope"></i> <span>info@thewhy.ng</span>
         </a>
-        <div style="font-size:11px; color:#64748b; padding-left:12px; margin-top:2px;">
+        <div style="font-size:11px; color:#64748b; padding-left:12px; margin-top:4px;">
           <i class="fa-solid fa-building-shield" style="color:var(--yellow); margin-right:4px;"></i> Lagos HQ: Yaba &bull; Ikeja
         </div>
       </div>
@@ -106,13 +119,13 @@
           <a href="/industries">Industries</a>
           <a href="/team">Our Team</a>
           <a href="/insights">Insights</a>
-          <a href="/launch" class="active">Special Program</a>
+          <a href="/launch" class="active" aria-current="page">Special Program</a>
           <a href="/contact">Contact</a>
         </div>
 
         <div class="nav-actions">
-          <a href="#register" class="nav-cta">
-            <span>Apply Now</span> <i class="fa-solid fa-arrow-right" style="font-size:11px;"></i>
+          <a href="/booking" class="nav-cta">
+            <span>Book Consultation</span> <i class="fa-solid fa-arrow-right" style="font-size:11px;"></i>
           </a>
           <button class="menu-btn" id="menuBtn" aria-label="Open navigation">
             <i class="fa-solid fa-bars"></i>
@@ -208,7 +221,7 @@
           </div>
 
           <div class="mono-card" style="background: var(--white); border-radius: 20px; padding: 2rem; border: 1px solid var(--line);">
-            <div style="font-size: 1.5rem; color: #059669; margin-bottom: 1rem;"><i class="fa-solid fa-robot"></i></div>
+            <div style="font-size: 1.5rem; color: #047857; margin-bottom: 1rem;"><i class="fa-solid fa-robot"></i></div>
             <h3 style="font-size: 1.2rem; margin-bottom: 0.75rem; color: var(--ink);">AI &amp; Cloud Financial Systems</h3>
             <p style="color: var(--muted); font-size: 0.92rem; line-height: 1.6;">
               Transition from manual spreadsheets to automated cloud dashboards (QuickBooks, Zoho, Sage) and harness AI for breakthrough operational productivity.
@@ -267,7 +280,7 @@
           </div>
 
           <div style="background: var(--white); border-radius: 16px; padding: 1.75rem 2rem; border: 1px solid var(--line); display: flex; gap: 1.5rem; align-items: flex-start;">
-            <div style="background: #ecfdf5; color: #059669; font-weight: 800; font-size: 0.85rem; padding: 8px 14px; border-radius: 10px; white-space: nowrap;">Week 04</div>
+            <div style="background: #ecfdf5; color: #047857; font-weight: 800; font-size: 0.85rem; padding: 8px 14px; border-radius: 10px; white-space: nowrap;">Week 04</div>
             <div>
               <h3 style="font-size: 1.15rem; margin-bottom: 0.5rem; color: var(--ink);">AI Integration &amp; Operational Automation</h3>
               <p style="color: var(--muted); font-size: 0.9rem; line-height: 1.5;">Deploying generative AI and workflow automations to streamline customer acquisition, financial reporting, and compliance monitoring.</p>
@@ -321,29 +334,29 @@
           <form id="bootcamp-form" style="display: flex; flex-direction: column; gap: 1.25rem;">
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem;">
               <div>
-                <label style="display: block; font-size: 0.82rem; font-weight: 700; color: var(--ink); margin-bottom: 6px;">Full Name *</label>
-                <input type="text" id="bc-name" required placeholder="Alhaji Tunde Balogun" style="width: 100%; padding: 12px 16px; border: 1px solid var(--line); border-radius: 12px; font-size: 0.9rem; background: var(--paper);">
+                <label for="bc-name" style="display: block; font-size: 0.82rem; font-weight: 700; color: var(--ink); margin-bottom: 6px;">Full Name *</label>
+                <input autocomplete="name" type="text" id="bc-name" required placeholder="Alhaji Tunde Balogun" style="width: 100%; padding: 12px 16px; border: 1px solid var(--line); border-radius: 12px; font-size: 0.9rem; background: var(--paper);">
               </div>
               <div>
-                <label style="display: block; font-size: 0.82rem; font-weight: 700; color: var(--ink); margin-bottom: 6px;">Company / Enterprise *</label>
-                <input type="text" id="bc-company" required placeholder="Logistics &amp; Haulage Ltd" style="width: 100%; padding: 12px 16px; border: 1px solid var(--line); border-radius: 12px; font-size: 0.9rem; background: var(--paper);">
+                <label for="bc-company" style="display: block; font-size: 0.82rem; font-weight: 700; color: var(--ink); margin-bottom: 6px;">Company / Enterprise *</label>
+                <input autocomplete="organization" type="text" id="bc-company" required placeholder="Logistics &amp; Haulage Ltd" style="width: 100%; padding: 12px 16px; border: 1px solid var(--line); border-radius: 12px; font-size: 0.9rem; background: var(--paper);">
               </div>
             </div>
 
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem;">
               <div>
-                <label style="display: block; font-size: 0.82rem; font-weight: 700; color: var(--ink); margin-bottom: 6px;">Work Email *</label>
-                <input type="email" id="bc-email" required placeholder="ceo@company.com" style="width: 100%; padding: 12px 16px; border: 1px solid var(--line); border-radius: 12px; font-size: 0.9rem; background: var(--paper);">
+                <label for="bc-email" style="display: block; font-size: 0.82rem; font-weight: 700; color: var(--ink); margin-bottom: 6px;">Work Email *</label>
+                <input autocomplete="email" type="email" id="bc-email" required placeholder="ceo@company.com" style="width: 100%; padding: 12px 16px; border: 1px solid var(--line); border-radius: 12px; font-size: 0.9rem; background: var(--paper);">
               </div>
               <div>
-                <label style="display: block; font-size: 0.82rem; font-weight: 700; color: var(--ink); margin-bottom: 6px;">Phone / WhatsApp *</label>
-                <input type="tel" id="bc-phone" required placeholder="+234 803 123 4567" style="width: 100%; padding: 12px 16px; border: 1px solid var(--line); border-radius: 12px; font-size: 0.9rem; background: var(--paper);">
+                <label for="bc-phone" style="display: block; font-size: 0.82rem; font-weight: 700; color: var(--ink); margin-bottom: 6px;">Phone / WhatsApp *</label>
+                <input autocomplete="tel" inputmode="tel" type="tel" id="bc-phone" required placeholder="+234 803 123 4567" style="width: 100%; padding: 12px 16px; border: 1px solid var(--line); border-radius: 12px; font-size: 0.9rem; background: var(--paper);">
               </div>
             </div>
 
             <div>
-              <label style="display: block; font-size: 0.82rem; font-weight: 700; color: var(--ink); margin-bottom: 6px;">Current Role / Position</label>
-              <select id="bc-role" style="width: 100%; padding: 12px 16px; border: 1px solid var(--line); border-radius: 12px; font-size: 0.9rem; background: var(--paper);">
+              <label for="bc-role" style="display: block; font-size: 0.82rem; font-weight: 700; color: var(--ink); margin-bottom: 6px;">Current Role / Position</label>
+              <select autocomplete="organization-title" id="bc-role" style="width: 100%; padding: 12px 16px; border: 1px solid var(--line); border-radius: 12px; font-size: 0.9rem; background: var(--paper);">
                 <option value="Founder / CEO">Founder / Chief Executive Officer</option>
                 <option value="Managing Director">Managing Director</option>
                 <option value="Chief Financial Officer">Chief Financial Officer / Finance Director</option>
@@ -353,7 +366,7 @@
             </div>
 
             <div>
-              <label style="display: block; font-size: 0.82rem; font-weight: 700; color: var(--ink); margin-bottom: 6px;">Primary Challenge You Want to Solve</label>
+              <label for="bc-challenge" style="display: block; font-size: 0.82rem; font-weight: 700; color: var(--ink); margin-bottom: 6px;">Primary Challenge You Want to Solve</label>
               <textarea id="bc-challenge" rows="3" placeholder="e.g. Tax audit resolution, recovering excess bank charges, or structuring bankable expansion capital..." style="width: 100%; padding: 12px 16px; border: 1px solid var(--line); border-radius: 12px; font-size: 0.9rem; background: var(--paper); resize: vertical;"></textarea>
             </div>
 
@@ -361,7 +374,7 @@
               <span>Submit Executive Application</span> <i class="fa-solid fa-arrow-right"></i>
             </button>
 
-            <div id="bc-alert" style="display: none; padding: 12px; border-radius: 10px; font-size: 0.88rem; text-align: center;"></div>
+            <div id="bc-alert" role="status" aria-live="polite" style="display: none; padding: 12px; border-radius: 10px; font-size: 0.88rem; text-align: center;"></div>
           </form>
         </div>
       </div>
@@ -431,9 +444,10 @@
             <li><a href="/about">About the Firm</a></li>
             <li><a href="/industries">Who We Serve</a></li>
             <li><a href="/team">Our Leadership Team</a></li>
+            <li><a href="/case-studies">Case Studies</a></li>
+            <li><a href="/calculator">Fee Calculator</a></li>
             <li><a href="/launch">SME Bootcamp (CMD)</a></li>
             <li><a href="/insights">Articles &amp; Insights</a></li>
-            <li><a href="/admin">Executive Portal</a></li>
           </ul>
         </div>
 
@@ -459,11 +473,10 @@
       </div>
 
       <div class="footer-bottom">
-        <p>&copy; 2026 THEWHY Consulting. All rights reserved. Registered in the Federal Republic of Nigeria.</p>
+        <p>&copy; <span data-year>2026</span> THEWHY Consulting. All rights reserved. Registered in the Federal Republic of Nigeria.</p>
         <div style="display: flex; gap: 1.5rem; font-size: 0.85rem;">
           <a href="/privacy" style="color: #94a3b8;">Privacy Policy</a>
           <a href="/terms" style="color: #94a3b8;">Terms of Use</a>
-          <a href="/admin" style="color: #94a3b8;">Admin Portal</a>
         </div>
       </div>
     </div>
@@ -471,6 +484,11 @@
 
   <script src="/js/main.js"></script>
   <script>
+    var escapeHtml = (window.WHY && window.WHY.escapeHtml) || function (s) {
+      return String(s == null ? '' : s)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    };
     document.getElementById('bootcamp-form').addEventListener('submit', async function(e) {
       e.preventDefault();
       const btn = document.getElementById('bc-submit-btn');
@@ -499,8 +517,8 @@
         if (data.success) {
           alertBox.style.display = 'block';
           alertBox.style.background = '#ecfdf5';
-          alertBox.style.color = '#059669';
-          alertBox.innerHTML = '<i class="fa-solid fa-circle-check"></i> ' + (data.message || 'Application submitted successfully! Our admissions panel will contact you.');
+          alertBox.style.color = '#047857';
+          alertBox.innerHTML = '<i class="fa-solid fa-circle-check"></i> ' + escapeHtml(data.message || 'Application submitted successfully! Our admissions panel will contact you.');
           document.getElementById('bootcamp-form').reset();
         } else {
           throw new Error(data.error || 'Submission failed');
@@ -509,7 +527,7 @@
         alertBox.style.display = 'block';
         alertBox.style.background = '#fef2f2';
         alertBox.style.color = '#dc2626';
-        alertBox.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> ' + err.message;
+        alertBox.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> ' + escapeHtml(err.message);
       } finally {
         btn.disabled = false;
         btn.innerHTML = originalText;

@@ -1,209 +1,334 @@
 /**
  * THEWHY CONSULTING - Core Frontend Client Script
- * Handles navigation, animations, interactive tools, tabs, and form submissions.
+ * Handles navigation, drawer, animations, interactive tools, tabs, and form submissions.
+ * Loaded as the last script on every public page.
  */
 
-// 0. IMMEDIATE BULLETPROOF PRELOADER DISMISSAL
+// 0. SHARED HELPERS (exposed early for inline page scripts)
+window.WHY = window.WHY || {};
+
+window.WHY.escapeHtml = function escapeHtml(value) {
+  if (value === null || value === undefined) return '';
+  return String(value).replace(/[&<>"']/g, (ch) => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;'
+  })[ch]);
+};
+
+/**
+ * Returns a safe URL for href/src use, or '' when the scheme is not allowed.
+ * Allowed: http(s), mailto (when allowMailto), and relative URLs.
+ */
+window.WHY.safeUrl = function safeUrl(raw, allowMailto) {
+  if (raw === null || raw === undefined) return '';
+  const url = String(raw).replace(/[\u0000- \u007f]/g, '');
+  if (!url) return '';
+  const scheme = url.match(/^([a-z][a-z0-9+.-]*):/i);
+  if (!scheme) return url; // relative (/path, #hash, ./x, ../x, path)
+  const s = scheme[1].toLowerCase();
+  if (s === 'http' || s === 'https') return url;
+  if (s === 'mailto' && allowMailto) return url;
+  return '';
+};
+
+window.WHY.prefersReducedMotion = function prefersReducedMotion() {
+  return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+};
+
+// 0B. PRELOADER: shown at most once per session, dismissed on DOMContentLoaded (max ~600ms)
 (function initPagePreloader() {
-  function dismiss() {
-    const preloader = document.getElementById('pagePreloader');
-    if (!preloader || preloader.dataset.dismissed === 'true') return;
+  const KEY = 'why_preloader_seen';
+  let seen = false;
+  try {
+    seen = window.sessionStorage.getItem(KEY) === '1';
+    window.sessionStorage.setItem(KEY, '1');
+  } catch (e) {
+    seen = false;
+  }
+
+  const removeNode = (el) => {
+    if (el && el.parentNode) el.parentNode.removeChild(el);
+  };
+
+  const preloader = document.getElementById('pagePreloader');
+  if (!preloader) return;
+
+  if (seen || window.WHY.prefersReducedMotion()) {
     preloader.dataset.dismissed = 'true';
-    preloader.classList.add('done');
-    preloader.classList.add('loaded');
-    setTimeout(() => {
-      preloader.style.opacity = '0';
-      preloader.style.pointerEvents = 'none';
-      preloader.style.visibility = 'hidden';
-      setTimeout(() => {
-        if (preloader.parentNode) preloader.parentNode.removeChild(preloader);
-      }, 500);
-    }, 250);
+    document.documentElement.classList.add('why-preloader-seen');
+    removeNode(preloader);
+    return;
   }
 
-  if (document.readyState === 'complete') {
-    dismiss();
-  } else if (document.readyState === 'interactive') {
-    setTimeout(dismiss, 120);
+  const dismiss = () => {
+    if (preloader.dataset.whyGone === 'true') return;
+    preloader.dataset.whyGone = 'true';
+    preloader.dataset.dismissed = 'true';
+    preloader.classList.add('done', 'loaded');
+    preloader.style.pointerEvents = 'none';
+    setTimeout(() => removeNode(preloader), 450);
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', dismiss, { once: true });
   } else {
-    document.addEventListener('DOMContentLoaded', () => setTimeout(dismiss, 120));
+    dismiss();
   }
-
-  window.addEventListener('load', dismiss);
-  // Hard fallback: guaranteed dismissal within 800ms
-  setTimeout(dismiss, 800);
+  setTimeout(dismiss, 600);
 })();
 
 document.addEventListener('DOMContentLoaded', () => {
+  const esc = window.WHY.escapeHtml;
+  const safeUrl = window.WHY.safeUrl;
+  const reducedMotion = window.WHY.prefersReducedMotion();
+
   // 1. DYNAMIC YEAR
-  const yearEls = document.querySelectorAll('#year, .dynamic-year');
-  const currentYear = new Date().getFullYear();
-  yearEls.forEach(el => { el.textContent = currentYear; });
+  const currentYear = String(new Date().getFullYear());
+  document.querySelectorAll('#year, .dynamic-year, [data-year]').forEach((el) => {
+    el.textContent = currentYear;
+  });
 
   // 2. NAV SCROLL EFFECT
   const siteNav = document.getElementById('siteNav');
   if (siteNav) {
     const handleScroll = () => {
-      if (window.scrollY > 35) {
-        siteNav.classList.add('scrolled');
-      } else {
-        siteNav.classList.remove('scrolled');
-      }
+      siteNav.classList.toggle('scrolled', window.scrollY > 35);
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
   }
 
-  // 3. MOBILE DRAWER NAVIGATION
+  // 3. MOBILE DRAWER NAVIGATION (accessible: inert when closed, focus trap, Escape)
   const menuBtn = document.getElementById('menuBtn');
   const drawer = document.getElementById('drawer');
   const drawerClose = document.getElementById('drawerClose');
   const drawerOverlay = document.getElementById('drawerOverlay');
 
-  const openDrawer = () => {
-    if (drawer) drawer.classList.add('open');
-    if (drawerOverlay) drawerOverlay.classList.add('open');
-    document.body.style.overflow = 'hidden';
-  };
-
-  const closeDrawer = () => {
-    if (drawer) drawer.classList.remove('open');
-    if (drawerOverlay) drawerOverlay.classList.remove('open');
-    document.body.style.overflow = '';
-  };
-
-  if (menuBtn) menuBtn.addEventListener('click', openDrawer);
-  if (drawerClose) drawerClose.addEventListener('click', closeDrawer);
-  if (drawerOverlay) drawerOverlay.addEventListener('click', closeDrawer);
-
   if (drawer) {
-    const drawerLinks = drawer.querySelectorAll('a');
-    drawerLinks.forEach(link => {
-      link.addEventListener('click', closeDrawer);
+    const FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+    let isOpen = false;
+
+    if (!drawer.hasAttribute('role')) drawer.setAttribute('role', 'dialog');
+    drawer.setAttribute('aria-modal', 'true');
+    if (!drawer.hasAttribute('aria-label') && !drawer.hasAttribute('aria-labelledby')) {
+      drawer.setAttribute('aria-label', 'Site navigation');
+    }
+    if (drawerOverlay) drawerOverlay.setAttribute('aria-hidden', 'true');
+    if (menuBtn) {
+      menuBtn.setAttribute('aria-controls', 'drawer');
+      menuBtn.setAttribute('aria-expanded', 'false');
+    }
+
+    const setClosedAttrs = () => {
+      drawer.inert = true;
+      drawer.setAttribute('inert', '');
+      drawer.setAttribute('aria-hidden', 'true');
+    };
+
+    const getFocusable = () => Array.from(drawer.querySelectorAll(FOCUSABLE))
+      .filter((el) => el.offsetWidth > 0 || el.offsetHeight > 0 || el === document.activeElement);
+
+    const onKeydown = (e) => {
+      if (!isOpen) return;
+      if (e.key === 'Escape' || e.key === 'Esc') {
+        e.preventDefault();
+        closeDrawer();
+        return;
+      }
+      if (e.key !== 'Tab') return;
+      const items = getFocusable();
+      if (items.length === 0) {
+        e.preventDefault();
+        return;
+      }
+      const first = items[0];
+      const last = items[items.length - 1];
+      if (e.shiftKey && (document.activeElement === first || !drawer.contains(document.activeElement))) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && (document.activeElement === last || !drawer.contains(document.activeElement))) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+
+    const openDrawer = () => {
+      if (isOpen) return;
+      isOpen = true;
+      drawer.inert = false;
+      drawer.removeAttribute('inert');
+      drawer.removeAttribute('aria-hidden');
+      drawer.classList.add('open');
+      if (drawerOverlay) drawerOverlay.classList.add('open');
+      if (menuBtn) menuBtn.setAttribute('aria-expanded', 'true');
+      document.documentElement.classList.add('drawer-open');
+      document.body.classList.add('drawer-open');
+      document.body.style.overflow = 'hidden';
+      document.addEventListener('keydown', onKeydown);
+      const target = drawerClose || getFocusable()[0];
+      // focus() forces a style recalc, so the now-visible close button can take focus
+      if (target) target.focus();
+    };
+
+    function closeDrawer(options) {
+      if (!isOpen) return;
+      isOpen = false;
+      drawer.classList.remove('open');
+      if (drawerOverlay) drawerOverlay.classList.remove('open');
+      setClosedAttrs();
+      if (menuBtn) menuBtn.setAttribute('aria-expanded', 'false');
+      document.documentElement.classList.remove('drawer-open');
+      document.body.classList.remove('drawer-open');
+      document.body.style.overflow = '';
+      document.removeEventListener('keydown', onKeydown);
+      if (menuBtn && !(options && options.skipFocus)) menuBtn.focus();
+    }
+
+    // Initialise the closed state on load
+    setClosedAttrs();
+
+    if (menuBtn) menuBtn.addEventListener('click', openDrawer);
+    if (drawerClose) drawerClose.addEventListener('click', () => closeDrawer());
+    if (drawerOverlay) drawerOverlay.addEventListener('click', () => closeDrawer());
+    drawer.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => closeDrawer({ skipFocus: true }));
     });
+
+    // Close if the viewport grows to the desktop nav layout while open
+    if (window.matchMedia) {
+      const desktopMq = window.matchMedia('(min-width: 993px)');
+      const onMqChange = (e) => { if (e.matches) closeDrawer({ skipFocus: true }); };
+      if (desktopMq.addEventListener) desktopMq.addEventListener('change', onMqChange);
+      else if (desktopMq.addListener) desktopMq.addListener(onMqChange);
+    }
+  }
+
+  // 3B. FLOATING WHATSAPP BUTTON (injected once per page)
+  if (!document.querySelector('.wa-float, #waFloat, [data-wa-float]')) {
+    const waText = encodeURIComponent("Hello THEWHY Consulting, I'd like to discuss an advisory engagement.");
+    const wa = document.createElement('a');
+    wa.className = 'wa-float';
+    wa.id = 'waFloat';
+    wa.href = `https://wa.me/2348034992318?text=${waText}`;
+    wa.target = '_blank';
+    wa.rel = 'noopener';
+    wa.setAttribute('aria-label', 'Chat with THEWHY Consulting on WhatsApp');
+    wa.innerHTML = '<i class="fa-brands fa-whatsapp" aria-hidden="true"></i>';
+    document.body.appendChild(wa);
   }
 
   // 4. REVEAL ANIMATIONS ON SCROLL
   const revealElements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale');
-  if ('IntersectionObserver' in window && revealElements.length > 0) {
+  if (reducedMotion || !('IntersectionObserver' in window)) {
+    revealElements.forEach((el) => el.classList.add('show'));
+  } else if (revealElements.length > 0) {
     const revealObserver = new IntersectionObserver((entries, observer) => {
-      entries.forEach(entry => {
+      entries.forEach((entry) => {
         if (entry.isIntersecting) {
           entry.target.classList.add('show');
           observer.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    }, { threshold: 0.05, rootMargin: '0px 0px -5% 0px' });
 
-    revealElements.forEach(el => {
+    const viewportH = window.innerHeight || document.documentElement.clientHeight;
+    revealElements.forEach((el) => {
       const rect = el.getBoundingClientRect();
-      if (rect.top < window.innerHeight && rect.bottom > 0) {
+      // Above-the-fold (or already scrolled past) content is shown immediately
+      if (rect.top < viewportH) {
         el.classList.add('show');
       } else {
         revealObserver.observe(el);
       }
     });
-  } else {
-    revealElements.forEach(el => el.classList.add('show'));
-  }
-
-  // 4B. PRELOADER DISMISSAL SAFEGUARD
-  const preloader = document.getElementById('pagePreloader');
-  if (preloader && !preloader.dataset.dismissed) {
-    preloader.dataset.dismissed = 'true';
-    preloader.classList.add('done');
-    preloader.classList.add('loaded');
-    setTimeout(() => {
-      preloader.style.opacity = '0';
-      preloader.style.pointerEvents = 'none';
-      preloader.style.visibility = 'hidden';
-      setTimeout(() => {
-        if (preloader.parentNode) preloader.parentNode.removeChild(preloader);
-      }, 500);
-    }, 250);
   }
 
   // 4C. SCROLL TO TOP BUTTON
   const scrollTopBtn = document.getElementById('scrollTop');
   if (scrollTopBtn) {
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 380) {
-        scrollTopBtn.classList.add('visible');
-      } else {
-        scrollTopBtn.classList.remove('visible');
-      }
-    }, { passive: true });
+    const toggleScrollTop = () => {
+      scrollTopBtn.classList.toggle('visible', window.scrollY > 380);
+    };
+    window.addEventListener('scroll', toggleScrollTop, { passive: true });
+    toggleScrollTop();
 
     scrollTopBtn.addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo({ top: 0, behavior: reducedMotion ? 'auto' : 'smooth' });
     });
   }
 
-  // 4D. ANIMATED STATS / COUNTERS (MONOLINE STYLE)
+  // 4D. ANIMATED STATS / COUNTERS
   const counterElements = document.querySelectorAll('.counter-number[data-target]');
   if (counterElements.length > 0) {
-    const animateCounter = (el) => {
-      const target = parseInt(el.getAttribute('data-target'), 10);
+    const finalText = (el) => {
+      const target = parseInt(el.getAttribute('data-target'), 10) || 0;
       const suffix = el.getAttribute('data-suffix') || '';
-      const duration = 1600;
+      return target.toLocaleString() + suffix;
+    };
+    const setFinal = (el) => {
+      const span = el.querySelector('span') || el;
+      span.textContent = finalText(el);
+    };
+
+    const animateCounter = (el) => {
+      const target = parseInt(el.getAttribute('data-target'), 10) || 0;
+      const suffix = el.getAttribute('data-suffix') || '';
+      const duration = 1400;
       const startTime = performance.now();
       const span = el.querySelector('span') || el;
 
       const updateCount = (currentTime) => {
-        const elapsed = currentTime - startTime;
-        const progress = Math.min(elapsed / duration, 1);
+        const progress = Math.min((currentTime - startTime) / duration, 1);
         const easeOut = 1 - (1 - progress) * (1 - progress);
-        const currentVal = Math.floor(easeOut * target);
-        span.textContent = currentVal.toLocaleString() + suffix;
-
+        span.textContent = Math.floor(easeOut * target).toLocaleString() + suffix;
         if (progress < 1) {
           requestAnimationFrame(updateCount);
         } else {
           span.textContent = target.toLocaleString() + suffix;
         }
       };
-
       requestAnimationFrame(updateCount);
     };
 
-    if ('IntersectionObserver' in window) {
+    if (reducedMotion || !('IntersectionObserver' in window)) {
+      counterElements.forEach(setFinal);
+    } else {
       const counterObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
+        entries.forEach((entry) => {
           if (entry.isIntersecting) {
             animateCounter(entry.target);
             observer.unobserve(entry.target);
           }
         });
-      }, { threshold: 0.3 });
-
-      counterElements.forEach(el => counterObserver.observe(el));
-    } else {
-      counterElements.forEach(animateCounter);
+      }, { threshold: 0.2 });
+      counterElements.forEach((el) => counterObserver.observe(el));
     }
   }
 
   // 4E. SKILL / PROGRESS BARS FILL ANIMATION
   const skillBars = document.querySelectorAll('.skill-bar-fill');
   if (skillBars.length > 0) {
-    if ('IntersectionObserver' in window) {
+    if (reducedMotion || !('IntersectionObserver' in window)) {
+      skillBars.forEach((bar) => bar.classList.add('animated'));
+    } else {
       const skillObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
+        entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add('animated');
             observer.unobserve(entry.target);
           }
         });
-      }, { threshold: 0.25 });
-
-      skillBars.forEach(bar => skillObserver.observe(bar));
-    } else {
-      skillBars.forEach(bar => bar.classList.add('animated'));
+      }, { threshold: 0.2 });
+      skillBars.forEach((bar) => skillObserver.observe(bar));
     }
   }
 
   // 5. HERO BOARD / CALCULATOR ANIMATION & TILT
   const screenNumber = document.getElementById('screenNumber');
-  if (screenNumber) {
+  if (screenNumber && !reducedMotion) {
     const displayValues = ['83,720', '41,250', '96,440', '72,300', '88,915'];
     let valIndex = 0;
     setInterval(() => {
@@ -217,7 +342,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const heroBoard = document.querySelector('.hero-board, .art-board');
-  if (heroBoard && window.matchMedia('(pointer: fine)').matches) {
+  if (heroBoard && !reducedMotion && window.matchMedia('(pointer: fine)').matches) {
     window.addEventListener('mousemove', (e) => {
       const x = (e.clientX / window.innerWidth - 0.5);
       const y = (e.clientY / window.innerHeight - 0.5);
@@ -231,47 +356,50 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (tabButtons.length > 0 && tabPanels.length > 0) {
     const activateTab = (targetTabId) => {
-      tabButtons.forEach(btn => {
+      tabButtons.forEach((btn) => {
         const isActive = btn.getAttribute('data-tab') === targetTabId;
         btn.classList.toggle('active', isActive);
+        btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
       });
-      tabPanels.forEach(panel => {
+      tabPanels.forEach((panel) => {
         const isActive = panel.id === `tab-${targetTabId}` || panel.id === targetTabId;
         panel.classList.toggle('active', isActive);
       });
     };
 
-    tabButtons.forEach(btn => {
+    tabButtons.forEach((btn) => {
       btn.addEventListener('click', () => {
         const targetTab = btn.getAttribute('data-tab');
         activateTab(targetTab);
-        history.replaceState(null, null, `#tab-${targetTab}`);
+        history.replaceState(null, '', `#tab-${targetTab}`);
       });
     });
 
-    // Check hash on load
     if (window.location.hash) {
       const hash = window.location.hash.replace('#tab-', '').replace('#', '');
-      const matchingBtn = document.querySelector(`.tab-btn[data-tab="${hash}"]`);
-      if (matchingBtn) {
-        activateTab(hash);
-      }
+      const matchingBtn = Array.from(tabButtons).find((b) => b.getAttribute('data-tab') === hash);
+      if (matchingBtn) activateTab(hash);
     }
   }
 
   // 7. FAQ ACCORDION
   const faqItems = document.querySelectorAll('.faq-item');
-  faqItems.forEach(item => {
+  faqItems.forEach((item) => {
     const toggle = item.querySelector('.faq-toggle');
-    if (toggle) {
-      toggle.addEventListener('click', () => {
-        const isOpen = item.classList.contains('open');
-        faqItems.forEach(i => i.classList.remove('open'));
-        if (!isOpen) {
-          item.classList.add('open');
-        }
+    if (!toggle) return;
+    toggle.setAttribute('aria-expanded', item.classList.contains('open') ? 'true' : 'false');
+    toggle.addEventListener('click', () => {
+      const isOpen = item.classList.contains('open');
+      faqItems.forEach((i) => {
+        i.classList.remove('open');
+        const t = i.querySelector('.faq-toggle');
+        if (t) t.setAttribute('aria-expanded', 'false');
       });
-    }
+      if (!isOpen) {
+        item.classList.add('open');
+        toggle.setAttribute('aria-expanded', 'true');
+      }
+    });
   });
 
   // 7b. PRACTICE JUMP BAR SCROLL SPY & AUTO-SCROLL
@@ -279,40 +407,37 @@ document.addEventListener('DOMContentLoaded', () => {
   if (practiceJumpBar) {
     const pills = practiceJumpBar.querySelectorAll('.practice-pill');
     const scrollContainer = practiceJumpBar.querySelector('.practice-pills-scroll');
-    const sections = Array.from(pills).map(pill => {
-      const id = pill.getAttribute('href')?.replace('#', '');
+    const sections = Array.from(pills).map((pill) => {
+      const href = pill.getAttribute('href') || '';
+      const id = href.charAt(0) === '#' ? href.slice(1) : '';
       return id ? document.getElementById(id) : null;
-    }).filter(Boolean);
+    });
 
-    function updateActivePill() {
+    const updateActivePill = () => {
       const scrollPos = window.scrollY + 170;
       let activeIndex = -1;
-
       sections.forEach((sec, idx) => {
-        if (sec.offsetTop <= scrollPos) {
-          activeIndex = idx;
-        }
+        if (sec && sec.offsetTop <= scrollPos) activeIndex = idx;
       });
 
       pills.forEach((pill, idx) => {
         if (idx === activeIndex) {
           if (!pill.classList.contains('active')) {
             pill.classList.add('active');
+            pill.setAttribute('aria-current', 'true');
             if (scrollContainer) {
-              const pillLeft = pill.offsetLeft;
-              const pillWidth = pill.offsetWidth;
-              const contWidth = scrollContainer.offsetWidth;
               scrollContainer.scrollTo({
-                left: pillLeft - contWidth / 2 + pillWidth / 2,
-                behavior: 'smooth'
+                left: pill.offsetLeft - scrollContainer.offsetWidth / 2 + pill.offsetWidth / 2,
+                behavior: reducedMotion ? 'auto' : 'smooth'
               });
             }
           }
         } else {
           pill.classList.remove('active');
+          pill.removeAttribute('aria-current');
         }
       });
-    }
+    };
 
     let ticking = false;
     window.addEventListener('scroll', () => {
@@ -324,82 +449,122 @@ document.addEventListener('DOMContentLoaded', () => {
         ticking = true;
       }
     }, { passive: true });
-
     updateActivePill();
   }
 
-  // 8. INTERACTIVE FEE CALCULATOR
+  // 8. INTERACTIVE FEE CALCULATOR (prices come from the DOM: data-cost / label text)
   const calcForm = document.getElementById('calcForm');
   const calcResult = document.getElementById('calcResult');
 
   if (calcForm && calcResult) {
+    const parseNaira = (text) => {
+      if (!text) return NaN;
+      const m = String(text).match(/₦\s*([\d,]+)/) || String(text).match(/([\d][\d,]*)/);
+      return m ? parseInt(m[1].replace(/,/g, ''), 10) : NaN;
+    };
+
+    const readSize = () => {
+      const radio = calcForm.querySelector('input[name="companySize"]:checked');
+      const select = calcForm.querySelector('select[name="companySize"]');
+      let source = radio;
+      if (!source && select) source = select.options[select.selectedIndex] || null;
+      if (!source) return { fee: 0, name: '' };
+
+      const label = radio ? radio.closest('label') : null;
+      let fee = parseInt((source.getAttribute('data-cost') || '').replace(/[^\d]/g, ''), 10);
+      if (isNaN(fee) && label) {
+        const feeText = Array.from(label.querySelectorAll('span, small, em'))
+          .map((n) => n.textContent)
+          .find((t) => /₦/.test(t));
+        fee = parseNaira(feeText || label.textContent);
+      }
+      if (isNaN(fee)) fee = 0;
+
+      let name = source.getAttribute('data-label') || '';
+      if (!name && label) {
+        const strong = label.querySelector('strong');
+        name = strong ? strong.textContent.trim() : '';
+      }
+      if (!name) name = radio ? radio.value : source.textContent.trim();
+      return { fee, name };
+    };
+
+    const readAddons = () => Array.from(calcForm.querySelectorAll('input[name="addons"]:checked')).map((box) => {
+      const label = box.closest('label');
+      let cost = parseInt((box.getAttribute('data-cost') || '').replace(/[^\d]/g, ''), 10);
+      if (isNaN(cost)) cost = 0;
+      let name = box.getAttribute('data-label') || '';
+      if (!name && label) {
+        const textEl = label.querySelector('span');
+        name = textEl ? textEl.textContent.trim() : '';
+      }
+      if (!name) name = box.value;
+      return { name, cost };
+    });
+
+    // Highlight the chosen option (inline border styles in the markup are static)
+    const syncSelectedStyles = () => {
+      calcForm.querySelectorAll('input[name="companySize"], input[name="addons"]').forEach((input) => {
+        const label = input.closest('label');
+        if (!label) return;
+        label.classList.add('calc-option');
+        label.classList.toggle('is-selected', input.checked);
+      });
+    };
+    calcForm.addEventListener('change', syncSelectedStyles);
+    syncSelectedStyles();
+
     calcForm.addEventListener('submit', (e) => {
       e.preventDefault();
-
-      const sizeInput = calcForm.querySelector('input[name="companySize"]:checked') || calcForm.querySelector('select[name="companySize"]');
-      let baseFee = 380000;
-      let sizeName = 'SME Growth (10-100 staff)';
-
-      if (sizeInput) {
-        const val = sizeInput.value;
-        if (val === 'micro') { baseFee = 180000; sizeName = 'Micro / Startup (1-10 staff)'; }
-        else if (val === 'sme') { baseFee = 380000; sizeName = 'SME Growth (10-100 staff)'; }
-        else if (val === 'mid') { baseFee = 750000; sizeName = 'Mid-Market Enterprise (100-500 staff)'; }
-        else if (val === 'large') { baseFee = 1200000; sizeName = 'Conglomerate / Large Enterprise'; }
-      }
-
-      const addons = calcForm.querySelectorAll('input[name="addons"]:checked');
-      let addonsTotal = 0;
-      const selectedAddonsList = [];
-
-      addons.forEach(box => {
-        const cost = parseInt(box.getAttribute('data-cost') || '0', 10);
-        addonsTotal += cost;
-        selectedAddonsList.push({ name: box.value, cost });
-      });
-
-      const totalMonthly = baseFee + addonsTotal;
+      const size = readSize();
+      const addons = readAddons();
+      const addonsTotal = addons.reduce((sum, a) => sum + a.cost, 0);
+      const totalMonthly = size.fee + addonsTotal;
       const fmt = (n) => '₦' + n.toLocaleString();
 
       let addonsHtml = '';
-      if (selectedAddonsList.length > 0) {
+      if (addons.length > 0) {
         addonsHtml = `
-          <div style="margin: 16px 0; padding-top: 14px; border-top: 1px dashed var(--line);">
-            <div style="font-size: 11px; text-transform: uppercase; font-weight: 800; color: var(--muted); margin-bottom: 8px;">Included Add-ons:</div>
-            ${selectedAddonsList.map(a => `
-              <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:6px; color:#4a4641;">
-                <span>• ${a.name}</span>
-                <span style="font-weight:700;">+${fmt(a.cost)}</span>
+          <div class="calc-result-addons">
+            <div class="calc-result-sublabel">Included Add-ons:</div>
+            ${addons.map((a) => `
+              <div class="calc-result-line">
+                <span>&bull; ${esc(a.name)}</span>
+                <span class="calc-result-amount">+${esc(fmt(a.cost))}</span>
               </div>
             `).join('')}
           </div>
         `;
       }
 
-      calcResult.innerHTML = `
-        <div style="background: #ffffff; border: 1px solid var(--line); border-radius: 24px; padding: 32px 28px; box-shadow: var(--shadow-soft);">
-          <div style="font-size: 11px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: var(--orange); margin-bottom: 6px;">
-            Estimated Advisory Retainer
-          </div>
-          <div style="font-family: 'Manrope', sans-serif; font-size: clamp(32px, 4vw, 44px); font-weight: 800; color: var(--ink); letter-spacing: -0.04em;">
-            ${fmt(totalMonthly)} <span style="font-size: 16px; font-weight: 600; color: var(--muted);">/ month</span>
-          </div>
-          <div style="font-size: 13px; color: var(--muted); margin-top: 4px;">
-            Enterprise Profile: <strong>${sizeName}</strong>
-          </div>
-          
-          ${addonsHtml}
+      const bookingHref = `/booking?estimatedFee=${encodeURIComponent(fmt(totalMonthly))}&scale=${encodeURIComponent(size.name)}`;
 
-          <div style="margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--line);">
-            <div style="font-size: 12px; color: #76716a; line-height: 1.6; margin-bottom: 20px;">
+      calcResult.innerHTML = `
+        <div class="calc-result-card" role="status" aria-live="polite">
+          <div class="calc-result-kicker">Estimated Advisory Retainer</div>
+          <div class="calc-result-total">
+            ${esc(fmt(totalMonthly))} <span>/ month</span>
+          </div>
+          <div class="calc-result-profile">
+            Enterprise Profile: <strong>${esc(size.name)}</strong>
+          </div>
+          ${addonsHtml}
+          <div class="calc-result-foot">
+            <div class="calc-result-note">
               Includes dedicated lead consultant, monthly ledger governance, statutory compliance schedules, and board advisory sessions.
             </div>
-            <a href="/booking?estimatedFee=${encodeURIComponent(fmt(totalMonthly))}&scale=${encodeURIComponent(sizeName)}" class="btn btn-primary" style="width: 100%; text-align: center;">
+            <a href="${esc(bookingHref)}" class="btn btn-primary calc-result-cta">
               Book Advisory with this Estimate &rarr;
             </a>
           </div>
         </div>
       `;
+
+      // On stacked (mobile/tablet) layouts, bring the result into view
+      const rect = calcResult.getBoundingClientRect();
+      if (rect.top > window.innerHeight * 0.8 || rect.bottom < 0) {
+        calcResult.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' });
+      }
     });
   }
 
@@ -408,12 +573,18 @@ document.addEventListener('DOMContentLoaded', () => {
   const bookingMsg = document.getElementById('bookingMsg');
 
   if (bookingForm) {
-    // Pre-populate if query params exist
     const urlParams = new URLSearchParams(window.location.search);
     const feeParam = urlParams.get('estimatedFee');
     if (feeParam) {
       const feeInput = bookingForm.querySelector('input[name="estimatedFee"]');
-      if (feeInput) feeInput.value = feeParam;
+      if (feeInput) feeInput.value = feeParam.slice(0, 80);
+    }
+
+    const dateInput = bookingForm.querySelector('input[type="date"][name="date"]');
+    if (dateInput && !dateInput.min) {
+      const now = new Date();
+      const pad = (n) => String(n).padStart(2, '0');
+      dateInput.min = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
     }
 
     bookingForm.addEventListener('submit', async (e) => {
@@ -423,16 +594,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (submitBtn) {
         submitBtn.disabled = true;
-        submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing...';
+        submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i> Processing...';
       }
-
       if (bookingMsg) {
         bookingMsg.style.display = 'none';
         bookingMsg.className = 'form-alert';
+        bookingMsg.setAttribute('role', 'status');
+        bookingMsg.setAttribute('aria-live', 'polite');
       }
 
-      const formData = new FormData(bookingForm);
-      const payload = Object.fromEntries(formData.entries());
+      const payload = Object.fromEntries(new FormData(bookingForm).entries());
 
       try {
         const res = await fetch('/api/bookings', {
@@ -440,20 +611,26 @@ document.addEventListener('DOMContentLoaded', () => {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
-
-        const data = await res.json();
+        let data = {};
+        try { data = await res.json(); } catch (parseErr) { data = {}; }
 
         if (res.ok && data.success) {
           bookingForm.reset();
           if (bookingMsg) {
+            const rec = data.data || {};
+            const ref = rec.ref_code || rec.id || 'CONFIRMED';
+            const calLink = rec.id
+              ? `<div class="form-alert-actions"><a href="/api/bookings/${encodeURIComponent(rec.id)}/calendar.ics" class="btn btn-ghost btn-sm"><i class="fa-regular fa-calendar-plus" aria-hidden="true"></i> Add to Calendar (.ics)</a></div>`
+              : '';
             bookingMsg.className = 'form-alert success';
             bookingMsg.style.display = 'block';
             bookingMsg.innerHTML = `
-              <strong><i class="fa-solid fa-circle-check"></i> Consultation Requested!</strong><br>
-              Reference Code: <strong>${data.data?.ref_code || data.data?.id || 'CONFIRMED'}</strong><br>
+              <strong><i class="fa-solid fa-circle-check" aria-hidden="true"></i> Consultation Requested!</strong><br>
+              Reference Code: <strong>${esc(ref)}</strong><br>
               A partner from our Lagos headquarters will review your submission and contact you within 24 hours.
-              ${data.data?.id ? `<div style="margin-top:10px;"><a href="/api/bookings/${data.data.id}/calendar.ics" class="btn btn-ghost" style="min-height:36px;font-size:12px;padding:0 16px;"><i class="fa-regular fa-calendar-plus"></i> Add to Calendar (.ics)</a></div>` : ''}
+              ${calLink}
             `;
+            bookingMsg.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'center' });
           }
         } else {
           throw new Error(data.error || 'Failed to submit consultation request.');
@@ -462,7 +639,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (bookingMsg) {
           bookingMsg.className = 'form-alert error';
           bookingMsg.style.display = 'block';
-          bookingMsg.innerHTML = `<strong>Error:</strong> ${err.message || 'Network error. Please try again or reach us directly at +234-8034-99-23-18.'}`;
+          bookingMsg.innerHTML = `<strong>Error:</strong> ${esc((err && err.message) || 'Network error. Please try again or reach us directly at +234-8034-99-23-18.')}`;
         }
       } finally {
         if (submitBtn) {
@@ -485,16 +662,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (submitBtn) {
         submitBtn.disabled = true;
-        submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending...';
+        submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i> Sending...';
       }
-
       if (contactMsg) {
         contactMsg.style.display = 'none';
         contactMsg.className = 'form-alert';
+        contactMsg.setAttribute('role', 'status');
+        contactMsg.setAttribute('aria-live', 'polite');
       }
 
-      const formData = new FormData(contactForm);
-      const payload = Object.fromEntries(formData.entries());
+      const payload = Object.fromEntries(new FormData(contactForm).entries());
 
       try {
         const res = await fetch('/api/contact', {
@@ -502,8 +679,8 @@ document.addEventListener('DOMContentLoaded', () => {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
-
-        const data = await res.json();
+        let data = {};
+        try { data = await res.json(); } catch (parseErr) { data = {}; }
 
         if (res.ok && data.success) {
           contactForm.reset();
@@ -511,8 +688,8 @@ document.addEventListener('DOMContentLoaded', () => {
             contactMsg.className = 'form-alert success';
             contactMsg.style.display = 'block';
             contactMsg.innerHTML = `
-              <strong><i class="fa-solid fa-circle-check"></i> Message Sent!</strong><br>
-              Reference: <strong>${data.ref_code || 'RECEIVED'}</strong>. Our team will respond shortly.
+              <strong><i class="fa-solid fa-circle-check" aria-hidden="true"></i> Message Sent!</strong><br>
+              Reference: <strong>${esc(data.ref_code || (data.data && data.data.ref_code) || 'RECEIVED')}</strong>. Our team will respond shortly.
             `;
           }
         } else {
@@ -522,7 +699,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (contactMsg) {
           contactMsg.className = 'form-alert error';
           contactMsg.style.display = 'block';
-          contactMsg.innerHTML = `<strong>Error:</strong> ${err.message || 'Unable to deliver message right now. Call us at +234-8034-99-23-18.'}`;
+          contactMsg.innerHTML = `<strong>Error:</strong> ${esc((err && err.message) || 'Unable to deliver message right now. Call us at +234-8034-99-23-18.')}`;
         }
       } finally {
         if (submitBtn) {
@@ -533,116 +710,206 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // 10a. IMAGE FALLBACKS & ARTICLE SHARE (replaces inline onerror/onclick handlers)
+  document.querySelectorAll('img[data-fallback]').forEach((img) => {
+    img.addEventListener('error', function onImgError() {
+      img.removeEventListener('error', onImgError);
+      img.src = img.dataset.fallback;
+    });
+    if (img.complete && img.naturalWidth === 0 && img.getAttribute('src')) img.src = img.dataset.fallback;
+  });
+
+  const articleShareBtn = document.getElementById('articleShareBtn');
+  if (articleShareBtn) {
+    articleShareBtn.addEventListener('click', async () => {
+      const url = window.location.href;
+      try {
+        if (navigator.share) {
+          await navigator.share({ title: document.title, url });
+          return;
+        }
+        await navigator.clipboard.writeText(url);
+        articleShareBtn.innerHTML = '<i class="fa-solid fa-check" aria-hidden="true"></i> Link copied';
+        setTimeout(() => {
+          articleShareBtn.innerHTML = '<i class="fa-solid fa-share-nodes" aria-hidden="true"></i> Share';
+        }, 2000);
+      } catch (err) { /* share cancelled or clipboard unavailable */ }
+    });
+  }
+
+  // 10b. NEWSLETTER SUBSCRIPTION
+  const newsletterForm = document.getElementById('newsletterForm');
+  if (newsletterForm) {
+    const newsletterMsg = document.getElementById('newsletterMsg');
+    newsletterForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = newsletterForm.querySelector('button[type="submit"]');
+      if (btn) btn.disabled = true;
+      const setMsg = (text) => { if (newsletterMsg) newsletterMsg.textContent = text; };
+      try {
+        const res = await fetch('/api/newsletter', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: newsletterForm.elements.email.value,
+            source: newsletterForm.dataset.source || 'website'
+          })
+        });
+        let data = {};
+        try { data = await res.json(); } catch (parseErr) { data = {}; }
+        if (!res.ok || !data.success) throw new Error(data.error || 'Subscription failed. Please try again.');
+        newsletterForm.reset();
+        setMsg('Thank you for subscribing to THEWHY Executive Advisory Briefs.');
+      } catch (err) {
+        setMsg((err && err.message) || 'Subscription failed. Please try again.');
+      } finally {
+        if (btn) btn.disabled = false;
+      }
+    });
+  }
+
   // 11. DYNAMIC INSIGHTS & ARTICLE READER ENGINE
   const insightsListView = document.getElementById('insightsListView');
   const articleView = document.getElementById('articleView');
+  const DEFAULT_COVER = '/assets/img/blog/1.jpg';
+  const FALLBACK_COVER = '/assets/img/portfolio/1.jpg';
 
-  // Simple Markdown Parser (modelled after Gloria-adah's InsightsSingle)
+  const coverSrc = (src) => {
+    if (!src) return DEFAULT_COVER;
+    const str = String(src).trim();
+    const normalised = /^([a-z][a-z0-9+.-]*:|\/)/i.test(str) ? str : `/${str}`;
+    return safeUrl(normalised, false) || DEFAULT_COVER;
+  };
+
+  const attachImageFallback = (root) => {
+    root.querySelectorAll('img[data-fallback]').forEach((img) => {
+      img.addEventListener('error', function onErr() {
+        img.removeEventListener('error', onErr);
+        img.src = img.getAttribute('data-fallback');
+      });
+    });
+  };
+
+  // Inline markdown on an ALREADY-ESCAPED string
+  function parseInline(escaped) {
+    const codeSpans = [];
+    let out = escaped.replace(/`([^`]+?)`/g, (m, code) => {
+      codeSpans.push(`<code>${code}</code>`);
+      return `\u0000${codeSpans.length - 1}\u0000`;
+    });
+
+    out = out.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (m, text, rawHref) => {
+      const href = safeUrl(rawHref, true);
+      if (!href) return text;
+      const isExternal = /^https?:/i.test(href) &&
+        href.replace(/^https?:\/\//i, '').split('/')[0].toLowerCase() !== window.location.host.toLowerCase();
+      const extra = isExternal ? ' target="_blank" rel="noopener"' : '';
+      return `<a href="${href}"${extra}>${text}</a>`;
+    });
+
+    out = out
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/(^|[^*])\*(?!\s)(.+?)\*(?!\*)/g, '$1<em>$2</em>');
+
+    return out.replace(/\u0000(\d+)\u0000/g, (m, i) => codeSpans[Number(i)] || '');
+  }
+
+  // Simple Markdown renderer: raw text is escaped first, then transformed
   function renderMarkdown(md) {
     if (!md) return '';
-    const lines = md.split('\n');
-    let inList = false;
+    const lines = String(md).replace(/\r\n?/g, '\n').split('\n');
+    let listType = null;
     let html = '';
+    const closeList = () => {
+      if (listType) { html += `</${listType}>`; listType = null; }
+    };
+    const openList = (type) => {
+      if (listType !== type) { closeList(); html += `<${type}>`; listType = type; }
+    };
 
-    lines.forEach(line => {
-      const trimmed = line.trim();
+    lines.forEach((line) => {
+      const trimmed = esc(line.trim());
       if (trimmed.startsWith('### ')) {
-        if (inList) { html += '</ul>'; inList = false; }
+        closeList();
         html += `<h3>${parseInline(trimmed.slice(4))}</h3>`;
       } else if (trimmed.startsWith('## ')) {
-        if (inList) { html += '</ul>'; inList = false; }
+        closeList();
         html += `<h2>${parseInline(trimmed.slice(3))}</h2>`;
-      } else if (trimmed.startsWith('> ')) {
-        if (inList) { html += '</ul>'; inList = false; }
-        html += `<blockquote>${parseInline(trimmed.slice(2))}</blockquote>`;
+      } else if (trimmed.startsWith('# ')) {
+        closeList();
+        html += `<h2>${parseInline(trimmed.slice(2))}</h2>`;
+      } else if (trimmed.startsWith('&gt; ')) {
+        closeList();
+        html += `<blockquote>${parseInline(trimmed.slice(5))}</blockquote>`;
       } else if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
-        if (!inList) { html += '<ul>'; inList = true; }
+        openList('ul');
         html += `<li>${parseInline(trimmed.slice(2))}</li>`;
       } else if (/^\d+\.\s/.test(trimmed)) {
-        if (!inList) { html += '<ol>'; inList = true; }
+        openList('ol');
         html += `<li>${parseInline(trimmed.replace(/^\d+\.\s/, ''))}</li>`;
       } else if (trimmed === '') {
-        if (inList) { html += '</ul>'; inList = false; }
+        closeList();
       } else {
-        if (inList) { html += '</ul>'; inList = false; }
+        closeList();
         html += `<p>${parseInline(trimmed)}</p>`;
       }
     });
 
-    if (inList) html += '</ul>';
+    closeList();
     return html;
   }
+  window.WHY.renderMarkdown = renderMarkdown;
 
-  function parseInline(text) {
-    return text
-      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-      .replace(/\*(.+?)\*/g, '<em>$1</em>')
-      .replace(/`(.+?)`/g, '<code>$1</code>');
-  }
+  const insightHref = (post) => `/insights/${encodeURIComponent(post.slug || post.id || '')}`;
 
-  // Detect route: /insights vs /insights/:slug
   const currentPath = window.location.pathname;
-  const isInsightsRoute = currentPath.startsWith('/insights');
   const pathParts = currentPath.split('/').filter(Boolean);
-  const articleSlug = (isInsightsRoute && pathParts.length >= 2 && pathParts[0] === 'insights') ? pathParts[1] : null;
+  let articleSlug = (pathParts[0] === 'insights' && pathParts.length >= 2) ? pathParts[1] : null;
+  if (articleSlug) {
+    try { articleSlug = decodeURIComponent(articleSlug); } catch (e) { /* keep raw */ }
+  }
 
   if (articleSlug && articleView) {
     // SINGLE ARTICLE READING MODE
     if (insightsListView) insightsListView.style.display = 'none';
     articleView.style.display = 'block';
 
-    fetch(`/api/insights/${articleSlug}`)
-      .then(res => {
+    fetch(`/api/insights/${encodeURIComponent(articleSlug)}`)
+      .then((res) => {
         if (!res.ok) throw new Error('Article not found');
         return res.json();
       })
-      .then(result => {
-        if (result.success && result.data) {
-          const post = result.data;
-          
-          // Page metadata
-          document.title = `${post.title} | THEWHY Consulting`;
-          const breadcrumbEl = document.getElementById('articleBreadcrumb');
-          if (breadcrumbEl) breadcrumbEl.textContent = post.title;
+      .then((result) => {
+        if (!(result && result.success && result.data)) throw new Error('Article not found');
+        const post = result.data;
 
-          // Header fields
-          const titleEl = document.getElementById('articleTitle');
-          if (titleEl) titleEl.textContent = post.title;
+        document.title = `${post.title || 'Insight'} | THEWHY Consulting`;
+        const setText = (id, value) => {
+          const el = document.getElementById(id);
+          if (el) el.textContent = value;
+        };
+        setText('articleBreadcrumb', post.title || '');
+        setText('articleTitle', post.title || '');
+        setText('articleCategory', post.category || 'Advisory Insights');
+        setText('articleAuthor', post.author || 'THEWHY Practice Team');
+        setText('articleDate', post.created_at
+          ? new Date(post.created_at).toLocaleDateString('en-NG', { month: 'long', year: 'numeric' })
+          : '2026 Edition');
 
-          const catEl = document.getElementById('articleCategory');
-          if (catEl) catEl.textContent = post.category || 'Advisory Insights';
-
-          const authorEl = document.getElementById('articleAuthor');
-          if (authorEl) authorEl.textContent = post.author || 'THEWHY Practice Team';
-
-          const dateEl = document.getElementById('articleDate');
-          if (dateEl) {
-            dateEl.textContent = post.created_at ? new Date(post.created_at).toLocaleDateString('en-NG', { month: 'long', year: 'numeric' }) : '2026 Edition';
-          }
-
-          // Read time calculation (avg 200 wpm)
-          const words = (post.content || '').split(/\s+/).length;
-          const readMins = Math.max(2, Math.ceil(words / 180));
-          const readTimeEl = document.getElementById('articleReadingTime');
-          if (readTimeEl) {
-            readTimeEl.innerHTML = `<i class="fa-regular fa-clock"></i> ${readMins} min read`;
-          }
-
-          // Cover Image
-          const coverEl = document.getElementById('articleCover');
-          if (coverEl && post.cover_image) {
-            coverEl.src = post.cover_image.startsWith('/') ? post.cover_image : `/${post.cover_image}`;
-          }
-
-          // Content Rendering
-          const contentEl = document.getElementById('articleContent');
-          if (contentEl) {
-            contentEl.innerHTML = renderMarkdown(post.content);
-          }
-
-          // Related Articles
-          loadRelatedArticles(post.slug);
+        const words = String(post.content || '').split(/\s+/).length;
+        const readMins = Math.max(2, Math.ceil(words / 180));
+        const readTimeEl = document.getElementById('articleReadingTime');
+        if (readTimeEl) {
+          readTimeEl.innerHTML = `<i class="fa-regular fa-clock" aria-hidden="true"></i> ${readMins} min read`;
         }
+
+        const coverEl = document.getElementById('articleCover');
+        if (coverEl && post.cover_image) coverEl.src = coverSrc(post.cover_image);
+
+        const contentEl = document.getElementById('articleContent');
+        if (contentEl) contentEl.innerHTML = renderMarkdown(post.content);
+
+        loadRelatedArticles(post.slug);
       })
       .catch(() => {
         const contentEl = document.getElementById('articleContent');
@@ -664,27 +931,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const insightsList = document.getElementById('insightsList');
     if (insightsList) {
       fetch('/api/insights')
-        .then(res => res.json())
-        .then(result => {
-          if (result.success && Array.isArray(result.data) && result.data.length > 0) {
-            const cardsHtml = result.data.map(post => `
+        .then((res) => res.json())
+        .then((result) => {
+          if (result && result.success && Array.isArray(result.data) && result.data.length > 0) {
+            const cardsHtml = result.data.map((post) => {
+              const excerpt = post.excerpt || (post.content ? `${String(post.content).substring(0, 140)}...` : '');
+              return `
               <article class="insight-card reveal show">
                 <div class="insight-thumb">
-                  <img src="${post.cover_image ? (post.cover_image.startsWith('/') ? post.cover_image : `/${post.cover_image}`) : '/assets/img/blog/1.jpg'}" alt="${post.title}" onerror="this.src='/assets/img/portfolio/1.jpg'">
+                  <img src="${esc(coverSrc(post.cover_image))}" alt="${esc(post.title)}" loading="lazy" data-fallback="${FALLBACK_COVER}">
                 </div>
                 <div class="insight-body">
-                  <div class="insight-cat">${post.category || 'Insights'}</div>
-                  <h3>${post.title}</h3>
-                  <p>${post.excerpt || (post.content ? post.content.substring(0, 140) + '...' : '')}</p>
+                  <div class="insight-cat">${esc(post.category || 'Insights')}</div>
+                  <h3>${esc(post.title)}</h3>
+                  <p>${esc(excerpt)}</p>
                   <div class="insight-meta">
-                    <span>${post.author || 'THEWHY Consulting'}</span>
-                    <a href="/insights/${post.slug || post.id}">Read Article &rarr;</a>
+                    <span>${esc(post.author || 'THEWHY Consulting')}</span>
+                    <a href="${esc(insightHref(post))}">Read Article &rarr;</a>
                   </div>
                 </div>
-              </article>
-            `).join('');
+              </article>`;
+            }).join('');
 
             insightsList.innerHTML = `<div class="insight-grid">${cardsHtml}</div>`;
+            attachImageFallback(insightsList);
           }
         })
         .catch(() => {
@@ -698,29 +968,28 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!relatedContainer) return;
 
     fetch('/api/insights')
-      .then(res => res.json())
-      .then(result => {
-        if (result.success && Array.isArray(result.data)) {
-          const others = result.data.filter(p => p.slug !== currentSlug).slice(0, 3);
-          if (others.length > 0) {
-            relatedContainer.innerHTML = others.map(post => `
-              <article class="insight-card" style="box-shadow:var(--shadow-soft);">
-                <div class="insight-thumb">
-                  <img src="${post.cover_image ? (post.cover_image.startsWith('/') ? post.cover_image : `/${post.cover_image}`) : '/assets/img/blog/1.jpg'}" alt="${post.title}">
-                </div>
-                <div class="insight-body">
-                  <div class="insight-cat">${post.category || 'Insights'}</div>
-                  <h4 style="font-size:17px; margin-bottom:8px;">${post.title}</h4>
-                  <p style="font-size:13px; color:var(--muted);">${post.excerpt || ''}</p>
-                  <div class="insight-meta">
-                    <span>${post.author}</span>
-                    <a href="/insights/${post.slug}">Read &rarr;</a>
-                  </div>
-                </div>
-              </article>
-            `).join('');
-          }
-        }
+      .then((res) => res.json())
+      .then((result) => {
+        if (!(result && result.success && Array.isArray(result.data))) return;
+        const others = result.data.filter((p) => p.slug !== currentSlug).slice(0, 3);
+        if (others.length === 0) return;
+        relatedContainer.innerHTML = others.map((post) => `
+          <article class="insight-card" style="box-shadow:var(--shadow-soft);">
+            <div class="insight-thumb">
+              <img src="${esc(coverSrc(post.cover_image))}" alt="${esc(post.title)}" loading="lazy" data-fallback="${FALLBACK_COVER}">
+            </div>
+            <div class="insight-body">
+              <div class="insight-cat">${esc(post.category || 'Insights')}</div>
+              <h4 style="font-size:17px; margin-bottom:8px;">${esc(post.title)}</h4>
+              <p style="font-size:13px; color:var(--muted);">${esc(post.excerpt || '')}</p>
+              <div class="insight-meta">
+                <span>${esc(post.author || 'THEWHY Consulting')}</span>
+                <a href="${esc(insightHref(post))}">Read &rarr;</a>
+              </div>
+            </div>
+          </article>
+        `).join('');
+        attachImageFallback(relatedContainer);
       })
       .catch(() => {});
   }

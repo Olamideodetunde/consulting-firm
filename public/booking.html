@@ -5,7 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Book a Consultation | THEWHY Consulting</title>
   <meta name="description" content="Schedule a 45-minute direct advisory session with practice directors at THEWHY Consulting Lagos headquarters or virtually." />
-  <meta name="theme-color" content="#111820" />
+  <link rel="canonical" href="https://why.ng/booking">
+  <meta name="theme-color" content="#0f172a" />
+
+  <!-- Open Graph / Social -->
+  <meta property="og:site_name" content="THEWHY Consulting" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Book a Consultation | THEWHY Consulting" />
+  <meta property="og:description" content="Schedule a 45-minute direct advisory session with practice directors at THEWHY Consulting Lagos headquarters or virtually." />
+  <meta property="og:url" content="https://why.ng/booking" />
+  <meta property="og:image" content="https://why.ng/assets/img/banners/boardroom-strategy.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Book a Consultation | THEWHY Consulting" />
+  <meta name="twitter:description" content="Schedule a 45-minute direct advisory session with practice directors at THEWHY Consulting Lagos headquarters or virtually." />
 
   <!-- Google Fonts: DM Sans & Manrope -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,9 +29,11 @@
 
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="/assets/img/logo-mark.svg">
+  <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
 
   <!-- Bespoke Design System CSS -->
   <link rel="stylesheet" href="/css/custom.css">
+  <script>try{if(sessionStorage.getItem('why_preloader_seen'))document.documentElement.classList.add('why-preloader-seen')}catch(e){}</script>
 </head>
 <body>
 
@@ -70,12 +84,12 @@
       <a href="/">Home</a>
       <a href="/about">About Us</a>
       <a href="/services">Services</a>
-      <a href="/calculator">Fee Calculator</a>
-      <a href="/case-studies">Track Record</a>
+      <a href="/industries">Who We Serve</a>
+      <a href="/team">Our Team</a>
       <a href="/insights">Insights</a>
+      <a href="/launch">Special Program</a>
       <a href="/contact">Contact</a>
-      <a href="/admin">Executive Portal</a>
-      <a href="/booking" class="drawer-cta">Book Consultation &rarr;</a>
+      <a href="/booking" class="drawer-cta">Schedule Consultation &rarr;</a>
       <div class="drawer-contact-strip">
         <a href="tel:+2348034992318" class="drawer-contact-link">
           <i class="fa-solid fa-phone"></i> <span>+234-8034-99-23-18</span>
@@ -83,7 +97,7 @@
         <a href="mailto:info@thewhy.ng" class="drawer-contact-link">
           <i class="fa-solid fa-envelope"></i> <span>info@thewhy.ng</span>
         </a>
-        <div style="font-size:11px; color:#64748b; padding-left:12px; margin-top:2px;">
+        <div style="font-size:11px; color:#64748b; padding-left:12px; margin-top:4px;">
           <i class="fa-solid fa-building-shield" style="color:var(--yellow); margin-right:4px;"></i> Lagos HQ: Yaba &bull; Ikeja
         </div>
       </div>
@@ -102,9 +116,10 @@
           <a href="/">Home</a>
           <a href="/about">About</a>
           <a href="/services">Services</a>
-          <a href="/calculator">Fee Calculator</a>
-          <a href="/case-studies">Track Record</a>
+          <a href="/industries">Industries</a>
+          <a href="/team">Our Team</a>
           <a href="/insights">Insights</a>
+          <a href="/launch">Special Program</a>
           <a href="/contact">Contact</a>
         </div>
 
@@ -163,39 +178,39 @@
             <p style="font-size:14px; color:var(--muted); margin-top:4px;">Fill in your details below to schedule an advisory consultation.</p>
           </div>
 
-          <div id="bookingMsg" class="form-alert" style="display:none;"></div>
+          <div id="bookingMsg" class="form-alert" role="status" aria-live="polite" style="display:none;"></div>
 
           <form id="bookingForm">
             <input type="hidden" name="estimatedFee" value="">
 
             <div class="form-grid">
               <div class="form-group">
-                <label>Full Name *</label>
-                <input type="text" name="clientName" class="form-control" placeholder="e.g. Adebayo Ogunlesi" required>
+                <label for="bk-clientName">Full Name *</label>
+                <input autocomplete="name" id="bk-clientName" type="text" name="clientName" class="form-control" placeholder="e.g. Adebayo Ogunlesi" required>
               </div>
 
               <div class="form-group">
-                <label>Corporate Email *</label>
-                <input type="email" name="email" class="form-control" placeholder="adebayo@company.ng" required>
-              </div>
-            </div>
-
-            <div class="form-grid">
-              <div class="form-group">
-                <label>Phone / WhatsApp *</label>
-                <input type="tel" name="phone" class="form-control" placeholder="+234 803 000 0000" required>
-              </div>
-
-              <div class="form-group">
-                <label>Company / Enterprise Name</label>
-                <input type="text" name="companyName" class="form-control" placeholder="e.g. Apex Marine Logistics Ltd">
+                <label for="bk-email">Corporate Email *</label>
+                <input autocomplete="email" id="bk-email" type="email" name="email" class="form-control" placeholder="adebayo@company.ng" required>
               </div>
             </div>
 
             <div class="form-grid">
               <div class="form-group">
-                <label>Primary Advisory Area *</label>
-                <select name="service" class="form-control" required>
+                <label for="bk-phone">Phone / WhatsApp *</label>
+                <input autocomplete="tel" inputmode="tel" id="bk-phone" type="tel" name="phone" class="form-control" placeholder="+234 803 000 0000" required>
+              </div>
+
+              <div class="form-group">
+                <label for="bk-companyName">Company / Enterprise Name</label>
+                <input autocomplete="organization" id="bk-companyName" type="text" name="companyName" class="form-control" placeholder="e.g. Apex Marine Logistics Ltd">
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="bk-service">Primary Advisory Area *</label>
+                <select id="bk-service" name="service" class="form-control" required>
                   <option value="Accounting &amp; Tax Compliance">Accounting &amp; Tax Compliance</option>
                   <option value="Corporate Finance &amp; Turnaround">Corporate Finance &amp; Turnaround</option>
                   <option value="Forensic Bank Charges Recovery">Forensic Bank Charges Recovery</option>
@@ -208,8 +223,8 @@
               </div>
 
               <div class="form-group">
-                <label>Meeting Format *</label>
-                <select name="meetingType" class="form-control" required>
+                <label for="bk-meetingType">Meeting Format *</label>
+                <select id="bk-meetingType" name="meetingType" class="form-control" required>
                   <option value="Virtual (Google Meet)">Virtual (Google Meet Video)</option>
                   <option value="In-Person (Yaba Lagos HQ)">In-Person (Yaba, Lagos HQ)</option>
                   <option value="Telephone Conference">Telephone Conference</option>
@@ -219,13 +234,13 @@
 
             <div class="form-grid">
               <div class="form-group">
-                <label>Preferred Date</label>
-                <input type="date" name="date" class="form-control">
+                <label for="bk-date">Preferred Date</label>
+                <input id="bk-date" type="date" name="date" class="form-control">
               </div>
 
               <div class="form-group">
-                <label>Preferred Time Slot</label>
-                <select name="timeSlot" class="form-control">
+                <label for="bk-timeSlot">Preferred Time Slot</label>
+                <select id="bk-timeSlot" name="timeSlot" class="form-control">
                   <option value="10:00 AM - 10:45 AM">Morning: 10:00 AM - 10:45 AM</option>
                   <option value="02:00 PM - 02:45 PM">Afternoon: 02:00 PM - 02:45 PM</option>
                   <option value="04:00 PM - 04:45 PM">Late Afternoon: 04:00 PM - 04:45 PM</option>
@@ -234,8 +249,8 @@
             </div>
 
             <div class="form-group">
-              <label>Company Scale</label>
-              <select name="companySize" class="form-control">
+              <label for="bk-companySize">Company Scale</label>
+              <select id="bk-companySize" name="companySize" class="form-control">
                 <option value="Micro (1-10 staff)">Micro / Startup (1-10 staff)</option>
                 <option value="SME (10-100 staff)" selected>Growing SME (10-100 staff)</option>
                 <option value="Mid-Market (100-500 staff)">Mid-Market Enterprise (100-500 staff)</option>
@@ -244,8 +259,8 @@
             </div>
 
             <div class="form-group">
-              <label>Briefly Describe the Scenario or Challenge</label>
-              <textarea name="message" class="form-control" placeholder="Provide background on the specific dilemma (e.g. pending bank audit, tax demand notice, debt restructuring, or upcoming procurement bid)..."></textarea>
+              <label for="bk-message">Briefly Describe the Scenario or Challenge</label>
+              <textarea id="bk-message" name="message" class="form-control" placeholder="Provide background on the specific dilemma (e.g. pending bank audit, tax demand notice, debt restructuring, or upcoming procurement bid)..."></textarea>
             </div>
 
             <button type="submit" class="btn btn-primary" style="width:100%; min-height:54px; font-size:15px;">
@@ -268,9 +283,10 @@
               Every engagement is led personally by chartered partners from Wale Kehinde &amp; Co., ensuring statutory authority and executive judgment from day one.
             </p>
 
+            <!-- TODO(client-assets): replace stock director photos with real partner headshots -->
             <!-- Director Card 1 -->
             <div style="display:flex; gap:14px; align-items:center; padding:12px 0; border-top:1px solid var(--line-light);">
-              <img src="/assets/img/team/1.jpg" alt="Kehinde Adewale" style="width:48px; height:48px; border-radius:50%; object-fit:cover;">
+              <img src="/assets/img/team/1.jpg" alt="Kehinde Adewale" style="width:48px; height:48px; border-radius:50%; object-fit:cover;" width="800" height="1068" loading="lazy" decoding="async">
               <div>
                 <strong style="font-family:Manrope; font-size:13px; display:block;">Mr. Kehinde Adewale</strong>
                 <span style="font-size:11px; color:var(--orange); font-weight:700;">Managing Consultant &bull; FCA, ACIT</span>
@@ -279,7 +295,7 @@
 
             <!-- Director Card 2 -->
             <div style="display:flex; gap:14px; align-items:center; padding:12px 0; border-top:1px solid var(--line-light);">
-              <img src="/assets/img/team/2.jpg" alt="Seun Olaniyi" style="width:48px; height:48px; border-radius:50%; object-fit:cover;">
+              <img src="/assets/img/team/2.jpg" alt="Seun Olaniyi" style="width:48px; height:48px; border-radius:50%; object-fit:cover;" width="369" height="493" loading="lazy" decoding="async">
               <div>
                 <strong style="font-family:Manrope; font-size:13px; display:block;">Mr. Seun Olaniyi</strong>
                 <span style="font-size:11px; color:var(--blue); font-weight:700;">Accounting Operations &bull; ACA</span>
@@ -288,10 +304,10 @@
 
             <!-- Director Card 3 -->
             <div style="display:flex; gap:14px; align-items:center; padding:12px 0; border-top:1px solid var(--line-light);">
-              <img src="/assets/img/team/3.jpg" alt="Dolapo Wale-Kehinde" style="width:48px; height:48px; border-radius:50%; object-fit:cover;">
+              <img src="/assets/img/team/3.jpg" alt="Dolapo Wale-Kehinde" style="width:48px; height:48px; border-radius:50%; object-fit:cover;" width="800" height="1067" loading="lazy" decoding="async">
               <div>
                 <strong style="font-family:Manrope; font-size:13px; display:block;">Mrs. Dolapo Wale-Kehinde</strong>
-                <span style="font-size:11px; color:#059669; font-weight:700;">Head Training &amp; HR &bull; PHRi</span>
+                <span style="font-size:11px; color:#047857; font-weight:700;">Head Training &amp; HR &bull; PHRi</span>
               </div>
             </div>
 
@@ -324,90 +340,77 @@
     </div>
   </section>
 
-  <!-- UNIVERSAL FOOTER -->
+  <!-- UNIFIED FOOTER -->
   <footer class="site-footer">
     <div class="container">
       <div class="footer-grid">
-        
-        <div class="footer-col">
-          <a class="brand" href="/" style="margin-bottom:12px;">
-            <img src="/assets/img/logo-horizontal-white.svg" alt="THEWHY Consulting" class="brand-logo" style="height:46px;">
-          </a>
-          <p class="footer-intro">
-            Boutique management consulting firm focused on practical solutions for small and medium-sized enterprises.
+        <div class="footer-col footer-col-main">
+          <img src="/assets/img/logo-horizontal-white.svg" alt="THEWHY Consulting" style="height: 44px; margin-bottom: 1.25rem;">
+          <p style="color: #94a3b8; font-size: 0.9rem; line-height: 1.6; margin-bottom: 1.25rem;">
+            A boutique management consulting firm headquartered in Lagos, Nigeria. We provide high-impact, practical solutions in accounting, tax, corporate finance, HR, strategy, and statutory governance to turn SMEs into enduring conglomerates.
           </p>
-          <div class="footer-affiliate-badge">
-            An affiliate of <strong>Wale Kehinde &amp; Co.</strong> (Chartered Accountants)
-          </div>
-          <div class="footer-social">
-            <a href="https://wa.me/2348034992318" target="_blank" class="footer-social-btn" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
-            <a href="https://linkedin.com" target="_blank" class="footer-social-btn" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
-            <a href="tel:+2348034992318" class="footer-social-btn" aria-label="Call"><i class="fa-solid fa-phone"></i></a>
-            <a href="mailto:info@thewhy.ng" class="footer-social-btn" aria-label="Email"><i class="fa-solid fa-envelope"></i></a>
+          <div style="font-size: 0.8rem; color: #f8c638; font-weight: 600;">
+            <i class="fa-solid fa-building-shield"></i> An affiliate of Wale Kehinde &amp; Co. (Chartered Accountants)
           </div>
         </div>
 
         <div class="footer-col">
-          <div class="footer-title">Practice Directory</div>
-          <div class="footer-links">
-            <a href="/about">About Our Firm</a>
-            <a href="/services">Services &amp; Pillars</a>
-            <a href="/case-studies">Documented Turnarounds</a>
-            <a href="/calculator">Fee &amp; Retainer Calculator</a>
-            <a href="/insights">Business Insights &amp; Articles</a>
-            <a href="/booking">Book Advisory Session</a>
-          </div>
+          <h4>Practice Areas</h4>
+          <ul>
+            <li><a href="/services#accounting-tax">Accounting &amp; Tax</a></li>
+            <li><a href="/services#corporate-finance">Corporate Finance</a></li>
+            <li><a href="/services#strategy-solutions">Strategy &amp; AI Solutions</a></li>
+            <li><a href="/services#hr-services">HR Consulting &amp; Training</a></li>
+            <li><a href="/services#audit-assurance">Audit &amp; Forensic Review</a></li>
+            <li><a href="/services#statutory-certification">Statutory Certification</a></li>
+          </ul>
         </div>
 
         <div class="footer-col">
-          <div class="footer-title">Core Competencies</div>
-          <div class="footer-links">
-            <a href="/services#tab-accounting">Accounting &amp; Tax Services</a>
-            <a href="/services#tab-finance">Corporate Finance &amp; Turnaround</a>
-            <a href="/services#tab-strategy">Strategy &amp; AI Integration</a>
-            <a href="/services#tab-hr">CMD Accredited HR Training</a>
-            <a href="/services#tab-accounting">Excess Bank Charges Recovery</a>
-            <a href="/services#tab-hr">PENCOM &amp; ITF Clearance</a>
-          </div>
+          <h4>Explore</h4>
+          <ul>
+            <li><a href="/about">About the Firm</a></li>
+            <li><a href="/industries">Who We Serve</a></li>
+            <li><a href="/team">Our Leadership Team</a></li>
+            <li><a href="/case-studies">Case Studies</a></li>
+            <li><a href="/calculator">Fee Calculator</a></li>
+            <li><a href="/launch">SME Bootcamp (CMD)</a></li>
+            <li><a href="/insights">Articles &amp; Insights</a></li>
+          </ul>
         </div>
 
         <div class="footer-col">
-          <div class="footer-title">Lagos Headquarters</div>
-          <div class="contact-line">
-            <i class="fa-solid fa-location-dot"></i>
-            <span>1a Hughes Avenue, Alagomeji, Yaba, Lagos, Nigeria</span>
-          </div>
-          <div class="contact-line">
-            <i class="fa-solid fa-phone"></i>
-            <span><a href="tel:+2348034992318" style="color:inherit;">+234-8034-99-23-18</a></span>
-          </div>
-          <div class="contact-line">
-            <i class="fa-solid fa-envelope"></i>
-            <span><a href="mailto:info@thewhy.ng" style="color:inherit;">info@thewhy.ng</a></span>
-          </div>
-          <div style="margin-top:16px;">
-            <a href="https://wa.me/2348034992318" target="_blank" class="btn btn-ghost" style="padding:10px 18px; font-size:12px; gap:8px;">
-              <i class="fa-brands fa-whatsapp" style="color:#25D366; font-size:15px;"></i> Chat on WhatsApp
-            </a>
-          </div>
+          <h4>Contact &amp; Lagos HQ</h4>
+          <p style="color: #cbd5e1; font-size: 0.85rem; margin-bottom: 0.75rem;">
+            <i class="fa-solid fa-location-dot" style="color: #ef4c20; margin-right: 6px;"></i>
+            1a Hughes Avenue, Alagomeji, Yaba, Lagos
+          </p>
+          <p style="color: #cbd5e1; font-size: 0.85rem; margin-bottom: 0.75rem;">
+            <i class="fa-solid fa-location-dot" style="color: #356fb7; margin-right: 6px;"></i>
+            29, Isaac John Street, GRA Ikeja, Lagos
+          </p>
+          <p style="color: #cbd5e1; font-size: 0.85rem; margin-bottom: 0.75rem;">
+            <i class="fa-solid fa-phone" style="color: #f8c638; margin-right: 6px;"></i>
+            <a href="tel:+2348034992318" style="color: inherit;">+234-8034-99-23-18</a>
+          </p>
+          <p style="color: #cbd5e1; font-size: 0.85rem;">
+            <i class="fa-solid fa-envelope" style="color: #ef4c20; margin-right: 6px;"></i>
+            <a href="mailto:info@thewhy.ng" style="color: inherit;">info@thewhy.ng</a>
+          </p>
         </div>
-
       </div>
 
       <div class="footer-bottom">
-        <div>
-          &copy; <span id="year">2026</span> THEWHY Consulting. All rights reserved. Affiliate of Wale Kehinde &amp; Co. (Chartered Accountants).
-        </div>
-        <div style="display:flex; gap:18px;">
-          <a href="/contact">Support</a>
-          <a href="/insights">Insights</a>
-          <a href="/admin">Executive Portal</a>
+        <p>&copy; <span data-year>2026</span> THEWHY Consulting. All rights reserved. Registered in the Federal Republic of Nigeria.</p>
+        <div style="display: flex; gap: 1.5rem; font-size: 0.85rem;">
+          <a href="/privacy" style="color: #94a3b8;">Privacy Policy</a>
+          <a href="/terms" style="color: #94a3b8;">Terms of Use</a>
         </div>
       </div>
     </div>
   </footer>
 
   <!-- Scripts -->
-  <script src="/js/app.js"></script>
+  <script src="/js/main.js"></script>
 </body>
 </html>

@@ -5,7 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title id="pageTitle">Business Insights &amp; Compliance Briefs | THEWHY Consulting</title>
   <meta name="description" id="pageMetaDesc" content="Expert perspectives on Nigerian tax compliance, CAC annual returns, corporate finance turnaround, PENCOM certificates, and excess bank charges recovery." />
-  <meta name="theme-color" content="#111820" />
+  <link rel="canonical" href="https://why.ng/insights">
+  <meta name="theme-color" content="#0f172a" />
+
+  <!-- Open Graph / Social -->
+  <meta property="og:site_name" content="THEWHY Consulting" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Business Insights &amp; Compliance Briefs | THEWHY Consulting" />
+  <meta property="og:description" content="Expert perspectives on Nigerian tax compliance, CAC annual returns, corporate finance turnaround, PENCOM certificates, and excess bank charges recovery." />
+  <meta property="og:url" content="https://why.ng/insights" />
+  <meta property="og:image" content="https://why.ng/assets/img/banners/boardroom-strategy.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Business Insights &amp; Compliance Briefs | THEWHY Consulting" />
+  <meta name="twitter:description" content="Expert perspectives on Nigerian tax compliance, CAC annual returns, corporate finance turnaround, PENCOM certificates, and excess bank charges recovery." />
 
   <!-- Google Fonts: DM Sans & Manrope -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,9 +29,11 @@
 
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="/assets/img/logo-mark.svg">
+  <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
 
   <!-- Absolute Root Bespoke Design System CSS -->
   <link rel="stylesheet" href="/css/custom.css">
+  <script>try{if(sessionStorage.getItem('why_preloader_seen'))document.documentElement.classList.add('why-preloader-seen')}catch(e){}</script>
 </head>
 <body>
 
@@ -72,11 +86,10 @@
       <a href="/services">Services</a>
       <a href="/industries">Who We Serve</a>
       <a href="/team">Our Team</a>
-      <a href="/insights" class="active">Insights</a>
+      <a href="/insights" class="active" aria-current="page">Insights</a>
       <a href="/launch">Special Program</a>
       <a href="/contact">Contact</a>
-      <a href="/admin">Executive Portal</a>
-      <a href="/contact" class="drawer-cta">Schedule Consultation &rarr;</a>
+      <a href="/booking" class="drawer-cta">Schedule Consultation &rarr;</a>
       <div class="drawer-contact-strip">
         <a href="tel:+2348034992318" class="drawer-contact-link">
           <i class="fa-solid fa-phone"></i> <span>+234-8034-99-23-18</span>
@@ -105,14 +118,14 @@
           <a href="/services">Services</a>
           <a href="/industries">Industries</a>
           <a href="/team">Our Team</a>
-          <a href="/insights" class="active">Insights</a>
+          <a href="/insights" class="active" aria-current="page">Insights</a>
           <a href="/launch">Special Program</a>
           <a href="/contact">Contact</a>
         </div>
 
         <div class="nav-actions">
-          <a href="/contact" class="nav-cta">
-            <span>Get In Touch</span> <i class="fa-solid fa-arrow-right" style="font-size:11px;"></i>
+          <a href="/booking" class="nav-cta">
+            <span>Book Consultation</span> <i class="fa-solid fa-arrow-right" style="font-size:11px;"></i>
           </a>
           <button class="menu-btn" id="menuBtn" aria-label="Open navigation">
             <i class="fa-solid fa-bars"></i>
@@ -173,7 +186,7 @@
             <!-- Article 1 -->
             <article class="insight-card reveal">
               <div class="insight-thumb">
-                <img src="/assets/img/blog/1.jpg" alt="CAC Annual Returns">
+                <img src="/assets/img/blog/1.jpg" alt="CAC Annual Returns" width="640" height="427" loading="lazy" decoding="async">
               </div>
               <div class="insight-body">
                 <div class="insight-cat">Corporate Compliance</div>
@@ -189,7 +202,7 @@
             <!-- Article 2 -->
             <article class="insight-card reveal delay-1">
               <div class="insight-thumb">
-                <img src="/assets/img/banners/bank-charges.jpg" alt="Excess Bank Charges Audit">
+                <img src="/assets/img/banners/bank-charges.jpg" alt="Excess Bank Charges Audit" width="1024" height="680" loading="lazy" decoding="async">
               </div>
               <div class="insight-body">
                 <div class="insight-cat">Banking &amp; Finance</div>
@@ -205,7 +218,7 @@
             <!-- Article 3 -->
             <article class="insight-card reveal delay-2">
               <div class="insight-thumb">
-                <img src="/assets/img/blog/3.jpg" alt="PENCOM Clearance Certificate">
+                <img src="/assets/img/blog/3.jpg" alt="PENCOM Clearance Certificate" width="640" height="427" loading="lazy" decoding="async">
               </div>
               <div class="insight-body">
                 <div class="insight-cat">HR &amp; Compliance</div>
@@ -221,7 +234,7 @@
             <!-- Article 4 -->
             <article class="insight-card reveal">
               <div class="insight-thumb">
-                <img src="/assets/img/portfolio/1.jpg" alt="Turnaround Strategy">
+                <img src="/assets/img/portfolio/1.jpg" alt="Turnaround Strategy" width="1000" height="672" loading="lazy" decoding="async">
               </div>
               <div class="insight-body">
                 <div class="insight-cat">Turnaround Strategy</div>
@@ -237,7 +250,7 @@
             <!-- Article 5 -->
             <article class="insight-card reveal delay-1">
               <div class="insight-thumb">
-                <img src="/assets/img/portfolio/2.jpg" alt="FIRS Tax Clearance">
+                <img src="/assets/img/portfolio/2.jpg" alt="FIRS Tax Clearance" width="1000" height="672" loading="lazy" decoding="async">
               </div>
               <div class="insight-body">
                 <div class="insight-cat">Tax Advisory</div>
@@ -253,7 +266,7 @@
             <!-- Article 6 -->
             <article class="insight-card reveal delay-2">
               <div class="insight-thumb">
-                <img src="/assets/img/portfolio/3.jpg" alt="Fixed Asset Verification">
+                <img src="/assets/img/portfolio/3.jpg" alt="Fixed Asset Verification" width="1000" height="672" loading="lazy" decoding="async">
               </div>
               <div class="insight-body">
                 <div class="insight-cat">Asset Protection</div>
@@ -282,12 +295,14 @@
             Subscribe to receive our monthly executive briefing covering FIRS tax deadlines, Central Bank banking policies, and statutory compliance updates.
           </p>
 
-          <form onsubmit="event.preventDefault(); alert('Thank you for subscribing to THEWHY Executive Advisory Briefs.');" style="display:flex; gap:12px; max-width:520px; margin:auto; flex-wrap:wrap; justify-content:center;">
-            <input type="email" placeholder="Enter corporate email..." required style="flex:1 1 280px; padding:14px 22px; border-radius:100px; border:1px solid rgba(255,255,255,0.2); background:rgba(255,255,255,0.08); color:#ffffff; font-size:14px; outline:none;">
+          <form id="newsletterForm" data-source="insights" style="display:flex; gap:12px; max-width:520px; margin:auto; flex-wrap:wrap; justify-content:center;">
+            <label for="newsletterEmail" style="position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;">Corporate email address</label>
+            <input type="email" id="newsletterEmail" name="email" autocomplete="email" placeholder="Enter corporate email..." required style="flex:1 1 280px; padding:14px 22px; border-radius:100px; border:1px solid rgba(255,255,255,0.2); background:rgba(255,255,255,0.08); color:#ffffff; font-size:14px; outline:none;">
             <button type="submit" class="btn btn-primary" style="min-height:50px; padding:0 28px;">
               <span>Subscribe</span> <i class="fa-solid fa-paper-plane"></i>
             </button>
           </form>
+          <p id="newsletterMsg" role="status" aria-live="polite" style="margin:14px auto 0; min-height:1.4em; font-size:14px; color:#ffffff;"></p>
         </div>
       </div>
     </section>
@@ -327,14 +342,14 @@
               </span>
             </div>
 
-            <h1 class="article-title" id="articleTitle">Loading article...</h1>
+            <h2 class="article-title" id="articleTitle">Loading article...</h2>
 
             <div class="article-meta">
               <div>
                 Written by <strong id="articleAuthor">THEWHY Practice Team</strong> &bull; <span id="articleDate">2026 Edition</span>
               </div>
               <div style="display:flex; gap:10px; align-items:center;">
-                <button onclick="navigator.clipboard?.writeText(window.location.href); alert('Article link copied to clipboard!');" class="btn btn-ghost" style="min-height:36px; padding:0 14px; font-size:12px; gap:6px;">
+                <button type="button" id="articleShareBtn" class="btn btn-ghost" style="min-height:44px; padding:0 14px; font-size:12px; gap:6px;">
                   <i class="fa-solid fa-share-nodes"></i> Share
                 </button>
               </div>
@@ -343,7 +358,7 @@
 
           <!-- Article Hero Cover -->
           <div class="article-hero-img">
-            <img id="articleCover" src="/assets/img/blog/1.jpg" alt="Article Cover" onerror="this.src='/assets/img/portfolio/1.jpg'">
+            <img id="articleCover" src="/assets/img/blog/1.jpg" alt="" data-fallback="/assets/img/portfolio/1.jpg">
           </div>
 
           <!-- Formatted Content Body -->
@@ -352,13 +367,14 @@
           </div>
 
           <!-- Practice Partner Bio Card -->
+          <!-- TODO(client-assets): replace stock author photo with a real partner headshot -->
           <div class="article-author-card">
-            <img src="/assets/img/team/1.jpg" alt="Lead Consultant">
+            <img src="/assets/img/team/1.jpg" alt="Lead Consultant" width="800" height="1068" loading="lazy" decoding="async">
             <div>
               <div style="font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:0.16em; color:var(--orange); margin-bottom:4px;">
                 Advisory Authority
               </div>
-              <h4 style="font-size:18px; margin-bottom:4px;">Practice Direction &bull; Wale Kehinde &amp; Co.</h4>
+              <h3 style="font-size:18px; margin-bottom:4px;">Practice Direction &bull; Wale Kehinde &amp; Co.</h3>
               <p style="font-size:13px; color:var(--muted); line-height:1.6;">
                 Our insights are curated directly by practicing chartered accountants (ICAN, CITN) and CMD-certified management facilitators specializing in Nigerian fiscal laws and corporate turnarounds.
               </p>
@@ -434,9 +450,10 @@
             <li><a href="/about">About the Firm</a></li>
             <li><a href="/industries">Who We Serve</a></li>
             <li><a href="/team">Our Leadership Team</a></li>
+            <li><a href="/case-studies">Case Studies</a></li>
+            <li><a href="/calculator">Fee Calculator</a></li>
             <li><a href="/launch">SME Bootcamp (CMD)</a></li>
             <li><a href="/insights">Articles &amp; Insights</a></li>
-            <li><a href="/admin">Executive Portal</a></li>
           </ul>
         </div>
 
@@ -462,11 +479,10 @@
       </div>
 
       <div class="footer-bottom">
-        <p>&copy; 2026 THEWHY Consulting. All rights reserved. Registered in the Federal Republic of Nigeria.</p>
+        <p>&copy; <span data-year>2026</span> THEWHY Consulting. All rights reserved. Registered in the Federal Republic of Nigeria.</p>
         <div style="display: flex; gap: 1.5rem; font-size: 0.85rem;">
           <a href="/privacy" style="color: #94a3b8;">Privacy Policy</a>
           <a href="/terms" style="color: #94a3b8;">Terms of Use</a>
-          <a href="/admin" style="color: #94a3b8;">Admin Portal</a>
         </div>
       </div>
     </div>

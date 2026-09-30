@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node server/server.js",
     "dev": "node --watch server/server.js",
-    "migrate": "node server/db/migrate.js"
+    "migrate": "node server/db/migrate.js",
+    "test": "node --test test/*.test.js"
   },
   "keywords": [
     "consulting",
@@ -20,12 +21,19 @@
   "author": "THEWHY Consulting",
   "license": "ISC",
   "dependencies": {
+    "compression": "^1.8.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "express-rate-limit": "^8.7.0",
     "helmet": "^8.3.0",
     "mysql2": "^3.24.4",
-    "uuid": "^9.0.1"
+    "nodemailer": "^10.0.13"
+  },
+  "devDependencies": {
+    "supertest": "^7.3.0"
+  },
+  "engines": {
+    "node": ">=21"
   }
 }

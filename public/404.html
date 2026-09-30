@@ -4,7 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>404 — Page Not Found | THEWHY Consulting</title>
-  <meta name="theme-color" content="#111820" />
+  <meta name="description" content="The page you requested could not be found. Explore THEWHY Consulting services, insights, or contact our Lagos advisory team." />
+  <meta name="robots" content="noindex" />
+  <meta name="theme-color" content="#0f172a" />
 
   <!-- Google Fonts: DM Sans & Manrope -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,11 +18,47 @@
 
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="/assets/img/logo-mark.svg">
+  <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
 
   <!-- Bespoke Design System CSS -->
   <link rel="stylesheet" href="/css/custom.css">
+  <script>try{if(sessionStorage.getItem('why_preloader_seen'))document.documentElement.classList.add('why-preloader-seen')}catch(e){}</script>
 </head>
 <body style="min-height: 100vh; display: flex; flex-direction: column;">
+
+  <!-- MOBILE SLIDE-OVER DRAWER -->
+  <div class="drawer-overlay" id="drawerOverlay"></div>
+  <aside class="drawer" id="drawer">
+    <button class="drawer-close" id="drawerClose" aria-label="Close navigation">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <div class="drawer-nav">
+      <div style="margin-bottom: 16px;">
+        <img src="/assets/img/logo-horizontal-white.svg" alt="THEWHY Consulting" style="height: 40px; width: auto;">
+      </div>
+      <small>THEWHY Practice Directory</small>
+      <a href="/">Home</a>
+      <a href="/about">About Us</a>
+      <a href="/services">Services</a>
+      <a href="/industries">Who We Serve</a>
+      <a href="/team">Our Team</a>
+      <a href="/insights">Insights</a>
+      <a href="/launch">Special Program</a>
+      <a href="/contact">Contact</a>
+      <a href="/booking" class="drawer-cta">Schedule Consultation &rarr;</a>
+      <div class="drawer-contact-strip">
+        <a href="tel:+2348034992318" class="drawer-contact-link">
+          <i class="fa-solid fa-phone"></i> <span>+234-8034-99-23-18</span>
+        </a>
+        <a href="mailto:info@thewhy.ng" class="drawer-contact-link">
+          <i class="fa-solid fa-envelope"></i> <span>info@thewhy.ng</span>
+        </a>
+        <div style="font-size:11px; color:#64748b; padding-left:12px; margin-top:4px;">
+          <i class="fa-solid fa-building-shield" style="color:var(--yellow); margin-right:4px;"></i> Lagos HQ: Yaba &bull; Ikeja
+        </div>
+      </div>
+    </div>
+  </aside>
 
   <!-- FLOATING FROSTED GLASS SITE NAVIGATION -->
   <nav class="site-nav" id="siteNav">
@@ -42,9 +80,12 @@
         </div>
 
         <div class="nav-actions">
-          <a href="/contact" class="nav-cta">
-            <span>Get In Touch</span> <i class="fa-solid fa-arrow-right" style="font-size:11px;"></i>
+          <a href="/booking" class="nav-cta">
+            <span>Book Consultation</span> <i class="fa-solid fa-arrow-right" style="font-size:11px;"></i>
           </a>
+          <button class="menu-btn" id="menuBtn" aria-label="Open navigation">
+            <i class="fa-solid fa-bars"></i>
+          </button>
         </div>
       </div>
     </div>
@@ -60,7 +101,7 @@
         Page Not Found
       </h1>
       <p style="font-size: 1.05rem; color: var(--muted); line-height: 1.6; margin-bottom: 2.5rem;">
-        The requested advisory resource, page, or document does not exist or has been relocated to another section of the practice portal.
+        The page you were looking for does not exist or may have moved. Check the address for typos, or use one of the links below to find what you need.
       </p>
 
       <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
@@ -71,25 +112,87 @@
           <i class="fa-solid fa-list-check" style="margin-right: 6px;"></i> Explore Services
         </a>
         <a href="/contact" class="btn btn-outline">
-          <i class="fa-solid fa-envelope" style="margin-right: 6px;"></i> Contact Support
+          <i class="fa-solid fa-envelope" style="margin-right: 6px;"></i> Contact Us
         </a>
       </div>
+
+      <p style="font-size: 0.95rem; color: var(--muted); line-height: 1.6; margin-top: 2rem;">
+        Looking for something specific? Read our <a href="/insights" style="color: var(--orange); font-weight: 600;">latest insights</a>, review <a href="/case-studies" style="color: var(--orange); font-weight: 600;">case studies</a>, or <a href="/booking" style="color: var(--orange); font-weight: 600;">book a consultation</a>. You can also call <a href="tel:+2348034992318" style="color: var(--orange); font-weight: 600;">+234-8034-99-23-18</a>.
+      </p>
     </div>
   </main>
 
-  <!-- FOOTER -->
+  <!-- UNIFIED FOOTER -->
   <footer class="site-footer" style="margin-top: auto;">
     <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col footer-col-main">
+          <img src="/assets/img/logo-horizontal-white.svg" alt="THEWHY Consulting" style="height: 44px; margin-bottom: 1.25rem;">
+          <p style="color: #94a3b8; font-size: 0.9rem; line-height: 1.6; margin-bottom: 1.25rem;">
+            A boutique management consulting firm headquartered in Lagos, Nigeria. We provide high-impact, practical solutions in accounting, tax, corporate finance, HR, strategy, and statutory governance to turn SMEs into enduring conglomerates.
+          </p>
+          <div style="font-size: 0.8rem; color: #f8c638; font-weight: 600;">
+            <i class="fa-solid fa-building-shield"></i> An affiliate of Wale Kehinde &amp; Co. (Chartered Accountants)
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Practice Areas</h4>
+          <ul>
+            <li><a href="/services#accounting-tax">Accounting &amp; Tax</a></li>
+            <li><a href="/services#corporate-finance">Corporate Finance</a></li>
+            <li><a href="/services#strategy-solutions">Strategy &amp; AI Solutions</a></li>
+            <li><a href="/services#hr-services">HR Consulting &amp; Training</a></li>
+            <li><a href="/services#audit-assurance">Audit &amp; Forensic Review</a></li>
+            <li><a href="/services#statutory-certification">Statutory Certification</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Explore</h4>
+          <ul>
+            <li><a href="/about">About the Firm</a></li>
+            <li><a href="/industries">Who We Serve</a></li>
+            <li><a href="/team">Our Leadership Team</a></li>
+            <li><a href="/case-studies">Case Studies</a></li>
+            <li><a href="/calculator">Fee Calculator</a></li>
+            <li><a href="/launch">SME Bootcamp (CMD)</a></li>
+            <li><a href="/insights">Articles &amp; Insights</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Contact &amp; Lagos HQ</h4>
+          <p style="color: #cbd5e1; font-size: 0.85rem; margin-bottom: 0.75rem;">
+            <i class="fa-solid fa-location-dot" style="color: #ef4c20; margin-right: 6px;"></i>
+            1a Hughes Avenue, Alagomeji, Yaba, Lagos
+          </p>
+          <p style="color: #cbd5e1; font-size: 0.85rem; margin-bottom: 0.75rem;">
+            <i class="fa-solid fa-location-dot" style="color: #356fb7; margin-right: 6px;"></i>
+            29, Isaac John Street, GRA Ikeja, Lagos
+          </p>
+          <p style="color: #cbd5e1; font-size: 0.85rem; margin-bottom: 0.75rem;">
+            <i class="fa-solid fa-phone" style="color: #f8c638; margin-right: 6px;"></i>
+            <a href="tel:+2348034992318" style="color: inherit;">+234-8034-99-23-18</a>
+          </p>
+          <p style="color: #cbd5e1; font-size: 0.85rem;">
+            <i class="fa-solid fa-envelope" style="color: #ef4c20; margin-right: 6px;"></i>
+            <a href="mailto:info@thewhy.ng" style="color: inherit;">info@thewhy.ng</a>
+          </p>
+        </div>
+      </div>
+
       <div class="footer-bottom">
-        <p>&copy; 2026 THEWHY Consulting. An affiliate of Wale Kehinde &amp; Co. (Chartered Accountants).</p>
+        <p>&copy; <span data-year>2026</span> THEWHY Consulting. All rights reserved. Registered in the Federal Republic of Nigeria.</p>
         <div style="display: flex; gap: 1.5rem; font-size: 0.85rem;">
           <a href="/privacy" style="color: #94a3b8;">Privacy Policy</a>
           <a href="/terms" style="color: #94a3b8;">Terms of Use</a>
-          <a href="/admin" style="color: #94a3b8;">Admin Portal</a>
         </div>
       </div>
     </div>
   </footer>
 
+  <!-- Scripts -->
+  <script src="/js/main.js"></script>
 </body>
 </html>

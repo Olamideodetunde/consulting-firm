@@ -396,7 +396,7 @@ module.exports = {
       name: "Mr. Kehinde Adewale",
       credentials: "HND, FCA, ACIT, ACS, MBA Finance",
       role: "Managing Consultant",
-      image: "assets/img/team/kehinde-adewale.jpg",
+      image: null, // TODO(client-assets): add headshot
       bio: "A distinguished Fellow of the Institute of Chartered Accountants of Nigeria (FCA), Associate of the Chartered Institute of Taxation of Nigeria (ACIT), and Associate of the Chartered Institute of Stockbrokers (ACS). With over two decades of cutting-edge practice spanning corporate finance, forensic tax advisory, and strategic turnaround management, Mr. Adewale leads THEWHY Consulting with an unwavering commitment to enterprise resilience and wealth preservation.",
       specialties: ["Forensic Tax Advisory", "Excess Bank Charges Recovery", "Corporate Finance & M&A", "Capital Restructuring"]
     },
@@ -405,7 +405,7 @@ module.exports = {
       name: "Mrs. Dolapo Wale-Kehinde",
       credentials: "B.Tech, MBA (Finance), PHRi",
       role: "Head, Training and HR Consulting",
-      image: "assets/img/team/dolapo-wale-kehinde.jpg",
+      image: null, // TODO(client-assets): add headshot
       bio: "A certified Professional in Human Resources - International (PHRi) with an MBA in Finance. She directs THEWHY Consulting's human capital advisory, organizational design, executive capacity building, and CMD-accredited corporate training programs. She brings deep competence in competency framework design, executive headhunting, and statutory human resource compliance across diverse industrial sectors.",
       specialties: ["CMD-Certified Training", "Executive Talent Acquisition", "Compensation & Grading", "Statutory Certifications (PENCOM/ITF)"]
     },
@@ -414,7 +414,7 @@ module.exports = {
       name: "Mr. Seun Olaniyi",
       credentials: "BSc Accounting, ACA",
       role: "Accounting Operations",
-      image: "assets/img/team/seun-olaniyi.jpg",
+      image: null, // TODO(client-assets): add headshot
       bio: "A dedicated Associate Chartered Accountant (ACA) who oversees daily accounting operations, outsourced financial management, and statutory audit liaison for THEWHY's diverse SME and corporate client portfolios. Mr. Olaniyi specializes in cloud accounting implementations, payroll architecture, cash flow budgeting, and financial statement integrity.",
       specialties: ["Cloud Accounting Systems", "Statutory Reporting & IFRS", "Outsourced Payroll", "Internal Control Reviews"]
     }
@@ -504,7 +504,209 @@ module.exports = {
     email: "info@thewhy.ng",
     addressYaba: "1a Hughes Avenue, Alagomeji, Yaba, Lagos, Nigeria",
     addressIkeja: "29, Isaac John Street, GRA Ikeja, Lagos, Nigeria",
-    affiliate: "An affiliate of Wale Kehinde & Co. (Chartered Accountants)",
-    adminPasscode: "whyng2026"
+    affiliate: "An affiliate of Wale Kehinde & Co. (Chartered Accountants)"
+  },
+
+  caseStudies: [
+    {
+      "id": "cs-1",
+      "title": "₦82.4M Recovered in Excess Bank Charges for National Logistics Group",
+      "sector": "Logistics & Supply Chain",
+      "category": "Accounting & Tax",
+      "summary": "A 10-year forensic review of multi-bank loan accounts and trade transactions revealed systemic unapproved excess interest and debit fees.",
+      "metrics": [
+        {
+          "label": "Amount Recovered",
+          "value": "₦82.4M"
+        },
+        {
+          "label": "Turnaround Time",
+          "value": "4 Months"
+        },
+        {
+          "label": "Annual Savings",
+          "value": "₦19.5M"
+        }
+      ],
+      "challenge": "The client was servicing multiple facilities across three commercial banks in Nigeria, experiencing continuous cash flow squeeze despite healthy operational turnover.",
+      "strategy": "Our audit team conducted algorithmic transaction verification across 7 years of bank statements, calculating actual vs. contracted tariff rates and representing the company at direct mediation sessions.",
+      "result": "All 3 banks issued formal credit reconciliations totaling ₦82.4 million directly back into the client's working capital account with zero litigation friction."
+    },
+    {
+      "id": "cs-2",
+      "title": "Series A Restructuring & ₦450M Corporate Finance for Lagos Fintech",
+      "sector": "Fintech & Software",
+      "category": "Corporate Finance",
+      "summary": "Restructured financial model and balance sheet architecture to prepare a fast-scaling payments startup for institutional investment.",
+      "metrics": [
+        {
+          "label": "Capital Raised",
+          "value": "₦450M"
+        },
+        {
+          "label": "Valuation Increase",
+          "value": "+140%"
+        },
+        {
+          "label": "Due Diligence Time",
+          "value": "3 Weeks"
+        }
+      ],
+      "challenge": "The startup had rapid top-line traction but disorganized historical book records, unfiled CAC post-incorporation returns, and no formal unit economic forecasting.",
+      "strategy": "THEWHY deployed cloud accounting systems, restructured founder shareholding, cleared statutory filings, and built a dynamic 5-year investment projection model.",
+      "result": "The firm passed institutional investor due diligence with zero audit qualifications and closed ₦450M in blended equity and debt growth financing."
+    },
+    {
+      "id": "cs-3",
+      "title": "Debt Turnaround & Asset Verification (₦3.2B Assets) for Manufacturing Firm",
+      "sector": "Manufacturing",
+      "category": "Strategy & Solutions",
+      "summary": "Comprehensive fixed asset verification and debt turnaround strategy preventing hostile creditor liquidation during economic volatility.",
+      "metrics": [
+        {
+          "label": "Assets Verified",
+          "value": "₦3.2B"
+        },
+        {
+          "label": "Debt Discount Won",
+          "value": "35%"
+        },
+        {
+          "label": "Jobs Preserved",
+          "value": "120+"
+        }
+      ],
+      "challenge": "Facing currency devaluation and soaring raw material costs, the enterprise defaulted on commercial paper and faced imminent receivership.",
+      "strategy": "Using our Chessboard Turnaround framework, we executed an independent business review, tagged and valued physical assets across 3 plants, and negotiated a structured debt-equity swap.",
+      "result": "Creditors agreed to a 3-year repayment moratorium and 35% interest haircut, returning the manufacturer to EBITDA positive within 9 months."
+    },
+    {
+      "id": "cs-4",
+      "title": "CMD-Certified Workforce Upskilling & Compensation Overhaul",
+      "sector": "Healthcare & Pharmaceuticals",
+      "category": "HR Services",
+      "summary": "Re-engineered organizational design and trained 85 executives and clinical administrators under Centre for Management Development standards.",
+      "metrics": [
+        {
+          "label": "Staff Upskilled",
+          "value": "85 Leaders"
+        },
+        {
+          "label": "Retention Rate",
+          "value": "96%"
+        },
+        {
+          "label": "Statutory Badges",
+          "value": "PENCOM, ITF, NSITF"
+        }
+      ],
+      "challenge": "High attrition of skilled managers, lack of statutory PENCOM/ITF certifications impeding public hospital contract biddings.",
+      "strategy": "Conducted total compensation benchmarking, instituted performance-based appraisal metrics, delivered CMD accredited training, and secured all statutory procurement certificates.",
+      "result": "Employee retention surged to 96%, and the company qualified for and won 2 landmark federal healthcare supply tenders."
+    }
+  ],
+
+  faqs: [
+    {
+      "id": "faq-1",
+      "question": "What makes THEWHY Consulting different from traditional consulting firms?",
+      "answer": "Unlike typical consulting firms that apply generic cookie-cutter templates, our philosophy is rooted in versatility, practical execution, and our strategic Chessboard Approach. An affiliate of Wale Kehinde & Co. (Chartered Accountants), we don't just advise — we actively move the heavy pieces in your business, from negotiating with commercial banks and tax authorities to setting up cloud accounting and restructuring corporate debts."
+    },
+    {
+      "id": "faq-2",
+      "question": "What is your Tailored-For-You (TFY) service offering?",
+      "answer": "TFY Services are bespoke, nimble advisory packages designed specifically for Nigerian SMEs and high-growth startups that cannot afford rigid, overpriced corporate bureaucracy. TFY provides flexible retainers, hands-on turnaround guidance, and unconventional tactics to maximize ROI on every Naira deployed."
+    },
+    {
+      "id": "faq-3",
+      "question": "Can you assist with statutory compliance certificates like PENCOM, NSITF, and ITF?",
+      "answer": "Yes, absolutely. We regularly assist clients in procuring PENCOM Compliance Certificates, NSITF Clearance, Industrial Training Fund (ITF) Compliance, Bureau of Public Procurement (BPP) National Database Registration, and Federal/State Tax Clearance Certificates (TCC) required for corporate tenders and operations."
+    },
+    {
+      "id": "faq-4",
+      "question": "How does the initial consultation process work?",
+      "answer": "You can book a 45-minute strategic advisory session directly on our website. You can choose whether to meet virtually via Google Meet, over a direct phone call, or in-person at our Lagos Headquarters in Yaba. Once booked, our senior partners review your business profile and come prepared with actionable diagnostics."
+    },
+    {
+      "id": "faq-5",
+      "question": "How do you handle excess bank charges recovery?",
+      "answer": "Commercial banks in Nigeria frequently apply unapproved tariffs, excessive interest rate spikes, and duplicate ledger maintenance fees. We run algorithmic forensic audits on your multi-year bank statements, establish discrepancies against CBN monetary policy circulars, and negotiate direct refunds credited back to your account."
+    },
+    {
+      "id": "faq-6",
+      "question": "Are your management and HR training courses accredited?",
+      "answer": "Yes. All our leadership, management, and workforce development training programs are officially certified by the Centre for Management Development (CMD) in Nigeria, ensuring institutional credibility and compliance."
+    }
+  ],
+
+  // Default Insights articles (seeded into MySQL or the JSON store on first run)
+  insights: [
+  {
+    slug: 'cac-annual-returns-guide-2026',
+    title: 'Filing Annual Returns with the CAC: A Practical 2026 Guide',
+    excerpt: 'Every business registered in Nigeria under the CAC has a statutory obligation to file annual returns to prevent inactive status and striking off.',
+    category: 'Corporate Compliance',
+    cover_image: 'assets/img/blog/1.jpg',
+    author: 'THEWHY Practice Team',
+    content: `Every business registered in Nigeria under the Corporate Affairs Commission (CAC) has a mandatory statutory obligation to file annual returns. Failure to do so can result in serious penalties, classified inactive status on the CAC portal, and potential delisting from the register of companies.
+
+### Why Filing Annual Returns is Critical
+Annual returns are not tax filings or company financial statements; rather, they serve as official notification to the CAC that your registered enterprise or limited liability company remains solvent, active, and operationally viable. 
+
+### Key Timelines & Deadlines
+- **Business Names (Sole Proprietorships/Enterprises):** Must file not later than 30th June each calendar year.
+- **Limited Liability Companies (LTD):** Must file within 42 days following the conclusion of the Annual General Meeting (AGM).
+- **Incorporated Trustees (NGOs/Foundations):** Must file between 30th June and 31st December annually.
+
+At THEWHY Consulting, in affiliation with Wale Kehinde & Co. (Chartered Accountants), we oversee the end-to-end statutory compliance calendar for growing SMEs and corporate conglomerates across Nigeria.`
+  },
+  {
+    slug: 'excess-bank-charges-how-to-recover',
+    title: 'Excess Bank Charges in Nigeria: How to Identify and Forensically Recover Them',
+    excerpt: 'Nigerian commercial businesses routinely lose millions annually to compounding unapproved bank debits, COT excess, and miscalculated interest.',
+    category: 'Banking & Finance',
+    cover_image: 'assets/img/blog/2.jpg',
+    author: 'Kehinde Adewale, FCA',
+    content: `Systemic unapproved bank charges represent one of the quietest drains on corporate liquidity in Nigeria. From compounding interest rate miscalculations to unauthorized facility review fees and foreign exchange transaction markups, Nigerian businesses frequently surrender substantial reserves unknowingly.
+
+### The Forensic Recovery Process
+1. **Multi-Year Statement Acquisition:** Gathering complete transaction ledgers across all corporate borrowing, overdraft, and operating accounts.
+2. **Re-computation According to CBN Guide to Bank Charges:** Running rigorous algorithmic reconciliation against Central Bank of Nigeria statutory caps.
+3. **Formal Demand & Institutional Reconciliation:** Presenting substantiated audit findings directly to bank management and credit committees.
+
+THEWHY Consulting has successfully recovered over ₦82.4 Million in unapproved bank charges for logistics, manufacturing, and trading enterprises.`
+  },
+  {
+    slug: 'pencom-clearance-statutory-guide',
+    title: 'PENCOM Clearance Certificates: Essential Requirements for Nigerian Contracts',
+    excerpt: 'Understanding the compliance steps to obtain a National Pension Commission (PENCOM) clearance certificate for government tenders and regulatory permits.',
+    category: 'HR & Compliance',
+    cover_image: 'assets/img/blog/3.jpg',
+    author: 'Dolapo Wale-Kehinde, PHRi',
+    content: `Under the Pension Reform Act 2014, any enterprise employing 15 or more staff (or bidding for federal, state, and parastatal procurement contracts) must hold a current-year PENCOM Compliance Certificate.
+
+### Mandatory Pre-requisites
+- Valid Group Life Insurance policy for all employees (minimum 3x annual gross remuneration).
+- Up-to-date monthly pension remittances with registered Pension Fund Administrators (PFAs).
+- Certified evidence of employee enrollment and contribution schedules.
+
+Our HR Advisory practice facilitates expedited compliance documentation, payroll alignment, and liaison with certified PFAs.`
+  },
+  {
+    slug: 'turnaround-strategy-debt-management',
+    title: 'Business Turnaround Strategy: Managing Hostile Debt and Restoring Cashflow',
+    excerpt: 'A blueprint for Nigerian managing directors facing aggressive creditor action, receivership threats, and negative working capital.',
+    category: 'Turnaround Strategy',
+    cover_image: 'assets/img/blog/1.jpg',
+    author: 'Kehinde Adewale, FCA',
+    content: `When macroeconomic volatility strikes, even profitable enterprises can find their working capital suffocated by bank debt service and interest rate hikes.
+
+### The Turnaround Checklist
+- Immediate Cashflow Ringfencing: Identifying non-core assets and renegotiating unsecured vendor balances.
+- Independent Fixed Asset Valuation: Establishing true current replacement valuation to counter liquidation fire-sale tactics.
+- Moratorium Negotiation: Structuring sustainable 2 to 3-year grace periods with commercial banks based on verifiable projections.
+
+Through aggressive financial engineering, THEWHY Consulting has defended over ₦3.2 Billion in operational machinery and preserved hundreds of jobs.`
   }
+  ]
 };

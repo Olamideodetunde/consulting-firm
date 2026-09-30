@@ -1,6 +1,5 @@
 # Dependencies
 node_modules/
-package-lock.json
 
 # Environment Variables & Secrets
 .env
@@ -34,5 +33,11 @@ Thumbs.db
 ehthumbs.db
 .idea/
 .vscode/
+.claude/
 *.sublime-project
 *.sublime-workspace
+
+# Runtime data (JSON fallback store holds real client submissions / PII)
+server/data/runtime-db.json
+server/data/*.tmp
+server/data/database.json
