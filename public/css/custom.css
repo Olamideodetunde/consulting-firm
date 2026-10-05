@@ -1912,6 +1912,15 @@ textarea.form-control {
   color: #b92b10;
   border: 1px solid #f9cdbf;
 }
+.form-alert.info {
+  background: #eef4ff;
+  color: #1e40af;
+  border: 1px solid #c7d7fe;
+  font-weight: 500;
+}
+.form-alert.info i {
+  margin-right: 6px;
+}
 
 /* ==========================================================================
    BLOG / INSIGHTS CARDS
@@ -3890,7 +3899,6 @@ html.why-preloader-seen .page-preloader {
   }
   .hero-actions .btn {
     width: 100%;
-    min-height: 48px;
     font-size: 14px;
     justify-content: center;
   }
@@ -5077,5 +5085,97 @@ body.drawer-open .scroll-top {
   }
   .skill-bar-fill {
     transition: none !important;
+  }
+}
+
+/* ==========================================================================
+   BUTTON SYSTEM v4 - one sizing scale for every CTA, balanced on phones.
+   Inline button overrides were removed from the HTML; use these modifiers.
+   ========================================================================== */
+.btn {
+  line-height: 1.25;
+  text-align: center;
+}
+.btn > i,
+.btn > svg {
+  flex-shrink: 0;
+}
+.btn-block {
+  width: 100%;
+}
+.btn-lg {
+  min-height: 56px;
+  font-size: 15px;
+}
+.btn-whatsapp {
+  background: #15803d; /* WhatsApp green, darkened: white text 5.0:1 */
+  color: #ffffff;
+  border-color: #15803d;
+}
+.btn-whatsapp:hover {
+  background: #166534;
+  border-color: #166534;
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+.btn-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 14px;
+}
+.btn-group-center {
+  justify-content: center;
+}
+.btn-group-split {
+  justify-content: space-between;
+}
+
+/* Phones: every primary CTA is a full-width block of identical height, and
+   any group of buttons stacks into equal-width rows with even spacing. */
+@media (max-width: 575.98px) {
+  .btn {
+    min-height: 52px;
+    padding: 12px 22px;
+    font-size: 14px;
+    gap: 8px;
+  }
+  .btn-lg {
+    min-height: 56px;
+    font-size: 15px;
+  }
+  .btn-sm {
+    min-height: 44px;
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+  .btn:not(.btn-sm) {
+    width: 100%;
+  }
+  .hero-actions,
+  .promo-banner .hero-actions,
+  .feature-cta,
+  .btn-group {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    width: 100%;
+  }
+  .hero-actions > .btn,
+  .feature-cta > .btn,
+  .btn-group > .btn {
+    width: 100%;
+    margin: 0;
+  }
+}
+@media (max-width: 360px) {
+  .btn {
+    padding: 12px 18px;
+    font-size: 13.5px;
+  }
+  .btn-sm {
+    padding: 8px 14px;
+    font-size: 13px;
   }
 }

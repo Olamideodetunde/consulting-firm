@@ -125,8 +125,9 @@ test('development generates and prints a temporary passcode when unset', () => {
   }
 });
 
-test('mailer is a silent no-op without SMTP and escapes user HTML', async () => {
+test('mailer is a silent no-op without a transport and escapes user HTML', async () => {
   process.env.SMTP_HOST = '';
+  process.env.BREVO_API_KEY = '';
   const mailer = require('../server/services/mailer');
   mailer._reset();
   const logs = [];
@@ -140,12 +141,46 @@ test('mailer is a silent no-op without SMTP and escapes user HTML', async () => 
   } finally {
     console.log = orig;
   }
-  assert.equal(logs.filter(l => l.includes('[MAIL] SMTP not configured, skipping')).length, 1);
+  assert.equal(logs.filter(l => l.includes('[MAIL] Email not configured, skipping')).length, 1);
 
   const html = mailer._detailsTable([['Name', '<script>x</script>'], ['Empty', '']]);
   assert.ok(html.includes('&lt;script&gt;x&lt;/script&gt;'));
   assert.ok(!html.includes('<script>'));
   assert.ok(!html.includes('Empty'));
-  // Notification helpers never throw, even without SMTP.
+  // Notification helpers never throw, even without a transport.
   mailer.notifyNewBooking({ ref_code: 'WHY-1', clientName: '<b>', email: 'a@b.co' });
+});
+
+test('mailer sends through the Brevo API when BREVO_API_KEY is set', async () => {
+  const mailer = require('../server/services/mailer');
+  const saved = { key: process.env.BREVO_API_KEY, from: process.env.MAIL_FROM, fetch: global.fetch };
+  process.env.BREVO_API_KEY = 'xkeysib-test';
+  process.env.MAIL_FROM = 'THEWHY Consulting <sender@example.com>';
+  mailer._reset();
+  const calls = [];
+  global.fetch = async (url, opts) => {
+    calls.push({ url, opts });
+    return { ok: true, status: 201, json: async () => ({ messageId: '<abc@brevo>' }) };
+  };
+  try {
+    assert.equal(mailer.provider(), 'brevo');
+    const r = await mailer.send({ to: 'a@b.co', subject: 'Hi\r\nBcc: x@y.z', html: '<p>h</p>', text: 'h', replyTo: 'Client <c@d.co>' });
+    assert.equal(r.messageId, '<abc@brevo>');
+    assert.equal(calls.length, 1);
+    assert.equal(calls[0].url, 'https://api.brevo.com/v3/smtp/email');
+    assert.equal(calls[0].opts.headers['api-key'], 'xkeysib-test');
+    const body = JSON.parse(calls[0].opts.body);
+    assert.deepEqual(body.sender, { name: 'THEWHY Consulting', email: 'sender@example.com' });
+    assert.deepEqual(body.to, [{ email: 'a@b.co' }]);
+    assert.deepEqual(body.replyTo, { name: 'Client', email: 'c@d.co' });
+    assert.ok(!/[\r\n]/.test(body.subject));
+
+    global.fetch = async () => ({ ok: false, status: 401, statusText: 'Unauthorized', json: async () => ({ message: 'Key not found' }) });
+    await assert.rejects(mailer.send({ to: 'a@b.co', subject: 's', html: 'h' }), /Brevo API 401: Key not found/);
+  } finally {
+    global.fetch = saved.fetch;
+    if (saved.key === undefined) delete process.env.BREVO_API_KEY; else process.env.BREVO_API_KEY = saved.key;
+    if (saved.from === undefined) delete process.env.MAIL_FROM; else process.env.MAIL_FROM = saved.from;
+    mailer._reset();
+  }
 });

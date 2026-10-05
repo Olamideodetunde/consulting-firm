@@ -225,7 +225,7 @@
       </article>
 
       <!-- Back to insights & next steps -->
-      <div style="margin-top: 3rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+      <div class="btn-group btn-group-split" style="margin-top: 3rem;">
         <a href="/insights" class="btn btn-outline">
           &larr; Back to All Articles
         </a>
@@ -315,6 +315,8 @@
         .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
     };
     function inlineMd(text) {
+      // Prefer main.js's safe inline renderer (links, bold, italic, code).
+      if (window.WHY && window.WHY.renderInline) return window.WHY.renderInline(text);
       return escapeHtml(text).replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
     }
     async function loadArticle() {

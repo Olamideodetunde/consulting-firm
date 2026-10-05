@@ -149,11 +149,11 @@
       <p class="hero-lead reveal delay-1" style="max-width: 820px;" id="program-subtitle">
         A practical, high-impact 6-week strategic immersion designed for Founders, Managing Directors, and Finance Leaders to master tax resilience, capital structuring, and operational scalability in Nigeria.
       </p>
-      <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 2rem;">
+      <div class="btn-group" style="margin-top: 2rem;">
         <a href="#register" class="btn btn-primary">
           <span>Secure Executive Seat</span> <i class="fa-solid fa-arrow-down"></i>
         </a>
-        <a href="#curriculum" class="btn btn-secondary" style="background: rgba(255,255,255,0.12); color: #fff; border-color: rgba(255,255,255,0.25);">
+        <a href="#curriculum" class="btn btn-outline-light">
           <span>View 6-Week Syllabus</span>
         </a>
       </div>
@@ -370,7 +370,7 @@
               <textarea id="bc-challenge" rows="3" placeholder="e.g. Tax audit resolution, recovering excess bank charges, or structuring bankable expansion capital..." style="width: 100%; padding: 12px 16px; border: 1px solid var(--line); border-radius: 12px; font-size: 0.9rem; background: var(--paper); resize: vertical;"></textarea>
             </div>
 
-            <button type="submit" id="bc-submit-btn" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 14px; font-size: 1rem; margin-top: 6px;">
+            <button type="submit" id="bc-submit-btn" class="btn btn-primary btn-block btn-lg" style="margin-top: 6px;">
               <span>Submit Executive Application</span> <i class="fa-solid fa-arrow-right"></i>
             </button>
 
@@ -518,7 +518,9 @@
           alertBox.style.display = 'block';
           alertBox.style.background = '#ecfdf5';
           alertBox.style.color = '#047857';
-          alertBox.innerHTML = '<i class="fa-solid fa-circle-check"></i> ' + escapeHtml(data.message || 'Application submitted successfully! Our admissions panel will contact you.');
+          var appRef = (data.data && data.data.ref_code) || data.ref_code;
+          alertBox.innerHTML = '<i class="fa-solid fa-circle-check"></i> <strong>Application received!</strong> Our admissions panel will contact you with next steps and cohort dates.'
+            + (appRef ? ' Your reference: <strong>' + escapeHtml(appRef) + '</strong>.' : '');
           document.getElementById('bootcamp-form').reset();
         } else {
           throw new Error(data.error || 'Submission failed');

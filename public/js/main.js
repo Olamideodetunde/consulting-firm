@@ -578,6 +578,48 @@ document.addEventListener('DOMContentLoaded', () => {
     if (feeParam) {
       const feeInput = bookingForm.querySelector('input[name="estimatedFee"]');
       if (feeInput) feeInput.value = feeParam.slice(0, 80);
+      // Show the carried-over calculator estimate so the client knows it was attached.
+      const note = document.createElement('div');
+      note.className = 'form-alert info';
+      note.setAttribute('role', 'status');
+      note.innerHTML = `<i class="fa-solid fa-calculator" aria-hidden="true"></i> Your calculator estimate of <strong>${esc(feeParam.slice(0, 80))}</strong> per month will be attached to this request.`;
+      bookingForm.prepend(note);
+    }
+
+    // Preselect a <select> option from a URL hint, matching value or label text.
+    const preselect = (selectName, matcher) => {
+      const select = bookingForm.querySelector(`select[name="${selectName}"]`);
+      if (!select) return;
+      const option = [...select.options].find((o) => o.value && matcher(`${o.value} ${o.text}`.toLowerCase()));
+      if (option) select.value = option.value;
+    };
+
+    const SERVICE_HINTS = {
+      taxcompliance: 'accounting & tax',
+      accounting: 'accounting & tax',
+      corporatefinance: 'corporate finance',
+      turnaround: 'corporate finance',
+      bankcharges: 'bank charges',
+      assetverification: 'fixed asset',
+      strategy: 'strategy',
+      training: 'hr training',
+      hr: 'hr training',
+      pencom: 'pencom'
+    };
+    const serviceParam = (urlParams.get('service') || '').toLowerCase().replace(/[^a-z]/g, '');
+    if (serviceParam) {
+      const hint = SERVICE_HINTS[serviceParam] || serviceParam;
+      preselect('service', (text) => text.replace(/[^a-z& ]/g, '').includes(hint) || text.replace(/[^a-z]/g, '').includes(serviceParam));
+    }
+
+    // Map the calculator's enterprise scale (e.g. "Growing SME (10–100 Employees)") to company size.
+    const scaleParam = (urlParams.get('scale') || '').toLowerCase();
+    if (scaleParam) {
+      const sizeKey = /500\+|conglomerate|group|large/.test(scaleParam) ? 'large'
+        : /mid/.test(scaleParam) ? 'mid-market'
+          : /micro|startup|1.10\b/.test(scaleParam) ? 'micro'
+            : /sme|small|10.100/.test(scaleParam) ? 'sme' : '';
+      if (sizeKey) preselect('companySize', (text) => text.includes(sizeKey));
     }
 
     const dateInput = bookingForm.querySelector('input[type="date"][name="date"]');
@@ -710,13 +752,26 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // 9b. CONTACT FORM SUBJECT PREFILL (/contact?subject=...)
+  const contactSubjectInput = document.querySelector('#contactForm input[name="subject"]');
+  if (contactSubjectInput && !contactSubjectInput.value) {
+    const subjectParam = new URLSearchParams(window.location.search).get('subject');
+    if (subjectParam) contactSubjectInput.value = subjectParam.replace(/\s+/g, ' ').trim().slice(0, 160);
+  }
+
   // 10a. IMAGE FALLBACKS & ARTICLE SHARE (replaces inline onerror/onclick handlers)
+  // Image errors don't bubble, so listen in the capture phase: this also covers
+  // cards rendered later from the API. Each image falls back at most once.
+  const applyImgFallback = (img) => {
+    if (!img.dataset.fallback || img.dataset.fellBack) return;
+    img.dataset.fellBack = '1';
+    img.src = img.dataset.fallback;
+  };
+  document.addEventListener('error', (e) => {
+    if (e.target && e.target.tagName === 'IMG') applyImgFallback(e.target);
+  }, true);
   document.querySelectorAll('img[data-fallback]').forEach((img) => {
-    img.addEventListener('error', function onImgError() {
-      img.removeEventListener('error', onImgError);
-      img.src = img.dataset.fallback;
-    });
-    if (img.complete && img.naturalWidth === 0 && img.getAttribute('src')) img.src = img.dataset.fallback;
+    if (img.complete && img.naturalWidth === 0 && img.getAttribute('src')) applyImgFallback(img);
   });
 
   const articleShareBtn = document.getElementById('articleShareBtn');
@@ -859,6 +914,8 @@ document.addEventListener('DOMContentLoaded', () => {
     return html;
   }
   window.WHY.renderMarkdown = renderMarkdown;
+  // Inline-only markdown (links, bold, italic, code) for plain text; escapes first.
+  window.WHY.renderInline = (text) => parseInline(esc(String(text || '')));
 
   const insightHref = (post) => `/insights/${encodeURIComponent(post.slug || post.id || '')}`;
 
@@ -992,5 +1049,46 @@ document.addEventListener('DOMContentLoaded', () => {
         attachImageFallback(relatedContainer);
       })
       .catch(() => {});
+  }
+
+  // 12. HOMEPAGE "LATEST INSIGHTS" — live from the CMS. The static cards in
+  // index.html stay as the no-JS / API-down fallback.
+  const latestGrid = document.querySelector('[data-latest-insights]');
+  if (latestGrid) {
+    const limit = parseInt(latestGrid.getAttribute('data-latest-insights'), 10) || 3;
+    const monthLabel = (value) => {
+      const d = value ? new Date(value) : null;
+      return d && !Number.isNaN(d.getTime())
+        ? d.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' })
+        : '';
+    };
+    fetch('/api/insights')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((result) => {
+        const posts = result && result.success && Array.isArray(result.data) ? result.data.slice(0, limit) : [];
+        if (!posts.length) return;
+        latestGrid.innerHTML = posts.map((post, i) => {
+          const excerpt = post.excerpt || (post.content ? `${String(post.content).substring(0, 140)}...` : '');
+          const badge = monthLabel(post.published_at || post.created_at);
+          return `
+          <article class="blog-card reveal show${i ? ` delay-${i}` : ''}">
+            <div class="blog-thumb">
+              <img src="${esc(coverSrc(post.cover_image))}" alt="${esc(post.title)}" width="640" height="427" loading="lazy" decoding="async" data-fallback="${FALLBACK_COVER}">
+              ${badge ? `<span class="blog-date-badge">${esc(badge)}</span>` : ''}
+            </div>
+            <div class="blog-body">
+              <span class="blog-cat">${esc(post.category || 'Insights')}</span>
+              <h3>${esc(post.title)}</h3>
+              <p>${esc(excerpt)}</p>
+              <div class="blog-meta">
+                <span>${esc(post.author || 'THEWHY Practice Team')}</span>
+                <a href="${esc(insightHref(post))}" class="blog-read-more">Read Analysis <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+              </div>
+            </div>
+          </article>`;
+        }).join('');
+        attachImageFallback(latestGrid);
+      })
+      .catch(() => { /* keep the static fallback cards */ });
   }
 });

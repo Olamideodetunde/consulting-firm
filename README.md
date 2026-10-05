@@ -5,7 +5,7 @@ Website and admin console for **THEWHY Consulting**, an affiliate of **Wale Kehi
 - **Backend**: Node.js + Express (`server/`)
 - **Frontend**: static HTML/CSS/vanilla JS in `public/`, served by Express with clean URLs
 - **Data**: MySQL (recommended) with an automatic JSON-file fallback
-- **Email**: optional SMTP notifications via nodemailer
+- **Email**: optional notifications via the Brevo transactional API (or any SMTP server)
 
 ---
 
@@ -43,7 +43,8 @@ All variables are documented in [`.env.example`](.env.example). Summary:
 | `DB_CONNECTION_LIMIT`, `DB_CONNECT_TIMEOUT` | no | MySQL pool tuning |
 | `DB_MODE` | no | `json` forces the JSON store (dev/tests) |
 | `DB_JSON_PATH` | no | JSON store location (default `server/data/runtime-db.json`) |
-| `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASS` | no | SMTP server for notifications |
+| `BREVO_API_KEY` | no | Brevo API key (`xkeysib-...`); preferred email transport |
+| `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASS` | no | SMTP fallback, used only when `BREVO_API_KEY` is empty |
 | `MAIL_FROM` | no | Sender address |
 | `NOTIFY_TO` | no (`info@thewhy.ng`) | Where internal notifications are sent |
 
@@ -93,12 +94,12 @@ Records use `crypto.randomUUID()` ids. Bookings, contact messages and inquiries 
 
 ## Email notifications
 
-When SMTP is configured, each new booking, contact message, inquiry or launch/bootcamp application sends:
+When email is configured (`BREVO_API_KEY`, or SMTP as a fallback), each new booking, contact message, inquiry or launch/bootcamp application sends:
 
 1. an internal notification to `NOTIFY_TO`, and
 2. a short branded confirmation to the client (including the booking reference).
 
-Emails are sent in the background; a mail failure is logged and never fails the HTTP request. All user-supplied values are HTML-escaped. If `SMTP_HOST` is empty, the server logs `[MAIL] SMTP not configured, skipping` once and sends nothing.
+Emails are sent in the background; a mail failure is logged and never fails the HTTP request. All user-supplied values are HTML-escaped. If neither `BREVO_API_KEY` nor `SMTP_HOST` is set, the server logs `[MAIL] Email not configured, skipping` once and sends nothing.
 
 ---
 
@@ -144,4 +145,4 @@ Emails are sent in the background; a mail failure is logged and never fails the 
 npm test
 ```
 
-Uses Node's built-in test runner (`node:test`) with `supertest`. Tests load the Express app without listening, force `DB_MODE=json` with a throwaway store in the OS temp directory, and never touch MySQL, SMTP or the real data file. They cover auth (cookie flags, tampering, logout, production start-up refusal), protected routes, validation, CSV escaping, XSS-safe meta rendering, drafts, newsletter deduplication, robots/sitemap, redirects and cache headers.
+Uses Node's built-in test runner (`node:test`) with `supertest`. Tests load the Express app without listening, force `DB_MODE=json` with a throwaway store in the OS temp directory, and never touch MySQL, Brevo/SMTP or the real data file. They cover auth (cookie flags, tampering, logout, production start-up refusal), protected routes, validation, CSV escaping, XSS-safe meta rendering, drafts, newsletter deduplication, robots/sitemap, redirects and cache headers.

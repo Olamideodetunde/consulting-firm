@@ -154,7 +154,11 @@ app.use(express.static(PUBLIC_DIR, {
     const rel = path.relative(PUBLIC_DIR, filePath).split(path.sep).join('/');
     if (rel.endsWith('.html')) {
       res.setHeader('Cache-Control', 'no-cache');
-    } else if (/^(assets|css|js)\//.test(rel)) {
+    } else if (/^(css|js)\//.test(rel)) {
+      // Filenames are not content-hashed, so revalidate on every load (cheap
+      // 304 via ETag) and visitors never run stale CSS/JS after a deploy.
+      res.setHeader('Cache-Control', 'no-cache');
+    } else if (/^assets\//.test(rel)) {
       res.setHeader('Cache-Control', 'public, max-age=604800');
     } else {
       res.setHeader('Cache-Control', 'public, max-age=3600');

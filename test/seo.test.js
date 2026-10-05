@@ -99,13 +99,16 @@ test('/insights/:slug returns 404 for unknown slugs', async () => {
   assert.equal(res.status, 404);
 });
 
-test('static cache headers: 7 days for assets/css/js, never immutable', async () => {
+test('static cache headers: css/js revalidate, images cached 7 days, never immutable', async () => {
   const css = await request(app).get('/css/admin.css');
   assert.equal(css.status, 200);
-  assert.equal(css.headers['cache-control'], 'public, max-age=604800');
+  assert.equal(css.headers['cache-control'], 'no-cache');
+  assert.ok(css.headers.etag, 'css should carry an ETag for cheap revalidation');
   const js = await request(app).get('/js/admin.js');
-  assert.equal(js.headers['cache-control'], 'public, max-age=604800');
-  assert.doesNotMatch(js.headers['cache-control'], /immutable/);
+  assert.equal(js.headers['cache-control'], 'no-cache');
+  const img = await request(app).get('/assets/img/logo-mark.svg');
+  assert.equal(img.headers['cache-control'], 'public, max-age=604800');
+  assert.doesNotMatch(img.headers['cache-control'], /immutable/);
   const robots = await request(app).get('/robots.txt');
   assert.doesNotMatch(robots.headers['cache-control'], /604800/);
 });
