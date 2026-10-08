@@ -337,6 +337,14 @@
           const art = json.data;
           document.title = (art.title || 'Executive Insight') + ' | THEWHY Consulting';
           document.getElementById('art-title').textContent = art.title || '';
+          // Use the article's cover (e.g. a Cloudinary upload) as the hero image.
+          // Only https URLs or site paths without quote/paren characters reach CSS.
+          var cover = String(art.cover_image || '').trim();
+          var heroBg = document.getElementById('article-hero-bg');
+          if (heroBg && cover && !/["'()\\\s<>]/.test(cover) && (/^https:\/\//i.test(cover) || !/^[a-z][a-z0-9+.-]*:/i.test(cover))) {
+            var coverUrl = /^https:\/\//i.test(cover) || cover.charAt(0) === '/' ? cover : '/' + cover;
+            heroBg.style.backgroundImage = 'url("' + coverUrl + '")';
+          }
           document.getElementById('art-category').textContent = art.category || 'Strategic Insight';
           document.getElementById('art-author').textContent = art.author || 'THEWHY Practice Team';
           document.getElementById('art-excerpt').textContent = art.excerpt || '';

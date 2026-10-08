@@ -135,32 +135,55 @@ function sendLater(message) {
 // ---------------------------------------------------------------------------
 // Templates
 //
-// Table-based, inline-styled markup so it renders consistently in Gmail,
-// Outlook and Apple Mail. No remote images: the wordmark is pure text, so the
-// email looks right even with images blocked. Every user value goes through
-// escapeHtml (or is emitted via the text helpers below).
+// Mirrors the website: paper background, a white rounded header bar with the
+// full-colour logo and a dark "Book Consultation" pill (like the site nav),
+// white content card, and a dark footer with the white logo (like the site
+// footer). Table-based, inline-styled markup for Gmail/Outlook/Apple Mail.
+// Logos are PNGs (email clients block SVG) served from EMAIL_ASSET_URL, with
+// styled alt text so the brand still reads when images are blocked.
+// Every user value goes through escapeHtml (or the text helpers below).
 // ---------------------------------------------------------------------------
 const BRAND = {
-  navy: '#0F172A',
+  dark: '#111820',
+  ink: '#171717',
   orange: '#EF4C20',
   orangeStrong: '#B93A12',
   gold: '#F8C638',
-  ink: '#1E293B',
-  muted: '#64748B',
-  line: '#E2E8F0',
-  paper: '#F6F3EE',
-  soft: '#F8FAFC',
+  blue: '#3A71B7',
+  muted: '#6B6863',
+  line: '#ECE7DE',
+  lineStrong: '#DED8CE',
+  paper: '#F7F4EF',
+  soft: '#FBF9F6',
   phone: '+234-8034-99-23-18',
   phoneHref: 'tel:+2348034992318',
   email: 'info@thewhy.ng',
   whatsapp: 'https://wa.me/2348034992318',
-  address: '1a Hughes Avenue, Alagomeji, Yaba, Lagos, Nigeria'
+  address: '1a Hughes Avenue, Alagomeji, Yaba, Lagos'
 };
-const FONT = "'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
+const FONT = "'DM Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
+const FONT_HEAD = "'Manrope', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
+
+function assetBase() {
+  return (process.env.EMAIL_ASSET_URL || settings().siteUrl).replace(/\/+$/, '');
+}
+
+function logoImg(variant, width) {
+  const file = variant === 'white' ? 'logo-email-white.png' : 'logo-email.png';
+  const height = Math.round(width * 122 / 480);
+  const altColor = variant === 'white' ? '#FFFFFF' : BRAND.ink;
+  return `<img src="${escapeHtml(`${assetBase()}/assets/img/email/${file}`)}" width="${width}" height="${height}" alt="THEWHY Consulting"`
+    + ` style="display:block;border:0;outline:none;text-decoration:none;width:${width}px;max-width:100%;height:auto;`
+    + `font-family:${FONT_HEAD};font-size:18px;font-weight:800;letter-spacing:1px;color:${altColor};">`;
+}
 
 function layout(title, bodyHtml, opts = {}) {
   const { preheader = '', eyebrow = '' } = opts;
   const s = settings();
+  const site = escapeHtml(s.siteUrl);
+  const cta = opts.headerCta || { label: 'Book Consultation', href: `${s.siteUrl}/booking` };
+  const footerLink = (href, label) => `<a href="${escapeHtml(href)}" style="color:#FFFFFF;text-decoration:none;font-weight:600;">${label}</a>`;
+  const dot = color => `<span style="display:inline-block;width:8px;height:8px;border-radius:4px;background:${color};margin-right:10px;vertical-align:middle;"></span>`;
   return `<!doctype html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -169,57 +192,92 @@ function layout(title, bodyHtml, opts = {}) {
 <meta name="color-scheme" content="light">
 <meta name="supported-color-schemes" content="light">
 <title>${escapeHtml(title)}</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Manrope:wght@700;800&display=swap" rel="stylesheet">
 <style>
+  body { margin: 0; padding: 0; }
+  a { color: ${BRAND.orangeStrong}; }
   @media only screen and (max-width: 620px) {
-    .wrap { padding: 12px 0 !important; }
-    .card { border-radius: 0 !important; }
+    .wrap { padding: 14px 10px !important; }
     .pad { padding-left: 22px !important; padding-right: 22px !important; }
-    .h1 { font-size: 22px !important; line-height: 30px !important; }
-    .tagline { display: none !important; }
+    .h1 { font-size: 23px !important; line-height: 31px !important; }
+    .hdr-cta { display: none !important; }
+    .hdr-logo { padding: 12px 18px !important; }
     .kv td { display: block !important; width: 100% !important; padding-left: 0 !important; padding-right: 0 !important; }
     .kv .k { padding-bottom: 0 !important; border-bottom: 0 !important; }
     .kv .v { padding-top: 2px !important; }
     .btn-cell { display: block !important; width: 100% !important; padding: 0 0 10px 0 !important; }
+    .btn-row, .btn, .btn td { width: 100% !important; }
     .btn a { display: block !important; }
   }
 </style>
 </head>
 <body style="margin:0;padding:0;background:${BRAND.paper};-webkit-text-size-adjust:100%;">
 <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent;mso-hide:all;">${escapeHtml(preheader)}&#8199;&#65279;&#847;&#8199;&#65279;&#847;&#8199;&#65279;&#847;</div>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" class="wrap" style="background:${BRAND.paper};padding:32px 0;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" class="wrap" style="background:${BRAND.paper};padding:28px 12px;">
 <tr><td align="center">
-  <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" class="card" style="width:100%;max-width:600px;background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 8px 30px rgba(15,23,42,0.08);">
-    <tr><td class="pad" style="background:${BRAND.navy};padding:26px 36px;">
-      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
-        <td style="font-family:${FONT};">
-          <div style="font-size:22px;line-height:24px;font-weight:800;letter-spacing:1px;color:#ffffff;">THE<span style="color:${BRAND.orange};">WHY</span></div>
-          <div style="font-size:10px;line-height:14px;font-weight:700;letter-spacing:4px;color:#CBD5E1;margin-top:3px;">CONSULTING</div>
-        </td>
-        <td align="right" class="tagline" style="font-family:${FONT};font-size:11px;line-height:16px;color:#94A3B8;letter-spacing:0.5px;">Management Consulting<br>&amp; Advisory &middot; Lagos</td>
-      </tr></table>
+  <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px;">
+
+    <!-- Header bar (mirrors the site's floating nav) -->
+    <tr><td style="padding:0 0 16px;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#FFFFFF;border:1px solid ${BRAND.line};border-radius:999px;box-shadow:0 8px 24px rgba(23,23,23,0.06);">
+        <tr>
+          <td class="hdr-logo" style="padding:12px 12px 12px 24px;"><a href="${site}" style="text-decoration:none;">${logoImg('color', 150)}</a></td>
+          <td class="hdr-cta" align="right" style="padding:10px 10px 10px 0;">
+            <a href="${escapeHtml(cta.href)}" style="display:inline-block;background:${BRAND.ink};color:#FFFFFF;border-radius:100px;padding:12px 20px;font-family:${FONT_HEAD};font-size:13px;line-height:16px;font-weight:700;text-decoration:none;white-space:nowrap;">${escapeHtml(cta.label)} &rarr;</a>
+          </td>
+        </tr>
+      </table>
     </td></tr>
-    <tr><td style="height:4px;line-height:4px;font-size:0;background:${BRAND.orange};background-image:linear-gradient(90deg,${BRAND.orange},${BRAND.gold});">&nbsp;</td></tr>
-    <tr><td class="pad" style="padding:36px 36px 8px;font-family:${FONT};color:${BRAND.ink};">
-      ${eyebrow ? `<div style="font-size:11px;line-height:16px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:${BRAND.orangeStrong};margin:0 0 10px;">${escapeHtml(eyebrow)}</div>` : ''}
-      <h1 class="h1" style="margin:0 0 20px;font-size:26px;line-height:34px;font-weight:800;color:${BRAND.navy};">${escapeHtml(title)}</h1>
-      ${bodyHtml}
+
+    <!-- Content card -->
+    <tr><td style="background:#FFFFFF;border:1px solid ${BRAND.line};border-radius:24px;overflow:hidden;box-shadow:0 10px 30px rgba(23,23,23,0.05);">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr><td style="height:4px;line-height:4px;font-size:0;background:${BRAND.orange};background-image:linear-gradient(90deg,${BRAND.orange},${BRAND.gold});border-radius:24px 24px 0 0;">&nbsp;</td></tr>
+        <tr><td class="pad" style="padding:34px 38px 10px;font-family:${FONT};color:${BRAND.ink};">
+          ${eyebrow ? `<div style="font-family:${FONT_HEAD};font-size:11px;line-height:16px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:${BRAND.orangeStrong};margin:0 0 12px;"><span style="display:inline-block;width:22px;height:2px;background:${BRAND.orange};vertical-align:middle;margin-right:10px;"></span>${escapeHtml(eyebrow)}<span style="display:inline-block;width:5px;height:5px;border-radius:3px;background:${BRAND.orange};vertical-align:middle;margin-left:10px;"></span></div>` : ''}
+          <h1 class="h1" style="margin:0 0 20px;font-family:${FONT_HEAD};font-size:28px;line-height:36px;font-weight:800;letter-spacing:-0.5px;color:${BRAND.ink};">${escapeHtml(title)}</h1>
+          ${bodyHtml}
+        </td></tr>
+        <tr><td class="pad" style="padding:6px 38px 30px;font-family:${FONT};">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top:1px solid ${BRAND.line};"><tr>
+            <td style="padding-top:18px;font-size:13px;line-height:20px;color:${BRAND.muted};">
+              Questions? Call <a href="${BRAND.phoneHref}" style="color:${BRAND.orangeStrong};text-decoration:none;font-weight:700;">${BRAND.phone}</a>
+              or <a href="${BRAND.whatsapp}" style="color:${BRAND.orangeStrong};text-decoration:none;font-weight:700;">chat on WhatsApp</a>.
+            </td>
+          </tr></table>
+        </td></tr>
+      </table>
     </td></tr>
-    <tr><td class="pad" style="padding:8px 36px 32px;font-family:${FONT};">
-      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top:1px solid ${BRAND.line};"><tr>
-        <td style="padding-top:20px;font-size:13px;line-height:20px;color:${BRAND.muted};">
-          Questions? Call <a href="${BRAND.phoneHref}" style="color:${BRAND.orangeStrong};text-decoration:none;font-weight:600;">${BRAND.phone}</a>
-          or <a href="${BRAND.whatsapp}" style="color:${BRAND.orangeStrong};text-decoration:none;font-weight:600;">chat on WhatsApp</a>.
-        </td>
-      </tr></table>
+
+    <!-- Footer (mirrors the site footer) -->
+    <tr><td style="padding-top:16px;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:${BRAND.dark};border-radius:24px;">
+        <tr><td class="pad" style="padding:30px 38px 8px;font-family:${FONT};">
+          <a href="${site}" style="text-decoration:none;">${logoImg('white', 140)}</a>
+          <p style="margin:16px 0 18px;font-size:13px;line-height:21px;color:rgba(255,255,255,0.72);">A boutique management consulting firm headquartered in Lagos, Nigeria. Practical solutions in accounting, tax, corporate finance, HR and strategy.</p>
+          <div style="font-size:13px;line-height:22px;color:rgba(255,255,255,0.45);margin:0 0 18px;">
+            ${footerLink(`${s.siteUrl}/services`, 'Services')} &nbsp;&middot;&nbsp;
+            ${footerLink(`${s.siteUrl}/about`, 'About')} &nbsp;&middot;&nbsp;
+            ${footerLink(`${s.siteUrl}/insights`, 'Insights')} &nbsp;&middot;&nbsp;
+            ${footerLink(`${s.siteUrl}/contact`, 'Contact')}
+          </div>
+          <div style="font-size:13px;line-height:24px;color:rgba(255,255,255,0.78);">
+            ${dot(BRAND.orange)}${BRAND.address}<br>
+            ${dot(BRAND.gold)}<a href="${BRAND.phoneHref}" style="color:rgba(255,255,255,0.78);text-decoration:none;">${BRAND.phone}</a><br>
+            ${dot(BRAND.blue)}<a href="mailto:${BRAND.email}" style="color:rgba(255,255,255,0.78);text-decoration:none;">${BRAND.email}</a>
+          </div>
+        </td></tr>
+        <tr><td class="pad" style="padding:18px 38px 26px;font-family:${FONT};">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top:1px solid rgba(255,255,255,0.10);"><tr>
+            <td style="padding-top:16px;font-size:11px;line-height:18px;color:rgba(255,255,255,0.55);">
+              &copy; ${new Date().getFullYear()} THEWHY Consulting. An affiliate of Wale Kehinde &amp; Co. (Chartered Accountants).<br>
+              All engagements are handled under strict confidentiality.
+            </td>
+          </tr></table>
+        </td></tr>
+      </table>
     </td></tr>
-    <tr><td class="pad" style="background:${BRAND.navy};padding:24px 36px;font-family:${FONT};font-size:12px;line-height:19px;color:#94A3B8;">
-      <strong style="color:#ffffff;">THEWHY Consulting</strong><br>
-      ${BRAND.address}<br>
-      <a href="${BRAND.phoneHref}" style="color:#CBD5E1;text-decoration:none;">${BRAND.phone}</a> &middot;
-      <a href="mailto:${BRAND.email}" style="color:#CBD5E1;text-decoration:none;">${BRAND.email}</a> &middot;
-      <a href="${escapeHtml(s.siteUrl)}" style="color:#CBD5E1;text-decoration:none;">${escapeHtml(s.siteUrl.replace(/^https?:\/\//, ''))}</a>
-      <div style="margin-top:12px;color:#64748B;font-size:11px;line-height:17px;">An affiliate of Wale Kehinde &amp; Co. (Chartered Accountants). All engagements are handled under strict confidentiality.</div>
-    </td></tr>
+
   </table>
 </td></tr>
 </table>
@@ -229,21 +287,21 @@ function layout(title, bodyHtml, opts = {}) {
 
 function paragraph(text, opts = {}) {
   const size = opts.lead ? '16px' : '15px';
-  const lh = opts.lead ? '26px' : '24px';
-  return `<p style="margin:0 0 16px;font-size:${size};line-height:${lh};color:${BRAND.ink};">${escapeHtml(text)}</p>`;
+  const lh = opts.lead ? '26px' : '25px';
+  return `<p style="margin:0 0 16px;font-family:${FONT};font-size:${size};line-height:${lh};color:${opts.lead ? BRAND.ink : '#2D2D2D'};">${escapeHtml(text)}</p>`;
 }
 
 function refCard(label, code) {
   if (!code) return '';
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:8px 0 24px;background:${BRAND.paper};border:1px solid #EADFD3;border-radius:12px;">
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:8px 0 26px;background:${BRAND.paper};border:1px solid ${BRAND.lineStrong};border-radius:16px;">
 <tr><td style="padding:18px 22px;font-family:${FONT};">
-  <div style="font-size:11px;line-height:16px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:${BRAND.muted};">${escapeHtml(label)}</div>
-  <div style="font-family:Consolas,'SFMono-Regular',Menlo,monospace;font-size:22px;line-height:30px;font-weight:700;letter-spacing:1px;color:${BRAND.navy};margin-top:4px;">${escapeHtml(code)}</div>
+  <div style="font-family:${FONT_HEAD};font-size:11px;line-height:16px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:${BRAND.muted};">${escapeHtml(label)}</div>
+  <div style="font-family:Consolas,'SFMono-Regular',Menlo,monospace;font-size:22px;line-height:30px;font-weight:700;letter-spacing:1px;color:${BRAND.ink};margin-top:4px;">${escapeHtml(code)}</div>
 </td></tr></table>`;
 }
 
 function sectionTitle(text) {
-  return `<div style="font-size:12px;line-height:18px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:${BRAND.navy};margin:8px 0 10px;">${escapeHtml(text)}</div>`;
+  return `<div style="font-family:${FONT_HEAD};font-size:12px;line-height:18px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:${BRAND.ink};margin:8px 0 10px;">${escapeHtml(text)}</div>`;
 }
 
 const present = v => v !== undefined && v !== null && String(v).trim() !== '';
@@ -253,49 +311,49 @@ function detailsTable(rows) {
     .filter(([, v]) => present(v))
     .map(([k, v]) => `<tr>
 <td class="k" width="38%" style="padding:11px 14px 11px 0;border-bottom:1px solid ${BRAND.line};font-size:13px;line-height:20px;color:${BRAND.muted};vertical-align:top;">${escapeHtml(k)}</td>
-<td class="v" style="padding:11px 0;border-bottom:1px solid ${BRAND.line};font-size:14px;line-height:20px;color:${BRAND.ink};font-weight:600;vertical-align:top;word-break:break-word;">${escapeHtml(v)}</td>
+<td class="v" style="padding:11px 0;border-bottom:1px solid ${BRAND.line};font-size:14px;line-height:20px;color:${BRAND.ink};font-weight:700;vertical-align:top;word-break:break-word;">${escapeHtml(v)}</td>
 </tr>`)
     .join('');
   if (!trs) return '';
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" class="kv" style="margin:0 0 24px;font-family:${FONT};border-top:1px solid ${BRAND.line};">${trs}</table>`;
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" class="kv" style="margin:0 0 26px;font-family:${FONT};border-top:1px solid ${BRAND.line};">${trs}</table>`;
 }
 
 function messageBlock(label, text) {
   if (!present(text)) return '';
   return `${sectionTitle(label)}
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 24px;"><tr>
-<td style="border-left:4px solid ${BRAND.orange};background:${BRAND.soft};padding:14px 18px;font-family:${FONT};font-size:14px;line-height:22px;color:${BRAND.ink};white-space:pre-wrap;border-radius:0 8px 8px 0;">${escapeHtml(text)}</td>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 26px;"><tr>
+<td style="border-left:4px solid ${BRAND.orange};background:${BRAND.soft};padding:14px 18px;font-family:${FONT};font-size:14px;line-height:22px;color:${BRAND.ink};white-space:pre-wrap;border-radius:0 12px 12px 0;">${escapeHtml(text)}</td>
 </tr></table>`;
 }
 
 function steps(items) {
   const rows = items.map((item, i) => `<tr>
-<td width="40" valign="top" style="padding:0 0 14px;">
-  <div style="width:28px;height:28px;line-height:28px;border-radius:14px;background:${BRAND.navy};color:#ffffff;font-family:${FONT};font-size:13px;font-weight:700;text-align:center;">${i + 1}</div>
+<td width="42" valign="top" style="padding:0 0 14px;">
+  <div style="width:30px;height:30px;line-height:30px;border-radius:15px;background:${BRAND.dark};color:${BRAND.gold};font-family:${FONT_HEAD};font-size:13px;font-weight:800;text-align:center;">${i + 1}</div>
 </td>
-<td valign="top" style="padding:3px 0 14px;font-family:${FONT};font-size:14px;line-height:22px;color:${BRAND.ink};">${escapeHtml(item)}</td>
+<td valign="top" style="padding:4px 0 14px;font-family:${FONT};font-size:14px;line-height:22px;color:${BRAND.ink};">${escapeHtml(item)}</td>
 </tr>`).join('');
   return `${sectionTitle('What happens next')}<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 16px;">${rows}</table>`;
 }
 
-/** buttons: [{ label, href, variant: 'primary'|'ghost' }] (hrefs are escaped). */
+/** buttons: [{ label, href, variant: 'primary'|'ghost' }] (hrefs are escaped). Pill-shaped like the site. */
 function buttons(list) {
   const cells = list.filter(b => b && b.href).map((b) => {
     const primary = b.variant !== 'ghost';
-    const bg = primary ? BRAND.orangeStrong : '#ffffff';
-    const color = primary ? '#ffffff' : BRAND.navy;
-    const border = primary ? BRAND.orangeStrong : '#CBD5E1';
+    const bg = primary ? BRAND.orangeStrong : '#FFFFFF';
+    const color = primary ? '#FFFFFF' : BRAND.ink;
+    const border = primary ? BRAND.orangeStrong : BRAND.lineStrong;
     return `<td class="btn-cell" style="padding:0 10px 10px 0;">
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" class="btn"><tr>
-<td align="center" style="border-radius:10px;background:${bg};border:1px solid ${border};">
-<a href="${escapeHtml(b.href)}" style="display:inline-block;padding:13px 24px;font-family:${FONT};font-size:14px;line-height:18px;font-weight:700;color:${color};text-decoration:none;border-radius:10px;">${escapeHtml(b.label)}</a>
+<td align="center" style="border-radius:100px;background:${bg};border:1px solid ${border};">
+<a href="${escapeHtml(b.href)}" style="display:inline-block;padding:14px 26px;font-family:${FONT_HEAD};font-size:14px;line-height:18px;font-weight:700;color:${color};text-decoration:none;border-radius:100px;">${escapeHtml(b.label)}</a>
 </td></tr></table></td>`;
   }).join('');
-  return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:4px 0 20px;"><tr>${cells}</tr></table>`;
+  return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" class="btn-row" style="margin:4px 0 20px;"><tr>${cells}</tr></table>`;
 }
 
 function signOff() {
-  return `<p style="margin:8px 0 0;font-size:15px;line-height:24px;color:${BRAND.ink};">Warm regards,<br><strong>The THEWHY Consulting Team</strong></p>`;
+  return `<p style="margin:8px 0 0;font-family:${FONT};font-size:15px;line-height:24px;color:${BRAND.ink};">Warm regards,<br><strong style="font-family:${FONT_HEAD};">The THEWHY Consulting Team</strong></p>`;
 }
 
 function detailsText(rows) {
@@ -338,7 +396,11 @@ function internal({ subject, title, eyebrow, ref, rows, message, contact }) {
     to: s.notifyTo,
     subject,
     replyTo: contact && contact.email,
-    html: layout(title, body, { eyebrow, preheader: `${title}${ref ? ` (${ref})` : ''}` }),
+    html: layout(title, body, {
+      eyebrow,
+      preheader: `${title}${ref ? ` (${ref})` : ''}`,
+      headerCta: { label: 'Admin Console', href: `${s.siteUrl}/admin` }
+    }),
     text: `${title}\n\n${ref ? `Reference: ${ref}\n` : ''}${detailsText(rows)}${present(message) ? `\n\nMessage:\n${message}` : ''}\n\nAdmin: ${s.siteUrl}/admin`
   });
 }

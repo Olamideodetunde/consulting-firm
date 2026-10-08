@@ -4,7 +4,7 @@
  *   - JSON store in a throwaway temp file (never the real runtime store)
  *   - MySQL disabled (DB_MODE=json)
  *   - fixed test passcode and session secret
- *   - SMTP disabled
+ *   - email (SMTP / Brevo) and Cloudinary disabled, whatever .env contains
  */
 const os = require('os');
 const fs = require('fs');
@@ -20,8 +20,15 @@ process.env.DB_MODE = 'json';
 process.env.DB_JSON_PATH = DB_JSON_PATH;
 process.env.ADMIN_PASSCODE = TEST_PASSCODE;
 process.env.ADMIN_SESSION_SECRET = crypto.randomBytes(32).toString('hex');
-process.env.SMTP_HOST = '';
 process.env.SITE_URL = 'https://why.ng';
+// Never reach real services from tests. These are set (even empty) before the
+// app loads, so dotenv cannot fill them in from a developer's .env file.
+process.env.SMTP_HOST = '';
+process.env.BREVO_API_KEY = '';
+process.env.CLOUDINARY_URL = '';
+process.env.CLOUDINARY_CLOUD_NAME = '';
+process.env.CLOUDINARY_API_KEY = '';
+process.env.CLOUDINARY_API_SECRET = '';
 
 const request = require('supertest');
 const app = require('../server/server');

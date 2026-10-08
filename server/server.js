@@ -42,7 +42,8 @@ app.use(helmet({
       styleSrc: ["'self'", "'unsafe-inline'", 'https://cdnjs.cloudflare.com', 'https://fonts.googleapis.com'],
       fontSrc: ["'self'", 'https://cdnjs.cloudflare.com', 'https://fonts.gstatic.com'],
       imgSrc: ["'self'", 'data:', 'https:'],
-      connectSrc: ["'self'"],
+      // Admin image uploads go straight from the browser to Cloudinary.
+      connectSrc: ["'self'", 'https://api.cloudinary.com'],
       frameSrc: ['https://www.openstreetmap.org', 'https://www.google.com'],
       objectSrc: ["'none'"],
       baseUri: ["'self'"],

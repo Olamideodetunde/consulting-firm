@@ -273,6 +273,169 @@
   const articleForm = $('article-form');
   const articleError = $('article-error');
 
+  // -------------------------------------------------------------------------
+  // CLOUDINARY UPLOADS (signed by the server, sent straight to Cloudinary)
+  // -------------------------------------------------------------------------
+  let uploadsConfigPromise = null;
+  function getUploadsConfig() {
+    if (!uploadsConfigPromise) {
+      uploadsConfigPromise = api('/api/admin/uploads/config')
+        .then(json => json.data || { enabled: false })
+        .catch((err) => {
+          uploadsConfigPromise = null; // retry next time
+          if (err instanceof AuthError) throw err;
+          return { enabled: false };
+        });
+    }
+    return uploadsConfigPromise;
+  }
+
+  const MIME_FORMATS = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp', 'image/avif': 'avif' };
+
+  function checkImageFile(file, cfg) {
+    if (!file) return 'No file selected.';
+    if (!MIME_FORMATS[file.type]) return 'Please choose a JPG, PNG, WebP or AVIF image.';
+    const max = (cfg && cfg.maxBytes) || 8 * 1024 * 1024;
+    if (file.size > max) return `That image is ${(file.size / 1048576).toFixed(1)} MB. The limit is ${Math.round(max / 1048576)} MB.`;
+    return '';
+  }
+
+  /** Delivery URL with auto format/quality and a 1600px max width. */
+  function optimizedCloudinaryUrl(secureUrl, cloudName, width = 1600) {
+    const prefix = `https://res.cloudinary.com/${cloudName}/image/upload/`;
+    if (!secureUrl || !secureUrl.startsWith(prefix)) return secureUrl;
+    const rest = secureUrl.slice(prefix.length);
+    return /^f_auto/.test(rest) ? secureUrl : `${prefix}f_auto,q_auto,c_limit,w_${width}/${rest}`;
+  }
+
+  async function uploadImage(file, onProgress) {
+    const sig = (await api('/api/admin/uploads/sign', { method: 'POST', body: {} })).data;
+    const form = new FormData();
+    form.append('file', file);
+    form.append('api_key', sig.apiKey);
+    form.append('timestamp', String(sig.timestamp));
+    form.append('signature', sig.signature);
+    form.append('folder', sig.folder);
+    form.append('allowed_formats', sig.allowed_formats);
+
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', sig.uploadUrl);
+      xhr.upload.onprogress = (e) => {
+        if (e.lengthComputable && onProgress) onProgress(Math.round((e.loaded / e.total) * 100));
+      };
+      xhr.onload = () => {
+        let body = {};
+        try { body = JSON.parse(xhr.responseText); } catch (err) { body = {}; }
+        if (xhr.status >= 200 && xhr.status < 300 && body.secure_url) {
+          resolve({ ...body, url: optimizedCloudinaryUrl(body.secure_url, sig.cloudName) });
+        } else {
+          reject(new Error((body.error && body.error.message) || `Upload failed (${xhr.status}).`));
+        }
+      };
+      xhr.onerror = () => reject(new Error('Network error while uploading. Check your connection and try again.'));
+      xhr.ontimeout = () => reject(new Error('The upload timed out. Please try again.'));
+      xhr.timeout = 120000;
+      xhr.send(form);
+    });
+  }
+
+  // Cover image field: preview, upload, drag & drop, paste URL.
+  const coverInput = $('modal-art-image');
+  const coverFile = $('cover-file');
+  const coverPreview = $('cover-preview');
+  const coverEmpty = $('cover-preview-empty');
+  const coverStatus = $('cover-status');
+  const coverClear = $('cover-clear');
+  const coverProgress = $('cover-progress');
+  const coverProgressBar = $('cover-progress-bar');
+  const coverDropzone = $('cover-dropzone');
+  const coverUploadBtn = $('cover-upload-btn');
+  const COVER_HINT = 'JPG, PNG, WebP or AVIF up to 8 MB. Best at 1600 × 900 px.';
+  let coverUploading = false;
+
+  function coverPreviewSrc(value) {
+    const v = String(value || '').trim();
+    if (!v || /["'()\\\s<>]/.test(v)) return '';
+    if (/^https:\/\//i.test(v)) return v;
+    if (/^[a-z][a-z0-9+.-]*:/i.test(v)) return ''; // no other schemes
+    return v.startsWith('/') ? v : `/${v}`;
+  }
+
+  function setCoverStatus(text, tone) {
+    coverStatus.textContent = text;
+    coverStatus.className = `text-[11px] ${tone === 'error' ? 'text-red-600 font-semibold' : tone === 'ok' ? 'text-emerald-700 font-semibold' : 'text-slate-500'}`;
+  }
+
+  function refreshCoverPreview() {
+    const src = coverPreviewSrc(coverInput.value);
+    coverPreview.style.backgroundImage = src ? `url("${src}")` : '';
+    coverEmpty.classList.toggle('hidden', !!src);
+    coverClear.classList.toggle('hidden', !coverInput.value.trim());
+  }
+
+  function resetCoverField() {
+    coverFile.value = '';
+    coverProgress.classList.add('hidden');
+    coverProgressBar.style.width = '0%';
+    setCoverStatus(COVER_HINT);
+    refreshCoverPreview();
+  }
+
+  async function handleCoverFile(file) {
+    if (coverUploading) return;
+    const cfg = await getUploadsConfig().catch(() => ({ enabled: false }));
+    if (!cfg.enabled) {
+      setCoverStatus('Image uploads are not configured yet (Cloudinary). Paste an image URL or path instead.', 'error');
+      return;
+    }
+    const problem = checkImageFile(file, cfg);
+    if (problem) { setCoverStatus(problem, 'error'); return; }
+
+    coverUploading = true;
+    $('btn-save-article').disabled = true;
+    coverUploadBtn.classList.add('opacity-60', 'pointer-events-none');
+    coverProgress.classList.remove('hidden');
+    coverProgressBar.style.width = '0%';
+    setCoverStatus(`Uploading ${file.name}…`);
+    try {
+      const result = await uploadImage(file, (pct) => {
+        coverProgressBar.style.width = `${pct}%`;
+        coverProgress.setAttribute('aria-valuenow', String(pct));
+        setCoverStatus(`Uploading ${file.name}… ${pct}%`);
+      });
+      coverInput.value = result.url;
+      refreshCoverPreview();
+      const dims = result.width && result.height ? ` (${result.width} × ${result.height})` : '';
+      const small = result.width && result.width < 1000 ? ' This image is quite small and may look soft on large screens.' : '';
+      setCoverStatus(`Uploaded${dims}. Save the article to use it.${small}`, small ? 'error' : 'ok');
+    } catch (err) {
+      if (!(err instanceof AuthError)) setCoverStatus(err.message || 'Upload failed.', 'error');
+    } finally {
+      coverUploading = false;
+      $('btn-save-article').disabled = false;
+      coverUploadBtn.classList.remove('opacity-60', 'pointer-events-none');
+      coverProgress.classList.add('hidden');
+      coverFile.value = '';
+    }
+  }
+
+  coverFile.addEventListener('change', () => handleCoverFile(coverFile.files[0]));
+  coverInput.addEventListener('input', refreshCoverPreview);
+  coverClear.addEventListener('click', () => { coverInput.value = ''; resetCoverField(); });
+  ['dragenter', 'dragover'].forEach(type => coverDropzone.addEventListener(type, (e) => {
+    e.preventDefault();
+    coverDropzone.classList.add('border-brandOrange', 'bg-orange-50');
+  }));
+  ['dragleave', 'drop'].forEach(type => coverDropzone.addEventListener(type, (e) => {
+    e.preventDefault();
+    coverDropzone.classList.remove('border-brandOrange', 'bg-orange-50');
+  }));
+  coverDropzone.addEventListener('drop', (e) => {
+    const file = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+    if (file) handleCoverFile(file);
+  });
+
   $('btn-create-article').addEventListener('click', () => {
     $('art-modal-title').textContent = 'Write New Insight';
     articleForm.reset();
@@ -281,6 +444,7 @@
     $('modal-art-readtime').value = '4 min read';
     $('modal-art-published').checked = true;
     articleError.classList.add('hidden');
+    resetCoverField();
     articleModal.classList.remove('hidden');
   });
 
@@ -300,11 +464,17 @@
     $('modal-art-content').value = art.content || '';
     $('modal-art-published').checked = art.is_published !== false;
     articleError.classList.add('hidden');
+    resetCoverField();
     articleModal.classList.remove('hidden');
   }
 
   articleForm.addEventListener('submit', async function (e) {
     e.preventDefault();
+    if (coverUploading) {
+      articleError.textContent = 'Please wait for the image upload to finish.';
+      articleError.classList.remove('hidden');
+      return;
+    }
     const slug = $('modal-art-slug').value;
     const payload = {
       title: $('modal-art-title').value,
@@ -776,6 +946,9 @@
   // -------------------------------------------------------------------------
   // 11. MEDIA LIBRARY
   // -------------------------------------------------------------------------
+  state.cloudMedia = [];
+  state.cloudEnabled = null;
+
   async function fetchMedia() {
     try {
       const json = await api('/api/admin/media');
@@ -784,6 +957,50 @@
     } catch (err) {
       if (!(err instanceof AuthError)) console.error('Error fetching media:', err);
     }
+    fetchCloudMedia();
+  }
+
+  async function fetchCloudMedia() {
+    const grid = $('cloud-grid');
+    grid.innerHTML = '<div class="col-span-4 text-center text-slate-400 py-6 text-xs">Loading Cloudinary images…</div>';
+    try {
+      const json = await api('/api/admin/uploads');
+      state.cloudEnabled = json.enabled !== false;
+      state.cloudMedia = json.data || [];
+    } catch (err) {
+      if (err instanceof AuthError) return;
+      state.cloudMedia = [];
+      grid.innerHTML = `<div class="col-span-4 text-center text-red-600 py-6 text-xs font-semibold">${escapeHtml(err.message)}</div>`;
+      return;
+    }
+    renderCloudMedia();
+  }
+
+  function mediaCard(m) {
+    const src = m.thumb || m.path;
+    return `
+      <div class="bg-slate-50 border border-slate-200 rounded-2xl p-2.5 space-y-2 group hover:shadow-md transition-all">
+        <div class="aspect-video w-full rounded-xl overflow-hidden bg-slate-200 flex items-center justify-center relative">
+          <img src="${escapeHtml(src)}" alt="${escapeHtml(m.name)}" loading="lazy" class="w-full h-full object-cover">
+        </div>
+        <div class="text-[11px] font-semibold text-slate-700 truncate" title="${escapeHtml(m.name)}">${escapeHtml(m.name)}</div>
+        <button type="button" data-action="copy-media" data-path="${escapeHtml(m.path)}" class="w-full py-1.5 bg-white border border-slate-200 hover:bg-brandOrange hover:text-white rounded-lg text-[10px] font-bold text-slate-600 transition-colors flex items-center justify-center gap-1">
+          <i class="fa-regular fa-copy"></i> ${m.source === 'cloudinary' ? 'Copy URL' : 'Copy Path'}
+        </button>
+      </div>`;
+  }
+
+  function renderCloudMedia() {
+    const grid = $('cloud-grid');
+    if (state.cloudEnabled === false) {
+      grid.innerHTML = '<div class="col-span-4 text-center text-slate-500 py-6 text-xs">Cloudinary is not configured. Add <code class="font-mono">CLOUDINARY_URL</code> to the server .env to enable uploads.</div>';
+      $('media-upload-btn').classList.add('opacity-50', 'pointer-events-none');
+      return;
+    }
+    $('media-upload-btn').classList.remove('opacity-50', 'pointer-events-none');
+    grid.innerHTML = state.cloudMedia.length
+      ? state.cloudMedia.map(mediaCard).join('')
+      : '<div class="col-span-4 text-center text-slate-400 py-6 text-xs">No uploads yet. Use “Upload image” to add one.</div>';
   }
 
   function renderMedia() {
@@ -793,25 +1010,53 @@
       grid.innerHTML = '<div class="col-span-4 text-center text-slate-400 py-8 text-xs">No media assets found.</div>';
       return;
     }
-    grid.innerHTML = state.media.map(m => `
-      <div class="bg-slate-50 border border-slate-200 rounded-2xl p-2.5 space-y-2 group hover:shadow-md transition-all">
-        <div class="aspect-video w-full rounded-xl overflow-hidden bg-slate-200 flex items-center justify-center relative">
-          <img src="${escapeHtml(m.path)}" alt="${escapeHtml(m.name)}" loading="lazy" class="w-full h-full object-cover">
-        </div>
-        <div class="text-[11px] font-semibold text-slate-700 truncate" title="${escapeHtml(m.name)}">${escapeHtml(m.name)}</div>
-        <button type="button" data-action="copy-media" data-path="${escapeHtml(m.path)}" class="w-full py-1.5 bg-white border border-slate-200 hover:bg-brandOrange hover:text-white rounded-lg text-[10px] font-bold text-slate-600 transition-colors flex items-center justify-center gap-1">
-          <i class="fa-regular fa-copy"></i> Copy Path
-        </button>
-      </div>`).join('');
+    grid.innerHTML = state.media.map(mediaCard).join('');
   }
 
-  $('media-grid').addEventListener('click', (e) => {
+  function onCopyMedia(e) {
     const btn = e.target.closest('button[data-action="copy-media"]');
     if (!btn) return;
     const p = btn.dataset.path;
     navigator.clipboard.writeText(p)
-      .then(() => alert(`Path copied to clipboard: ${p}`))
-      .catch(() => prompt('Copy path:', p));
+      .then(() => alert(`Copied to clipboard: ${p}`))
+      .catch(() => prompt('Copy this:', p));
+  }
+  $('media-grid').addEventListener('click', onCopyMedia);
+  $('cloud-grid').addEventListener('click', onCopyMedia);
+
+  $('media-file').addEventListener('change', async () => {
+    const input = $('media-file');
+    const file = input.files[0];
+    const status = $('media-status');
+    const btn = $('media-upload-btn');
+    input.value = '';
+    const cfg = await getUploadsConfig().catch(() => ({ enabled: false }));
+    const problem = cfg.enabled ? checkImageFile(file, cfg) : 'Image uploads are not configured yet (Cloudinary).';
+    if (problem) {
+      status.textContent = problem;
+      status.className = 'text-[11px] text-red-600 font-semibold';
+      return;
+    }
+    btn.classList.add('opacity-60', 'pointer-events-none');
+    status.className = 'text-[11px] text-slate-500';
+    try {
+      const result = await uploadImage(file, pct => { status.textContent = `Uploading ${file.name}… ${pct}%`; });
+      status.textContent = `Uploaded ${file.name}. Use “Copy URL” to place it in an article.`;
+      status.className = 'text-[11px] text-emerald-700 font-semibold';
+      state.cloudMedia.unshift({
+        name: file.name,
+        path: result.url,
+        thumb: optimizedCloudinaryUrl(result.secure_url, cfg.cloudName, 400),
+        source: 'cloudinary'
+      });
+      renderCloudMedia();
+    } catch (err) {
+      if (err instanceof AuthError) return;
+      status.textContent = err.message || 'Upload failed.';
+      status.className = 'text-[11px] text-red-600 font-semibold';
+    } finally {
+      btn.classList.remove('opacity-60', 'pointer-events-none');
+    }
   });
 
   // -------------------------------------------------------------------------

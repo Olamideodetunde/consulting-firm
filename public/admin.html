@@ -19,7 +19,7 @@
   <link rel="stylesheet" href="/css/custom.css">
 
   <!-- Prebuilt Tailwind stylesheet, loaded last so utilities win (regenerate: see README "Admin stylesheet") -->
-  <link rel="stylesheet" href="/css/admin.css?v=3">
+  <link rel="stylesheet" href="/css/admin.css?v=4">
 </head>
 <body class="bg-slate-100 text-slate-800 antialiased min-h-screen flex flex-col font-sans">
 
@@ -372,11 +372,27 @@
     <!-- TAB: MEDIA & IMAGES -->
     <section id="tab-media" class="tab-content hidden space-y-6">
       <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
+          <div>
+            <h2 class="font-heading text-xl font-bold text-brandDark">Media &amp; Image Assets</h2>
+            <p class="text-xs text-slate-500">Upload images to Cloudinary, or copy the path of any asset to use in articles and pages.</p>
+          </div>
+          <label id="media-upload-btn" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-brandOrange hover:bg-brandOrangeDark text-white text-xs font-bold cursor-pointer transition-colors">
+            <i class="fa-solid fa-cloud-arrow-up" aria-hidden="true"></i>
+            <span>Upload image</span>
+            <input type="file" id="media-file" accept="image/jpeg,image/png,image/webp,image/avif" class="sr-only">
+          </label>
+        </div>
+        <p id="media-status" class="text-[11px] text-slate-500" aria-live="polite"></p>
+
         <div>
-          <h2 class="font-heading text-xl font-bold text-brandDark">Media &amp; Image Assets</h2>
-          <p class="text-xs text-slate-500">Approved photographs and banners. Click any asset to copy its path for articles and pages.</p>
+          <h3 class="font-heading text-sm font-bold text-brandDark mb-3">Cloudinary uploads</h3>
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4" id="cloud-grid">
+            <!-- Rendered via admin.js -->
+          </div>
         </div>
 
+        <h3 class="font-heading text-sm font-bold text-brandDark">Site images</h3>
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4" id="media-grid">
           <!-- Rendered via admin.js -->
         </div>
@@ -421,13 +437,33 @@
           </div>
         </div>
 
+        <div>
+          <label for="modal-art-image" class="block font-bold text-slate-700 mb-1">Featured Cover Image</label>
+          <div id="cover-dropzone" class="flex flex-col sm:flex-row gap-3 p-3 rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 transition-colors">
+            <div id="cover-preview" class="relative w-full sm:w-44 h-28 shrink-0 rounded-lg bg-slate-200 bg-cover bg-center overflow-hidden flex items-center justify-center text-slate-400 text-[10px] font-bold uppercase tracking-wider">
+              <span id="cover-preview-empty">No image</span>
+            </div>
+            <div class="flex-1 min-w-0 flex flex-col gap-2">
+              <div class="flex flex-wrap gap-2">
+                <label id="cover-upload-btn" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-brandDark hover:bg-brandNavy text-white text-xs font-bold cursor-pointer transition-colors">
+                  <i class="fa-solid fa-cloud-arrow-up" aria-hidden="true"></i>
+                  <span>Upload image</span>
+                  <input type="file" id="cover-file" accept="image/jpeg,image/png,image/webp,image/avif" class="sr-only">
+                </label>
+                <button type="button" id="cover-clear" class="hidden px-3 py-2 rounded-xl border border-slate-300 bg-white hover:bg-red-50 hover:text-red-600 text-xs font-bold text-slate-600 transition-colors">Remove</button>
+              </div>
+              <input type="text" id="modal-art-image" maxlength="500" placeholder="Upload, drop an image here, or paste an image URL" class="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white text-xs">
+              <div id="cover-progress" class="hidden h-1.5 rounded-full bg-slate-200 overflow-hidden" role="progressbar" aria-label="Upload progress" aria-valuemin="0" aria-valuemax="100">
+                <div id="cover-progress-bar" class="h-full w-0 bg-brandOrange transition-all"></div>
+              </div>
+              <p id="cover-status" class="text-[11px] text-slate-500" aria-live="polite">JPG, PNG, WebP or AVIF up to 8 MB. Best at 1600 &times; 900 px.</p>
+            </div>
+          </div>
+        </div>
+
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block font-bold text-slate-700 mb-1">Featured Cover Image</label>
-            <input type="text" id="modal-art-image" maxlength="500" placeholder="assets/img/blog/1.jpg" class="w-full px-3 py-2 rounded-xl border border-slate-300">
-          </div>
-          <div>
-            <label class="block font-bold text-slate-700 mb-1">Estimated Reading Time</label>
+            <label for="modal-art-readtime" class="block font-bold text-slate-700 mb-1">Estimated Reading Time</label>
             <input type="text" id="modal-art-readtime" maxlength="50" value="4 min read" class="w-full px-3 py-2 rounded-xl border border-slate-300">
           </div>
         </div>
@@ -462,6 +498,6 @@
     THEWHY Consulting Executive Portal &copy; 2026. An affiliate of Wale Kehinde &amp; Co. (Chartered Accountants).
   </footer>
 
-  <script src="/js/admin.js?v=3"></script>
+  <script src="/js/admin.js?v=4"></script>
 </body>
 </html>

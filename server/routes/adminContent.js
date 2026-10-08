@@ -12,6 +12,9 @@
  *   GET    /api/admin/insights            all articles incl. drafts
  *   GET    /api/admin/newsletter          subscribers
  *   DELETE /api/admin/newsletter/:id
+ *   GET    /api/admin/uploads/config      { enabled, cloudName, folder, maxBytes, allowedFormats }
+ *   POST   /api/admin/uploads/sign        short-lived Cloudinary upload signature
+ *   GET    /api/admin/uploads             recent Cloudinary images in the upload folder
  */
 const express = require('express');
 const router = express.Router();
@@ -22,6 +25,7 @@ const db = require('../db/db');
 const auth = require('../lib/auth');
 const { validateBody, schemas, pick, PUBLIC_SETTINGS_KEYS } = require('../lib/validate');
 const { wrap } = require('../lib/util');
+const cloudinary = require('../services/cloudinary');
 
 const verifyLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -119,5 +123,48 @@ router.delete('/newsletter/:id', wrap(async (req, res) => {
   if (!ok) return res.status(404).json({ success: false, error: 'Subscriber not found.' });
   res.json({ success: true, message: 'Subscriber removed.' });
 }));
+
+// ---- Cloudinary image uploads (signed, direct from the browser) ----
+const uploadSignLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 60,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { success: false, error: 'Too many uploads. Please wait a few minutes and try again.' }
+});
+
+router.get('/uploads/config', (req, res) => {
+  const c = cloudinary.config();
+  res.json({
+    success: true,
+    data: {
+      enabled: cloudinary.isConfigured(),
+      cloudName: cloudinary.isConfigured() ? c.cloudName : null,
+      folder: c.folder,
+      maxBytes: cloudinary.MAX_BYTES,
+      allowedFormats: cloudinary.ALLOWED_FORMATS
+    }
+  });
+});
+
+router.post('/uploads/sign', uploadSignLimiter, (req, res) => {
+  try {
+    res.set('Cache-Control', 'no-store');
+    res.json({ success: true, data: cloudinary.uploadSignature() });
+  } catch (err) {
+    res.status(err.status || 500).json({ success: false, error: err.message });
+  }
+});
+
+router.get('/uploads', async (req, res) => {
+  if (!cloudinary.isConfigured()) return res.json({ success: true, enabled: false, data: [] });
+  try {
+    const items = await cloudinary.listUploads(60);
+    res.json({ success: true, enabled: true, count: items.length, data: items });
+  } catch (err) {
+    console.error('[CLOUDINARY] list failed:', err.message);
+    res.status(err.status || 502).json({ success: false, error: 'Could not load images from Cloudinary.' });
+  }
+});
 
 module.exports = router;

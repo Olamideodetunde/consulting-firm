@@ -46,6 +46,9 @@ All variables are documented in [`.env.example`](.env.example). Summary:
 | `BREVO_API_KEY` | no | Brevo API key (`xkeysib-...`); preferred email transport |
 | `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASS` | no | SMTP fallback, used only when `BREVO_API_KEY` is empty |
 | `MAIL_FROM` | no | Sender address |
+| `CLOUDINARY_URL` | no | `cloudinary://key:secret@cloud`; enables image uploads in the admin (or set `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`) |
+| `CLOUDINARY_FOLDER` | no (`whyng/insights`) | Cloudinary folder for uploads |
+| `EMAIL_ASSET_URL` | no (`SITE_URL`) | Public base URL for the email logo PNGs in `/assets/img/email/` |
 | `NOTIFY_TO` | no (`info@thewhy.ng`) | Where internal notifications are sent |
 
 ---
@@ -91,6 +94,16 @@ Static marketing content (services, industries, team, testimonials, case studies
 Records use `crypto.randomUUID()` ids. Bookings, contact messages and inquiries also get a human-friendly reference such as `WHY-2026-7KQ4XM2PZD` (10 random characters).
 
 ---
+
+## Image uploads (Cloudinary)
+
+In the admin console, the article editor's **Featured Cover Image** field and the **Media Library** tab upload images to Cloudinary:
+
+1. The browser asks `POST /api/admin/uploads/sign` (admin session required) for a short-lived signature.
+2. The file goes straight from the browser to Cloudinary. The API secret never leaves the server, and the file never passes through this app.
+3. The saved URL uses Cloudinary's automatic format and quality (`f_auto,q_auto`) capped at 1600px wide, so covers stay light on mobile.
+
+Accepted formats: JPG, PNG, WebP and AVIF, up to 8 MB. Uploaded covers are used on the article cards, the homepage, the article hero and the social-share (Open Graph) image. Without Cloudinary credentials the upload buttons explain that uploads aren't configured, and admins can still paste an image URL or site path.
 
 ## Email notifications
 
