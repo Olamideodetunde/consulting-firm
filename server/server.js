@@ -135,11 +135,10 @@ app.get('/services', sendPage('services.html'));
 app.get('/industries', sendPage('industries.html'));
 app.get('/team', sendPage('team.html'));
 app.get('/insights', sendPage('insights.html'));
-app.get('/launch', sendPage('launch.html'));
+app.get('/seminar', sendPage('seminar.html'));
+app.get('/rent-an-accountant', sendPage('rent-an-accountant.html'));
 app.get('/contact', sendPage('contact.html'));
 app.get('/booking', sendPage('booking.html'));
-app.get('/calculator', sendPage('calculator.html'));
-app.get('/case-studies', sendPage('case-studies.html'));
 app.get('/privacy', sendPage('privacy.html'));
 app.get('/terms', sendPage('terms.html'));
 app.get('/admin', sendPage('admin.html'));
@@ -196,7 +195,6 @@ app.get('/api/testimonials', (req, res) => {
   const data = db.getTestimonials();
   res.json({ success: true, count: data.length, data });
 });
-app.get('/api/case-studies', (req, res) => res.json({ success: true, data: db.getCaseStudies() }));
 app.get('/api/faqs', (req, res) => res.json({ success: true, data: db.getFaqs() }));
 app.get('/api/launch', wrap(async (req, res) => {
   res.json({ success: true, data: await db.getLaunchCampaign() });

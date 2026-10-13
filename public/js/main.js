@@ -452,140 +452,12 @@ document.addEventListener('DOMContentLoaded', () => {
     updateActivePill();
   }
 
-  // 8. INTERACTIVE FEE CALCULATOR (prices come from the DOM: data-cost / label text)
-  const calcForm = document.getElementById('calcForm');
-  const calcResult = document.getElementById('calcResult');
-
-  if (calcForm && calcResult) {
-    const parseNaira = (text) => {
-      if (!text) return NaN;
-      const m = String(text).match(/₦\s*([\d,]+)/) || String(text).match(/([\d][\d,]*)/);
-      return m ? parseInt(m[1].replace(/,/g, ''), 10) : NaN;
-    };
-
-    const readSize = () => {
-      const radio = calcForm.querySelector('input[name="companySize"]:checked');
-      const select = calcForm.querySelector('select[name="companySize"]');
-      let source = radio;
-      if (!source && select) source = select.options[select.selectedIndex] || null;
-      if (!source) return { fee: 0, name: '' };
-
-      const label = radio ? radio.closest('label') : null;
-      let fee = parseInt((source.getAttribute('data-cost') || '').replace(/[^\d]/g, ''), 10);
-      if (isNaN(fee) && label) {
-        const feeText = Array.from(label.querySelectorAll('span, small, em'))
-          .map((n) => n.textContent)
-          .find((t) => /₦/.test(t));
-        fee = parseNaira(feeText || label.textContent);
-      }
-      if (isNaN(fee)) fee = 0;
-
-      let name = source.getAttribute('data-label') || '';
-      if (!name && label) {
-        const strong = label.querySelector('strong');
-        name = strong ? strong.textContent.trim() : '';
-      }
-      if (!name) name = radio ? radio.value : source.textContent.trim();
-      return { fee, name };
-    };
-
-    const readAddons = () => Array.from(calcForm.querySelectorAll('input[name="addons"]:checked')).map((box) => {
-      const label = box.closest('label');
-      let cost = parseInt((box.getAttribute('data-cost') || '').replace(/[^\d]/g, ''), 10);
-      if (isNaN(cost)) cost = 0;
-      let name = box.getAttribute('data-label') || '';
-      if (!name && label) {
-        const textEl = label.querySelector('span');
-        name = textEl ? textEl.textContent.trim() : '';
-      }
-      if (!name) name = box.value;
-      return { name, cost };
-    });
-
-    // Highlight the chosen option (inline border styles in the markup are static)
-    const syncSelectedStyles = () => {
-      calcForm.querySelectorAll('input[name="companySize"], input[name="addons"]').forEach((input) => {
-        const label = input.closest('label');
-        if (!label) return;
-        label.classList.add('calc-option');
-        label.classList.toggle('is-selected', input.checked);
-      });
-    };
-    calcForm.addEventListener('change', syncSelectedStyles);
-    syncSelectedStyles();
-
-    calcForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const size = readSize();
-      const addons = readAddons();
-      const addonsTotal = addons.reduce((sum, a) => sum + a.cost, 0);
-      const totalMonthly = size.fee + addonsTotal;
-      const fmt = (n) => '₦' + n.toLocaleString();
-
-      let addonsHtml = '';
-      if (addons.length > 0) {
-        addonsHtml = `
-          <div class="calc-result-addons">
-            <div class="calc-result-sublabel">Included Add-ons:</div>
-            ${addons.map((a) => `
-              <div class="calc-result-line">
-                <span>&bull; ${esc(a.name)}</span>
-                <span class="calc-result-amount">+${esc(fmt(a.cost))}</span>
-              </div>
-            `).join('')}
-          </div>
-        `;
-      }
-
-      const bookingHref = `/booking?estimatedFee=${encodeURIComponent(fmt(totalMonthly))}&scale=${encodeURIComponent(size.name)}`;
-
-      calcResult.innerHTML = `
-        <div class="calc-result-card" role="status" aria-live="polite">
-          <div class="calc-result-kicker">Estimated Advisory Retainer</div>
-          <div class="calc-result-total">
-            ${esc(fmt(totalMonthly))} <span>/ month</span>
-          </div>
-          <div class="calc-result-profile">
-            Enterprise Profile: <strong>${esc(size.name)}</strong>
-          </div>
-          ${addonsHtml}
-          <div class="calc-result-foot">
-            <div class="calc-result-note">
-              Includes dedicated lead consultant, monthly ledger governance, statutory compliance schedules, and board advisory sessions.
-            </div>
-            <a href="${esc(bookingHref)}" class="btn btn-primary calc-result-cta">
-              Book Advisory with this Estimate &rarr;
-            </a>
-          </div>
-        </div>
-      `;
-
-      // On stacked (mobile/tablet) layouts, bring the result into view
-      const rect = calcResult.getBoundingClientRect();
-      if (rect.top > window.innerHeight * 0.8 || rect.bottom < 0) {
-        calcResult.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' });
-      }
-    });
-  }
-
   // 9. BOOKING FORM SUBMISSION
   const bookingForm = document.getElementById('bookingForm');
   const bookingMsg = document.getElementById('bookingMsg');
 
   if (bookingForm) {
     const urlParams = new URLSearchParams(window.location.search);
-    const feeParam = urlParams.get('estimatedFee');
-    if (feeParam) {
-      const feeInput = bookingForm.querySelector('input[name="estimatedFee"]');
-      if (feeInput) feeInput.value = feeParam.slice(0, 80);
-      // Show the carried-over calculator estimate so the client knows it was attached.
-      const note = document.createElement('div');
-      note.className = 'form-alert info';
-      note.setAttribute('role', 'status');
-      note.innerHTML = `<i class="fa-solid fa-calculator" aria-hidden="true"></i> Your calculator estimate of <strong>${esc(feeParam.slice(0, 80))}</strong> per month will be attached to this request.`;
-      bookingForm.prepend(note);
-    }
-
     // Preselect a <select> option from a URL hint, matching value or label text.
     const preselect = (selectName, matcher) => {
       const select = bookingForm.querySelector(`select[name="${selectName}"]`);
@@ -599,27 +471,19 @@ document.addEventListener('DOMContentLoaded', () => {
       accounting: 'accounting & tax',
       corporatefinance: 'corporate finance',
       turnaround: 'corporate finance',
-      bankcharges: 'bank charges',
+      cac: 'cac company registration',
+      cacregistration: 'cac company registration',
+      companyregistration: 'cac company registration',
       assetverification: 'fixed asset',
       strategy: 'strategy',
-      training: 'hr training',
-      hr: 'hr training',
+      training: 'training services',
+      hr: 'training services',
       pencom: 'pencom'
     };
     const serviceParam = (urlParams.get('service') || '').toLowerCase().replace(/[^a-z]/g, '');
     if (serviceParam) {
       const hint = SERVICE_HINTS[serviceParam] || serviceParam;
       preselect('service', (text) => text.replace(/[^a-z& ]/g, '').includes(hint) || text.replace(/[^a-z]/g, '').includes(serviceParam));
-    }
-
-    // Map the calculator's enterprise scale (e.g. "Growing SME (10–100 Employees)") to company size.
-    const scaleParam = (urlParams.get('scale') || '').toLowerCase();
-    if (scaleParam) {
-      const sizeKey = /500\+|conglomerate|group|large/.test(scaleParam) ? 'large'
-        : /mid/.test(scaleParam) ? 'mid-market'
-          : /micro|startup|1.10\b/.test(scaleParam) ? 'micro'
-            : /sme|small|10.100/.test(scaleParam) ? 'sme' : '';
-      if (sizeKey) preselect('companySize', (text) => text.includes(sizeKey));
     }
 
     const dateInput = bookingForm.querySelector('input[type="date"][name="date"]');

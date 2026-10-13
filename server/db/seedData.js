@@ -20,17 +20,17 @@ module.exports = {
       features: [
         "Stocktaking & Asset Verification",
         "Debt Management & Recovery",
-        "Excess Bank Charges Recovery",
+        "CAC Company Registration & Annual Returns",
         "Treasury & Bank Reconciliation",
         "Cloud Accounting Software Setup (QuickBooks, Zoho, Sage)",
-        "Stress-Free Tax Authority Liaison (FIRS & LIRS)",
+        "Stress-Free Tax Authority Liaison (NRS & LIRS)",
         "Employee & Expatriate Tax Planning",
         "VAT Registration & Monthly Compliance"
       ],
       deliverables: [
         "Audited management accounts & reconciliations",
         "Monthly tax remittance receipts & Tax Clearance Certificates (TCC)",
-        "Bank charge excess audit recovery report",
+        "CAC registration certificates & compliance filings",
         "Cloud-based operational accounting chart of accounts"
       ]
     },
@@ -92,10 +92,10 @@ module.exports = {
       id: "hr-services",
       pillar: "04",
       pillarName: "HR Services & Development",
-      title: "HR Consulting & CMD-Certified Training",
+      title: "HR Consulting & Training",
       slug: "hr-services",
-      shortDesc: "Talent acquisition, executive capacity building, CMD-certified training, and statutory certifications.",
-      fullDesc: "Comprehensive human resource management from recruitment to training certified by the Centre for Management Development (CMD). We optimize human capital performance, structure competitive compensation packages, perform mystery shopping background checks, and procure statutory certifications including PENCOM, NSITF, and ITF.",
+      shortDesc: "Talent acquisition, executive capacity building, staff training, and statutory certifications.",
+      fullDesc: "Comprehensive human resource management from recruitment to staff training and capacity building. We optimize human capital performance, structure competitive compensation packages, perform mystery shopping background checks, and procure statutory certifications including PENCOM, NSITF, and ITF.",
       icon: "fa-users-gear",
       color: "emerald",
       features: [
@@ -103,14 +103,14 @@ module.exports = {
         "HR Operations, Policies & Shared Services Setup",
         "Compensation, Benefits & Performance Architecture",
         "Background Checks, Credential Verification & Mystery Shopping",
-        "Training Services: Certified by Centre for Management Development (CMD)",
+        "Staff Training & Capacity Building Programmes",
         "PENCOM, NSITF, ITF & BPP Statutory Certificates",
         "Expatriate Quota & Immigration Advisory",
         "Staff Capability Matrix & Succession Planning"
       ],
       deliverables: [
         "Complete Employee Handbook & HR Policy Manual",
-        "CMD accredited training certificates & impact assessment",
+        "Training completion certificates & impact assessment",
         "Statutory compliance clearance certificates (PENCOM/ITF/NSITF)",
         "Competitive salary structure & incentive grading scheme"
       ]
@@ -304,15 +304,15 @@ module.exports = {
       subtitle: "Upstream/Downstream Support, Haulage, Ancillary & Exports",
       icon: "fa-truck-fast",
       image: "assets/img/banners/contract-signing.jpg",
-      description: "Navigating heavy regulatory compliance (NUPRC, NCDMB), foreign exchange volatility, high fleet operating costs, and recovering unapproved financial institution debit charges.",
+      description: "Navigating heavy regulatory compliance (NUPRC, NCDMB), foreign exchange volatility, high fleet operating costs, and keeping company registrations and statutory filings current.",
       challenges: [
-        "Systemic excess bank charges and unapproved interest markups on trade facilities",
+        "Complex company structures, CAC filings and regulatory registrations",
         "High fleet maintenance costs, asset depreciation, and fuel supply credit risks",
         "Export documentation, repatriation guidelines, and statutory levies"
       ],
       solutions: [
-        "Algorithmic excess bank charges forensic review and cash recovery",
-        "CMD-certified fleet safety and supply chain management training",
+        "CAC registration, annual returns and regulatory compliance support",
+        "Fleet safety and supply chain management training",
         "Local content certification, NCDMB compliance, and export tax incentives"
       ]
     },
@@ -367,7 +367,7 @@ module.exports = {
       solutions: [
         "Specialized fund accounting policies and trust retention audits",
         "Full statutory certification procurement (PENCOM, ITF, NSITF, BPP)",
-        "CMD-certified administrative capacity building and compensation design"
+        "Administrative capacity building and compensation design"
       ]
     },
     {
@@ -385,7 +385,7 @@ module.exports = {
       solutions: [
         "Tailored-For-You (TFY) outsourced financial accounting and monthly oversight",
         "Affordable bank credit facilitation and debt restructuring",
-        "Stress-free tax liaison with FIRS and State IRS to secure Tax Clearance"
+        "Stress-free tax liaison with the NRS and State IRS to secure Tax Clearance"
       ]
     }
   ],
@@ -398,7 +398,7 @@ module.exports = {
       role: "Managing Consultant",
       image: null, // TODO(client-assets): add headshot
       bio: "A distinguished Fellow of the Institute of Chartered Accountants of Nigeria (FCA), Associate of the Chartered Institute of Taxation of Nigeria (ACIT), and Associate of the Chartered Institute of Stockbrokers (ACS). With over two decades of cutting-edge practice spanning corporate finance, forensic tax advisory, and strategic turnaround management, Mr. Adewale leads THEWHY Consulting with an unwavering commitment to enterprise resilience and wealth preservation.",
-      specialties: ["Forensic Tax Advisory", "Excess Bank Charges Recovery", "Corporate Finance & M&A", "Capital Restructuring"]
+      specialties: ["Forensic Tax Advisory", "CAC Company Registration", "Corporate Finance & M&A", "Capital Restructuring"]
     },
     {
       id: "dolapo-wale-kehinde",
@@ -406,8 +406,8 @@ module.exports = {
       credentials: "B.Tech, MBA (Finance), PHRi",
       role: "Head, Training and HR Consulting",
       image: null, // TODO(client-assets): add headshot
-      bio: "A certified Professional in Human Resources - International (PHRi) with an MBA in Finance. She directs THEWHY Consulting's human capital advisory, organizational design, executive capacity building, and CMD-accredited corporate training programs. She brings deep competence in competency framework design, executive headhunting, and statutory human resource compliance across diverse industrial sectors.",
-      specialties: ["CMD-Certified Training", "Executive Talent Acquisition", "Compensation & Grading", "Statutory Certifications (PENCOM/ITF)"]
+      bio: "A certified Professional in Human Resources - International (PHRi) with an MBA in Finance. She directs THEWHY Consulting's human capital advisory, organizational design, executive capacity building, and corporate training programs. She brings deep competence in competency framework design, executive headhunting, and statutory human resource compliance across diverse industrial sectors.",
+      specialties: ["Corporate Training", "Executive Talent Acquisition", "Compensation & Grading", "Statutory Certifications (PENCOM/ITF)"]
     },
     {
       id: "seun-olaniyi",
@@ -439,7 +439,7 @@ module.exports = {
     },
     {
       id: "t-3",
-      quote: "Trustworthy with a proven track record. Their excess bank charges recovery audit put over ₦80 Million straight back into our company's working capital.",
+      quote: "Trustworthy with a proven track record. They resolved a long-running tax dispute and put our company's statutory filings back in order.",
       author: "Finance Director",
       company: "West Africa Energy & Industrial Supplies",
       sector: "Oil & Gas Ancillary",
@@ -455,7 +455,7 @@ module.exports = {
     },
     {
       id: "t-5",
-      quote: "Consistently delivering quality with personal touch. Their CMD-accredited executive training transformed our middle management into proactive leaders.",
+      quote: "Consistently delivering quality with personal touch. Their executive training transformed our middle management into proactive leaders.",
       author: "Head of People & Operations",
       company: "Fintech Dynamics Africa",
       sector: "Information Technology & Fintech",
@@ -463,43 +463,30 @@ module.exports = {
     }
   ],
 
+  // Powers the public Seminar page (/seminar) and the admin "Seminar Page" tab.
   launchCampaign: {
-    title: "THEWHY Executive Business Acceleration & SME Scaling Bootcamp",
-    badge: "CMD-Certified Executive Training Programme",
-    headline: "Transform Your SME into an Enduring Conglomerate",
-    subtitle: "A practical, high-impact 6-week strategic immersion designed for Founders, Managing Directors, and Finance Leaders to master tax resilience, capital structuring, and operational scalability.",
+    title: "THEWHY Executive Business Seminar",
+    badge: "Executive Seminar",
+    headline: "Practical Strategy for Nigerian Business Leaders",
+    subtitle: "A focused, practical seminar for founders, managing directors and finance leaders on tax compliance under the Nigeria Revenue Service (NRS), company structuring and sustainable growth.",
     startDate: "November 2026",
-    format: "Hybrid (In-Person Lagos HQ & Executive Virtual Masterclasses)",
-    targetAudience: "SME Founders, Managing Directors, Chief Financial Officers, and Business Owners preparing for institutional scale or investment.",
+    format: "In-person at our Lagos HQ, with a virtual option",
+    targetAudience: "Founders, managing directors, finance leaders and business owners",
     status: "Active",
     benefits: [
-      "Master the 'Chessboard Turnaround' framework to outmaneuver industry competitors",
-      "End-to-end tax shielding and audit-proofing techniques for FIRS & State IRS",
-      "How to access bankable credit lines, private equity, and low-interest loans in Nigeria",
-      "Hands-on deployment of cloud financial dashboards and AI workflow automation",
-      "Official certificate accredited by the Centre for Management Development (CMD)",
-      "Exclusive access to THEWHY's network of commercial bank credit executives and angel investors"
-    ],
-    curriculum: [
-      { week: "Module 01", title: "Financial Diagnostics & Cloud Treasury Setup", desc: "Balance sheet stress testing, cash flow leak audit, and cloud software implementation." },
-      { week: "Module 02", title: "Tax Optimization & Statutory Clearance (TCC/PENCOM)", desc: "Legal tax shelters, pioneer status, withholding tax reconciliation, and statutory certifications." },
-      { week: "Module 03", title: "Corporate Finance & Capital Structuring", desc: "Preparing bankable project reports, equity fundraising, and structuring commercial credit lines." },
-      { week: "Module 04", title: "AI-Powered Operational Efficiency", desc: "Harnessing practical AI tools for cost reduction, market intelligence, and automated client onboarding." },
-      { week: "Module 05", title: "Corporate Governance & Board Architecture", desc: "Building independent advisory boards, statutory registers, and founder succession protocols." },
-      { week: "Module 06", title: "Growth Acceleration & Institutional Scale", desc: "Mergers, joint ventures, new market expansion, and final executive capstone pitch." }
-    ],
-    faqs: [
-      { q: "Who is this programme tailored for?", a: "Business owners, CEOs, Managing Directors, and Finance Controllers of established SMEs operating with annual turnover from ₦25M to ₦2B+ who want to scale into enduring institutions." },
-      { q: "Is the training certified by statutory bodies?", a: "Yes. All training is fully certified by the Centre for Management Development (CMD), qualifying participants for mandatory professional development credits and procurement bids." },
-      { q: "What is the format and duration?", a: "The programme runs for 6 weeks in a flexible hybrid format: weekend executive workshops at our Lagos training facility and weekly virtual interactive strategy masterclasses." },
-      { q: "How do I register or sponsor team members?", a: "Submit the registration form on this page or contact our training desk directly at info@thewhy.ng or +234-8034-99-23-18. Group discounts are available for corporate teams." }
+      "Stay compliant under the NRS tax regime and avoid costly assessments",
+      "Get CAC registration, annual returns and statutory filings right",
+      "Structure your business to access bank credit and investment",
+      "Move your books to cloud accounting and automate routine finance work",
+      "Build sound HR policies and meet PENCOM, ITF and NSITF obligations",
+      "Network with peer business leaders and THEWHY's senior consultants"
     ]
   },
 
   siteSettings: {
-    announcement: "Now Enrolling: THEWHY SME Executive Strategic Bootcamp (CMD Certified) — Early Bird Intake Open.",
+    announcement: "Now Open: Seat registration for the THEWHY Executive Business Seminar.",
     heroHeadline: "We Help Small & Medium Businesses Evolve Into Resilient Conglomerates",
-    heroSubtitle: "Boutique management consulting, accounting & tax advisory, corporate finance, and CMD-certified executive development in Lagos, Nigeria.",
+    heroSubtitle: "Boutique management consulting, accounting & tax advisory, corporate finance, CAC registration, and HR and training services in Lagos, Nigeria.",
     phone: "+234-8034-99-23-18",
     email: "info@thewhy.ng",
     addressYaba: "1a Hughes Avenue, Alagomeji, Yaba, Lagos, Nigeria",
@@ -507,104 +494,6 @@ module.exports = {
     affiliate: "An affiliate of Wale Kehinde & Co. (Chartered Accountants)"
   },
 
-  caseStudies: [
-    {
-      "id": "cs-1",
-      "title": "₦82.4M Recovered in Excess Bank Charges for National Logistics Group",
-      "sector": "Logistics & Supply Chain",
-      "category": "Accounting & Tax",
-      "summary": "A 10-year forensic review of multi-bank loan accounts and trade transactions revealed systemic unapproved excess interest and debit fees.",
-      "metrics": [
-        {
-          "label": "Amount Recovered",
-          "value": "₦82.4M"
-        },
-        {
-          "label": "Turnaround Time",
-          "value": "4 Months"
-        },
-        {
-          "label": "Annual Savings",
-          "value": "₦19.5M"
-        }
-      ],
-      "challenge": "The client was servicing multiple facilities across three commercial banks in Nigeria, experiencing continuous cash flow squeeze despite healthy operational turnover.",
-      "strategy": "Our audit team conducted algorithmic transaction verification across 7 years of bank statements, calculating actual vs. contracted tariff rates and representing the company at direct mediation sessions.",
-      "result": "All 3 banks issued formal credit reconciliations totaling ₦82.4 million directly back into the client's working capital account with zero litigation friction."
-    },
-    {
-      "id": "cs-2",
-      "title": "Series A Restructuring & ₦450M Corporate Finance for Lagos Fintech",
-      "sector": "Fintech & Software",
-      "category": "Corporate Finance",
-      "summary": "Restructured financial model and balance sheet architecture to prepare a fast-scaling payments startup for institutional investment.",
-      "metrics": [
-        {
-          "label": "Capital Raised",
-          "value": "₦450M"
-        },
-        {
-          "label": "Valuation Increase",
-          "value": "+140%"
-        },
-        {
-          "label": "Due Diligence Time",
-          "value": "3 Weeks"
-        }
-      ],
-      "challenge": "The startup had rapid top-line traction but disorganized historical book records, unfiled CAC post-incorporation returns, and no formal unit economic forecasting.",
-      "strategy": "THEWHY deployed cloud accounting systems, restructured founder shareholding, cleared statutory filings, and built a dynamic 5-year investment projection model.",
-      "result": "The firm passed institutional investor due diligence with zero audit qualifications and closed ₦450M in blended equity and debt growth financing."
-    },
-    {
-      "id": "cs-3",
-      "title": "Debt Turnaround & Asset Verification (₦3.2B Assets) for Manufacturing Firm",
-      "sector": "Manufacturing",
-      "category": "Strategy & Solutions",
-      "summary": "Comprehensive fixed asset verification and debt turnaround strategy preventing hostile creditor liquidation during economic volatility.",
-      "metrics": [
-        {
-          "label": "Assets Verified",
-          "value": "₦3.2B"
-        },
-        {
-          "label": "Debt Discount Won",
-          "value": "35%"
-        },
-        {
-          "label": "Jobs Preserved",
-          "value": "120+"
-        }
-      ],
-      "challenge": "Facing currency devaluation and soaring raw material costs, the enterprise defaulted on commercial paper and faced imminent receivership.",
-      "strategy": "Using our Chessboard Turnaround framework, we executed an independent business review, tagged and valued physical assets across 3 plants, and negotiated a structured debt-equity swap.",
-      "result": "Creditors agreed to a 3-year repayment moratorium and 35% interest haircut, returning the manufacturer to EBITDA positive within 9 months."
-    },
-    {
-      "id": "cs-4",
-      "title": "CMD-Certified Workforce Upskilling & Compensation Overhaul",
-      "sector": "Healthcare & Pharmaceuticals",
-      "category": "HR Services",
-      "summary": "Re-engineered organizational design and trained 85 executives and clinical administrators under Centre for Management Development standards.",
-      "metrics": [
-        {
-          "label": "Staff Upskilled",
-          "value": "85 Leaders"
-        },
-        {
-          "label": "Retention Rate",
-          "value": "96%"
-        },
-        {
-          "label": "Statutory Badges",
-          "value": "PENCOM, ITF, NSITF"
-        }
-      ],
-      "challenge": "High attrition of skilled managers, lack of statutory PENCOM/ITF certifications impeding public hospital contract biddings.",
-      "strategy": "Conducted total compensation benchmarking, instituted performance-based appraisal metrics, delivered CMD accredited training, and secured all statutory procurement certificates.",
-      "result": "Employee retention surged to 96%, and the company qualified for and won 2 landmark federal healthcare supply tenders."
-    }
-  ],
 
   faqs: [
     {
@@ -629,13 +518,13 @@ module.exports = {
     },
     {
       "id": "faq-5",
-      "question": "How do you handle excess bank charges recovery?",
-      "answer": "Commercial banks in Nigeria frequently apply unapproved tariffs, excessive interest rate spikes, and duplicate ledger maintenance fees. We run algorithmic forensic audits on your multi-year bank statements, establish discrepancies against CBN monetary policy circulars, and negotiate direct refunds credited back to your account."
+      "question": "Can you handle our CAC company registration?",
+      "answer": "Yes. We advise on the right business structure, register companies, business names and incorporated trustees with the Corporate Affairs Commission, and keep annual returns and statutory filings up to date afterwards."
     },
     {
       "id": "faq-6",
-      "question": "Are your management and HR training courses accredited?",
-      "answer": "Yes. All our leadership, management, and workforce development training programs are officially certified by the Centre for Management Development (CMD) in Nigeria, ensuring institutional credibility and compliance."
+      "question": "Do you run training for our staff?",
+      "answer": "Yes. Our HR & Training Services team designs practical leadership, management and workforce training around your business, and supports PENCOM, ITF and NSITF compliance."
     }
   ],
 

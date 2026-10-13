@@ -287,9 +287,10 @@ test('public content APIs respond', async () => {
   const team = await request(app).get('/api/team');
   assert.ok(team.body.data.length >= 3);
   const launch = await request(app).get('/api/launch');
-  assert.ok(launch.body.data.title);
-  const cs = await request(app).get('/api/case-studies');
-  assert.ok(cs.body.data.length > 0);
+  assert.equal(launch.body.data.title, 'THEWHY Executive Business Seminar');
+  assert.ok(!/CMD|bootcamp/i.test(JSON.stringify(launch.body.data)), 'seminar data must not mention CMD or a bootcamp');
+  // Case studies were removed at the client's request.
+  assert.equal((await request(app).get('/api/case-studies')).status, 404);
   const faqs = await request(app).get('/api/faqs');
   assert.ok(faqs.body.data.length > 0);
   const insights = await request(app).get('/api/insights');

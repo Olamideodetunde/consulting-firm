@@ -27,11 +27,10 @@ const STATIC_ROUTES = [
   { loc: '/industries', priority: '0.7', changefreq: 'monthly' },
   { loc: '/team', priority: '0.7', changefreq: 'monthly' },
   { loc: '/insights', priority: '0.8', changefreq: 'weekly' },
-  { loc: '/launch', priority: '0.8', changefreq: 'weekly' },
+  { loc: '/rent-an-accountant', priority: '0.9', changefreq: 'monthly' },
+  { loc: '/seminar', priority: '0.8', changefreq: 'weekly' },
   { loc: '/contact', priority: '0.7', changefreq: 'yearly' },
   { loc: '/booking', priority: '0.8', changefreq: 'yearly' },
-  { loc: '/calculator', priority: '0.6', changefreq: 'monthly' },
-  { loc: '/case-studies', priority: '0.7', changefreq: 'monthly' },
   { loc: '/privacy', priority: '0.3', changefreq: 'yearly' },
   { loc: '/terms', priority: '0.3', changefreq: 'yearly' }
 ];
@@ -44,11 +43,14 @@ const HTML_REDIRECTS = {
   'industries.html': '/industries',
   'team.html': '/team',
   'insights.html': '/insights',
-  'launch.html': '/launch',
+  'seminar.html': '/seminar',
+  'rent-an-accountant.html': '/rent-an-accountant',
+  // Retired pages (client corrections, Oct 2026)
+  'launch.html': '/seminar',
   'contact.html': '/contact',
   'booking.html': '/booking',
-  'calculator.html': '/calculator',
-  'case-studies.html': '/case-studies',
+  'calculator.html': '/booking',
+  'case-studies.html': '/',
   'privacy.html': '/privacy',
   'terms.html': '/terms',
   'admin.html': '/admin'
@@ -57,7 +59,11 @@ const HTML_REDIRECTS = {
 const ALIAS_REDIRECTS = {
   '/our-team': '/team',
   '/who-we-serve': '/industries',
-  '/product-launch': '/launch'
+  '/product-launch': '/seminar',
+  // Retired pages (client corrections, Oct 2026)
+  '/launch': '/seminar',
+  '/calculator': '/booking',
+  '/case-studies': '/'
 };
 
 function queryString(req) {

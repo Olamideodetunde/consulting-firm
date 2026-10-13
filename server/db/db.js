@@ -938,17 +938,36 @@ async function updateSiteSettings(values) {
   return getSiteSettings();
 }
 
+// The campaign used to describe a CMD-certified 6-week bootcamp; the client
+// replaced it with an executive seminar (Oct 2026). Records still holding the
+// old copy get the seminar wording, keeping their date, format and status.
+// Anything saved from the admin afterwards no longer matches and is kept as-is.
+const LEGACY_CAMPAIGN = /\bCMD\b|bootcamp|6-week/i;
+const SEMINAR_COPY_KEYS = ['title', 'badge', 'headline', 'subtitle', 'targetAudience', 'benefits'];
+
+function upgradeLegacyCampaign(campaign) {
+  const c = { ...campaign };
+  delete c.curriculum;
+  delete c.faqs;
+  if (![c.title, c.badge, c.headline, c.subtitle].some(v => LEGACY_CAMPAIGN.test(String(v || '')))) return c;
+  for (const key of SEMINAR_COPY_KEYS) c[key] = clone(seedData.launchCampaign[key]);
+  if (LEGACY_CAMPAIGN.test(String(c.format || '')) || /Masterclass/i.test(String(c.format || ''))) {
+    c.format = seedData.launchCampaign.format;
+  }
+  return c;
+}
+
 async function getLaunchCampaign() {
   if (isMysql()) {
     const rows = await q('SELECT data FROM launch_campaign WHERE id = 1');
     if (!rows.length) return clone(seedData.launchCampaign);
     try {
-      return { ...seedData.launchCampaign, ...JSON.parse(rows[0].data) };
+      return upgradeLegacyCampaign({ ...seedData.launchCampaign, ...JSON.parse(rows[0].data) });
     } catch (e) {
       return clone(seedData.launchCampaign);
     }
   }
-  return loadStore().launchCampaign;
+  return upgradeLegacyCampaign(loadStore().launchCampaign || seedData.launchCampaign);
 }
 
 /** `values` must already be filtered to allowlisted keys by the caller. */
@@ -974,7 +993,6 @@ const getServices = () => seedData.services || [];
 const getIndustries = () => seedData.industries || [];
 const getTeam = () => seedData.team || [];
 const getTestimonials = () => seedData.testimonials || [];
-const getCaseStudies = () => seedData.caseStudies || [];
 const getFaqs = () => seedData.faqs || [];
 
 // ---------------------------------------------------------------------------
@@ -1034,7 +1052,6 @@ module.exports = {
   getIndustries,
   getTeam,
   getTestimonials,
-  getCaseStudies,
   getFaqs,
   getStats
 };

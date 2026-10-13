@@ -184,3 +184,47 @@ test('mailer sends through the Brevo API when BREVO_API_KEY is set', async () =>
     mailer._reset();
   }
 });
+
+test('legacy CMD bootcamp campaign records are served as the seminar', async () => {
+  const os = require('os');
+  const fs = require('fs');
+  const path = require('path');
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'whyng-campaign-'));
+  const file = path.join(dir, 'db.json');
+  fs.writeFileSync(file, JSON.stringify({
+    launchCampaign: {
+      title: 'THEWHY Executive Business Acceleration & SME Scaling Bootcamp',
+      badge: 'CMD-Certified Executive Training Programme',
+      headline: 'Transform Your SME into an Enduring Conglomerate',
+      subtitle: 'A 6-week strategic immersion',
+      startDate: 'January 2027',
+      format: 'Hybrid (In-Person Lagos HQ & Executive Virtual Masterclasses)',
+      status: 'Active',
+      curriculum: [{ week: 'Module 01' }]
+    }
+  }));
+  const script = `
+    process.env.DB_MODE = 'json';
+    process.env.DB_JSON_PATH = ${JSON.stringify(file)};
+    const db = require(${JSON.stringify(path.join(__dirname, '..', 'server', 'db', 'db.js'))});
+    db.initDb().then(() => db.getLaunchCampaign()).then(c => { console.log(JSON.stringify(c)); process.exit(0); });
+  `;
+  const { spawnSync } = require('child_process');
+  const run = spawnSync(process.execPath, ['-e', script], { cwd: os.tmpdir(), encoding: 'utf8', env: { ...process.env, BREVO_API_KEY: '' } });
+  assert.equal(run.status, 0, run.stderr);
+  const c = JSON.parse(run.stdout.trim().split('\n').pop());
+  assert.equal(c.title, 'THEWHY Executive Business Seminar');
+  assert.equal(c.badge, 'Executive Seminar');
+  assert.equal(c.startDate, 'January 2027', 'keeps the admin-set date');
+  assert.equal(c.format, 'In-person at our Lagos HQ, with a virtual option');
+  assert.ok(!('curriculum' in c), 'syllabus removed');
+  assert.ok(!/CMD|bootcamp|6-week/i.test(JSON.stringify(c)));
+  fs.rmSync(dir, { recursive: true, force: true });
+});
+
+test('inquiry emails distinguish seminar, Rent-An-Accountant and general requests', () => {
+  const mailer = require('../server/services/mailer');
+  assert.equal(mailer._inquiryKind('Executive Business Seminar'), 'seminar');
+  assert.equal(mailer._inquiryKind('Rent-An-Accountant (Dedicated)'), 'accountant');
+  assert.equal(mailer._inquiryKind('Tax Defense'), 'general');
+});

@@ -509,14 +509,65 @@ function notifyNewContact(c) {
   }
 }
 
+/** Seminar registration, Rent-An-Accountant request, or a general inquiry. */
+function inquiryKind(serviceRequired) {
+  const sr = String(serviceRequired || '');
+  if (/seminar|bootcamp|programme|program|launch/i.test(sr)) return 'seminar';
+  if (/rent-an-accountant|rent an accountant/i.test(sr)) return 'accountant';
+  return 'general';
+}
+
+const INQUIRY_COPY = {
+  seminar: {
+    internalSubject: name => `New seminar registration: ${name}`,
+    internalTitle: 'New seminar registration',
+    internalEyebrow: 'Seminar registration',
+    subject: 'Your THEWHY seminar registration',
+    title: 'Your seat request has been received',
+    eyebrow: 'Seminar registration',
+    preheader: 'We will confirm your seat and send the date, venue and fee details.',
+    paragraph: inq => `Thank you for registering for the ${inq.serviceRequired}. We are glad you are investing in your leadership and your business.`,
+    next: [
+      'We confirm your seat within 24 hours.',
+      'You receive the date, venue and fee details by email.',
+      'Joining instructions are sent before the seminar.'
+    ]
+  },
+  accountant: {
+    internalSubject: name => `New Rent-An-Accountant request: ${name}`,
+    internalTitle: 'New Rent-An-Accountant request',
+    internalEyebrow: 'Rent-An-Accountant',
+    subject: 'Your Rent-An-Accountant request | THEWHY Consulting',
+    title: 'Your request has been received',
+    eyebrow: 'Rent-An-Accountant',
+    preheader: 'A consultant will contact you within 24 hours to arrange a free consultation.',
+    paragraph: () => 'Thank you for your interest in our Rent-An-Accountant service. A consultant will contact you within 24 hours to arrange a free consultation.',
+    next: [
+      'We review your books, transaction volume and filing obligations.',
+      'We recommend the right engagement and send a fixed monthly quote.',
+      'Your matched accountant starts, with partner-reviewed monthly reports.'
+    ]
+  },
+  general: {
+    internalSubject: name => `New inquiry: ${name}`,
+    internalTitle: 'New inquiry',
+    internalEyebrow: 'Service inquiry',
+    subject: 'Your inquiry | THEWHY Consulting',
+    title: 'Your inquiry has been received',
+    eyebrow: 'Inquiry received',
+    preheader: 'A consultant will respond within 24 hours.',
+    paragraph: () => 'Thank you for your inquiry. A consultant will review it and respond within 24 hours.',
+    next: []
+  }
+};
+
 function notifyNewInquiry(inq) {
   try {
-    const isApplication = /bootcamp|programme|program|launch/i.test(inq.serviceRequired || '');
-    const kind = isApplication ? 'programme application' : 'inquiry';
+    const copy = INQUIRY_COPY[inquiryKind(inq.serviceRequired)];
     internal({
-      subject: `New ${kind}: ${inq.name}`,
-      title: isApplication ? 'New programme application' : 'New inquiry',
-      eyebrow: isApplication ? 'Bootcamp application' : 'Service inquiry',
+      subject: copy.internalSubject(inq.name),
+      title: copy.internalTitle,
+      eyebrow: copy.internalEyebrow,
       ref: inq.ref_code,
       rows: [
         ['Name', inq.name], ['Company', inq.company], ['Email', inq.email],
@@ -527,27 +578,15 @@ function notifyNewInquiry(inq) {
     });
     clientConfirmation({
       to: inq.email,
-      subject: isApplication ? 'Your THEWHY programme application' : 'Your inquiry | THEWHY Consulting',
-      title: isApplication ? 'Your application has been received' : 'Your inquiry has been received',
-      eyebrow: isApplication ? 'Programme application' : 'Inquiry received',
-      preheader: isApplication
-        ? 'Our admissions panel will contact you with next steps.'
-        : 'A consultant will respond within 24 hours.',
+      subject: copy.subject,
+      title: copy.title,
+      eyebrow: copy.eyebrow,
+      preheader: copy.preheader,
       greeting: `Dear ${inq.name},`,
-      paragraphs: [
-        isApplication
-          ? `Thank you for applying to the ${inq.serviceRequired}. We are glad you are investing in your leadership and your business.`
-          : 'Thank you for your inquiry. A consultant will review it and respond within 24 hours.'
-      ],
+      paragraphs: [copy.paragraph(inq)],
       ref: inq.ref_code,
       rows: [['Programme / service', inq.serviceRequired], ['Company', inq.company]],
-      next: isApplication
-        ? [
-          'Our admissions panel reviews your application and business profile.',
-          'We contact you to confirm your seat, cohort dates and programme fees.',
-          'You receive your onboarding pack before the first session.'
-        ]
-        : []
+      next: copy.next
     });
   } catch (err) {
     console.error('[MAIL] notifyNewInquiry error:', err.message);
@@ -569,6 +608,7 @@ module.exports = {
   notifyNewContact,
   notifyNewInquiry,
   _parseAddress: parseAddress,
+  _inquiryKind: inquiryKind,
   _layout: layout,
   _detailsTable: detailsTable,
   _reset

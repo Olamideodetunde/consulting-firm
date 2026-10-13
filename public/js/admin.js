@@ -1,6 +1,6 @@
 /**
  * THEWHY CONSULTING - Executive Management Dashboard
- * Blog CRUD, bookings, inquiries, contact messages, newsletter, launch page,
+ * Blog CRUD, bookings, inquiries, contact messages, newsletter, seminar page,
  * site settings and media library.
  *
  * Auth: server-side session cookie (HttpOnly). All requests use
@@ -866,7 +866,7 @@
   });
 
   // -------------------------------------------------------------------------
-  // 9. PRODUCT LAUNCH PAGE
+  // 9. SEMINAR PAGE (stored as the launch campaign)
   // -------------------------------------------------------------------------
   async function fetchLaunchData() {
     try {
@@ -901,7 +901,7 @@
       });
       flash(msg, 'Saved successfully!');
     } catch (err) {
-      reportError('Error saving launch page', err);
+      reportError('Error saving seminar page', err);
     }
   });
 

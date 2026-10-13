@@ -23,9 +23,12 @@ test('sitemap.xml is dynamic: clean routes plus published articles', async () =>
   const res = await request(app).get('/sitemap.xml');
   assert.equal(res.status, 200);
   assert.match(res.headers['content-type'], /xml/);
-  for (const p of ['/', '/about', '/services', '/industries', '/team', '/insights', '/launch', '/contact',
-    '/booking', '/calculator', '/case-studies', '/privacy', '/terms']) {
+  for (const p of ['/', '/about', '/services', '/industries', '/team', '/insights', '/rent-an-accountant',
+    '/seminar', '/contact', '/booking', '/privacy', '/terms']) {
     assert.ok(res.text.includes(`<loc>https://why.ng${p}</loc>`), `missing ${p}`);
+  }
+  for (const retired of ['/launch', '/calculator', '/case-studies']) {
+    assert.ok(!res.text.includes(`<loc>https://why.ng${retired}</loc>`), `retired page ${retired} still in sitemap`);
   }
   assert.ok(res.text.includes('<loc>https://why.ng/insights/cac-annual-returns-guide-2026</loc>'));
   assert.ok(res.text.includes(`/insights/${created.body.data.slug}</loc>`));
@@ -38,12 +41,20 @@ test('*.html URLs 301-redirect to clean routes (query preserved)', async () => {
     '/about.html': '/about',
     '/index.html': '/',
     '/services.html': '/services',
-    '/case-studies.html': '/case-studies',
+    '/seminar.html': '/seminar',
+    '/rent-an-accountant.html': '/rent-an-accountant',
     '/contact.html?x=1': '/contact?x=1',
     '/admin.html': '/admin',
     '/our-team': '/team',
     '/who-we-serve': '/industries',
-    '/product-launch': '/launch',
+    '/product-launch': '/seminar',
+    // Retired pages (client corrections, Oct 2026)
+    '/launch': '/seminar',
+    '/launch.html': '/seminar',
+    '/calculator': '/booking',
+    '/calculator.html': '/booking',
+    '/case-studies': '/',
+    '/case-studies.html': '/',
     '/article?slug=pencom-clearance-statutory-guide': '/insights/pencom-clearance-statutory-guide',
     '/article.html': '/insights'
   };
@@ -57,8 +68,8 @@ test('*.html URLs 301-redirect to clean routes (query preserved)', async () => {
 });
 
 test('clean page routes respond 200 with no-cache', async () => {
-  for (const p of ['/', '/about', '/services', '/industries', '/team', '/insights', '/launch', '/contact',
-    '/booking', '/calculator', '/case-studies', '/privacy', '/terms', '/admin']) {
+  for (const p of ['/', '/about', '/services', '/industries', '/team', '/insights', '/rent-an-accountant',
+    '/seminar', '/contact', '/booking', '/privacy', '/terms', '/admin']) {
     const res = await request(app).get(p);
     assert.equal(res.status, 200, `${p} -> ${res.status}`);
     assert.match(res.headers['content-type'], /html/);
