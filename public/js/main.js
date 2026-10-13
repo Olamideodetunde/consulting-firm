@@ -265,8 +265,9 @@ document.addEventListener('DOMContentLoaded', () => {
   if (counterElements.length > 0) {
     const finalText = (el) => {
       const target = parseInt(el.getAttribute('data-target'), 10) || 0;
+      const prefix = el.getAttribute('data-prefix') || '';
       const suffix = el.getAttribute('data-suffix') || '';
-      return target.toLocaleString() + suffix;
+      return prefix + target.toLocaleString() + suffix;
     };
     const setFinal = (el) => {
       const span = el.querySelector('span') || el;
@@ -275,6 +276,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const animateCounter = (el) => {
       const target = parseInt(el.getAttribute('data-target'), 10) || 0;
+      const prefix = el.getAttribute('data-prefix') || '';
       const suffix = el.getAttribute('data-suffix') || '';
       const duration = 1400;
       const startTime = performance.now();
@@ -283,11 +285,11 @@ document.addEventListener('DOMContentLoaded', () => {
       const updateCount = (currentTime) => {
         const progress = Math.min((currentTime - startTime) / duration, 1);
         const easeOut = 1 - (1 - progress) * (1 - progress);
-        span.textContent = Math.floor(easeOut * target).toLocaleString() + suffix;
+        span.textContent = prefix + Math.floor(easeOut * target).toLocaleString() + suffix;
         if (progress < 1) {
           requestAnimationFrame(updateCount);
         } else {
-          span.textContent = target.toLocaleString() + suffix;
+          span.textContent = prefix + target.toLocaleString() + suffix;
         }
       };
       requestAnimationFrame(updateCount);

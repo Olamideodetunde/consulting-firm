@@ -5465,3 +5465,24 @@ body.drawer-open .scroll-top {
     grid-template-columns: 1fr;
   }
 }
+
+/* Services: photo banner at the top of each practice card (bleeds to the card edges) */
+.practice-card-media {
+  margin: calc(-1 * clamp(1.5rem, 4vw, 3rem)) calc(-1 * clamp(1.5rem, 4vw, 3rem)) 1.75rem;
+  height: clamp(190px, 24vw, 280px);
+  border-radius: var(--radius) var(--radius) 0 0;
+  overflow: hidden;
+  background: var(--paper);
+}
+.practice-card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 35%;
+}
+@media (max-width: 768px) {
+  /* Match the mobile card padding override (clamp(1.25rem, 4vw, 1.75rem)) */
+  .practice-card-media {
+    margin: calc(-1 * clamp(1.25rem, 4vw, 1.75rem)) calc(-1 * clamp(1.25rem, 4vw, 1.75rem)) 1.5rem;
+  }
+}
