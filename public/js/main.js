@@ -640,24 +640,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (img.complete && img.naturalWidth === 0 && img.getAttribute('src')) applyImgFallback(img);
   });
 
-  const articleShareBtn = document.getElementById('articleShareBtn');
-  if (articleShareBtn) {
-    articleShareBtn.addEventListener('click', async () => {
-      const url = window.location.href;
-      try {
-        if (navigator.share) {
-          await navigator.share({ title: document.title, url });
-          return;
-        }
-        await navigator.clipboard.writeText(url);
-        articleShareBtn.innerHTML = '<i class="fa-solid fa-check" aria-hidden="true"></i> Link copied';
-        setTimeout(() => {
-          articleShareBtn.innerHTML = '<i class="fa-solid fa-share-nodes" aria-hidden="true"></i> Share';
-        }, 2000);
-      } catch (err) { /* share cancelled or clipboard unavailable */ }
-    });
-  }
-
   // 10b. NEWSLETTER SUBSCRIPTION
   const newsletterForm = document.getElementById('newsletterForm');
   if (newsletterForm) {
@@ -691,15 +673,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 11. DYNAMIC INSIGHTS & ARTICLE READER ENGINE
   const insightsListView = document.getElementById('insightsListView');
-  const articleView = document.getElementById('articleView');
-  const DEFAULT_COVER = '/assets/img/blog/1.jpg';
+  const IMG_VERSION = 'v=20261013';
+  const DEFAULT_COVER = `/assets/img/blog/1.jpg?${IMG_VERSION}`;
   const FALLBACK_COVER = '/assets/img/portfolio/1.jpg';
 
   const coverSrc = (src) => {
     if (!src) return DEFAULT_COVER;
     const str = String(src).trim();
     const normalised = /^([a-z][a-z0-9+.-]*:|\/)/i.test(str) ? str : `/${str}`;
-    return safeUrl(normalised, false) || DEFAULT_COVER;
+    // Site photos were replaced in place (Oct 2026); version local covers so
+    // browsers holding the old cached files fetch the new ones.
+    const versioned = /^\/assets\/img\/[^?]+\.(jpe?g|png|webp)$/i.test(normalised) ? `${normalised}?${IMG_VERSION}` : normalised;
+    return safeUrl(versioned, false) || DEFAULT_COVER;
   };
 
   const attachImageFallback = (root) => {
@@ -785,71 +770,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const insightHref = (post) => `/insights/${encodeURIComponent(post.slug || post.id || '')}`;
 
-  const currentPath = window.location.pathname;
-  const pathParts = currentPath.split('/').filter(Boolean);
-  let articleSlug = (pathParts[0] === 'insights' && pathParts.length >= 2) ? pathParts[1] : null;
-  if (articleSlug) {
-    try { articleSlug = decodeURIComponent(articleSlug); } catch (e) { /* keep raw */ }
-  }
-
-  if (articleSlug && articleView) {
-    // SINGLE ARTICLE READING MODE
-    if (insightsListView) insightsListView.style.display = 'none';
-    articleView.style.display = 'block';
-
-    fetch(`/api/insights/${encodeURIComponent(articleSlug)}`)
-      .then((res) => {
-        if (!res.ok) throw new Error('Article not found');
-        return res.json();
-      })
-      .then((result) => {
-        if (!(result && result.success && result.data)) throw new Error('Article not found');
-        const post = result.data;
-
-        document.title = `${post.title || 'Insight'} | THEWHY Consulting`;
-        const setText = (id, value) => {
-          const el = document.getElementById(id);
-          if (el) el.textContent = value;
-        };
-        setText('articleBreadcrumb', post.title || '');
-        setText('articleTitle', post.title || '');
-        setText('articleCategory', post.category || 'Advisory Insights');
-        setText('articleAuthor', post.author || 'THEWHY Practice Team');
-        setText('articleDate', post.created_at
-          ? new Date(post.created_at).toLocaleDateString('en-NG', { month: 'long', year: 'numeric' })
-          : '2026 Edition');
-
-        const words = String(post.content || '').split(/\s+/).length;
-        const readMins = Math.max(2, Math.ceil(words / 180));
-        const readTimeEl = document.getElementById('articleReadingTime');
-        if (readTimeEl) {
-          readTimeEl.innerHTML = `<i class="fa-regular fa-clock" aria-hidden="true"></i> ${readMins} min read`;
-        }
-
-        const coverEl = document.getElementById('articleCover');
-        if (coverEl && post.cover_image) coverEl.src = coverSrc(post.cover_image);
-
-        const contentEl = document.getElementById('articleContent');
-        if (contentEl) contentEl.innerHTML = renderMarkdown(post.content);
-
-        loadRelatedArticles(post.slug);
-      })
-      .catch(() => {
-        const contentEl = document.getElementById('articleContent');
-        if (contentEl) {
-          contentEl.innerHTML = `
-            <div style="text-align:center; padding: 40px 0;">
-              <h3>Article Not Found</h3>
-              <p style="color:var(--muted); margin: 12px 0 24px;">The requested advisory brief may have moved or been updated.</p>
-              <a href="/insights" class="btn btn-primary">Return to All Insights</a>
-            </div>
-          `;
-        }
-      });
-  } else if (insightsListView) {
-    // INSIGHTS LISTING MODE
-    if (articleView) articleView.style.display = 'none';
-    insightsListView.style.display = 'block';
+  if (insightsListView) {
+    // INSIGHTS LISTING (live from the CMS; static cards stay as the fallback)
 
     const insightsList = document.getElementById('insightsList');
     if (insightsList) {
@@ -884,37 +806,6 @@ document.addEventListener('DOMContentLoaded', () => {
           // Static fallback remains in place
         });
     }
-  }
-
-  function loadRelatedArticles(currentSlug) {
-    const relatedContainer = document.getElementById('relatedArticles');
-    if (!relatedContainer) return;
-
-    fetch('/api/insights')
-      .then((res) => res.json())
-      .then((result) => {
-        if (!(result && result.success && Array.isArray(result.data))) return;
-        const others = result.data.filter((p) => p.slug !== currentSlug).slice(0, 3);
-        if (others.length === 0) return;
-        relatedContainer.innerHTML = others.map((post) => `
-          <article class="insight-card" style="box-shadow:var(--shadow-soft);">
-            <div class="insight-thumb">
-              <img src="${esc(coverSrc(post.cover_image))}" alt="${esc(post.title)}" loading="lazy" data-fallback="${FALLBACK_COVER}">
-            </div>
-            <div class="insight-body">
-              <div class="insight-cat">${esc(post.category || 'Insights')}</div>
-              <h4 style="font-size:17px; margin-bottom:8px;">${esc(post.title)}</h4>
-              <p style="font-size:13px; color:var(--muted);">${esc(post.excerpt || '')}</p>
-              <div class="insight-meta">
-                <span>${esc(post.author || 'THEWHY Consulting')}</span>
-                <a href="${esc(insightHref(post))}">Read &rarr;</a>
-              </div>
-            </div>
-          </article>
-        `).join('');
-        attachImageFallback(relatedContainer);
-      })
-      .catch(() => {});
   }
 
   // 12. HOMEPAGE "LATEST INSIGHTS" — live from the CMS. The static cards in

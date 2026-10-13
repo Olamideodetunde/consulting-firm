@@ -2904,7 +2904,7 @@ html.why-preloader-seen .page-preloader {
 .promo-banner-bg {
   position: absolute;
   inset: 0;
-  background-image: url("../assets/img/banners/boardroom-strategy.jpg");
+  background-image: url("../assets/img/banners/boardroom-strategy.jpg?v=20261013");
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
@@ -5441,7 +5441,7 @@ body.drawer-open .scroll-top {
     gap: 20px;
   }
 }
-@media (max-width: 1279.98px) {
+@media (max-width: 1099.98px) {
   .nav-links,
   .nav-cta {
     display: none;
@@ -5484,5 +5484,74 @@ body.drawer-open .scroll-top {
   /* Match the mobile card padding override (clamp(1.25rem, 4vw, 1.75rem)) */
   .practice-card-media {
     margin: calc(-1 * clamp(1.25rem, 4vw, 1.75rem)) calc(-1 * clamp(1.25rem, 4vw, 1.75rem)) 1.5rem;
+  }
+}
+
+/* ==========================================================================
+   IMAGE FRAMING - keep photos from being over-cropped at any width
+   ========================================================================== */
+.about-visual-img picture,
+.feature-art-img picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Team portraits: square frame focused on the face (was a 280px letterbox) */
+.team-photo {
+  height: auto;
+  aspect-ratio: 1 / 1;
+}
+.team-photo img {
+  object-position: center 22%;
+}
+
+/* Boardroom showcase banner: taller so less of the photo is cut away */
+.mono-promo img {
+  height: clamp(320px, 36vw, 500px);
+  object-position: center 40%;
+}
+
+/* Services: the practice photo sits beside the intro on desktop at its natural
+   3:2 shape, and above it (16:9) on tablets and phones. */
+.practice-card-media {
+  height: auto;
+  aspect-ratio: 16 / 9;
+}
+.practice-card-media img {
+  object-position: center;
+}
+@media (min-width: 992px) {
+  .practice-card:has(> .practice-card-media) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(300px, 38%);
+    column-gap: clamp(1.5rem, 3vw, 2.5rem);
+    align-items: start;
+  }
+  .practice-card > .practice-card-media {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    margin: 0 0 1.75rem;
+    aspect-ratio: 3 / 2;
+    border-radius: 20px;
+  }
+  .practice-card:has(> .practice-card-media) > :not(.practice-card-media) {
+    grid-column: 1;
+  }
+  .practice-card:has(> .practice-card-media) > .practice-subgrid {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Stacked layouts (<=1100px): size image panels by shape, not fixed heights,
+   so the landscape photo used there is shown almost in full. */
+@media (max-width: 1100px) {
+  .about-visual {
+    min-height: 0;
+    aspect-ratio: 3 / 2;
+  }
+  .feature-art {
+    min-height: 0;
+    aspect-ratio: 16 / 9;
   }
 }
