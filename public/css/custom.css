@@ -5618,3 +5618,21 @@ body.drawer-open .scroll-top {
     aspect-ratio: 16 / 9;
   }
 }
+
+/* Leadership grids with two people: keep the pair centred instead of leaving an empty third column */
+.team-grid.team-grid-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  max-width: 820px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.team-grid-cards.team-grid-2 {
+  max-width: 960px;
+  margin-left: auto;
+  margin-right: auto;
+}
+@media (max-width: 599.98px) {
+  .team-grid.team-grid-2 {
+    grid-template-columns: 1fr;
+  }
+}

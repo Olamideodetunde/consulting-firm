@@ -60,7 +60,7 @@ const validBooking = () => ({
   phone: '+234 803 000 0000',
   companyName: 'Apex Marine Logistics Ltd',
   service: 'General Strategic Advisory',
-  meetingType: 'Virtual (Google Meet)',
+  meetingType: 'Virtual',
   date: '2026-11-02',
   timeSlot: '10:00 AM - 10:30 AM',
   companySize: 'SME (10-100 staff)',

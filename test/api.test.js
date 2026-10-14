@@ -29,7 +29,7 @@ test('public booking POST with valid data returns 201 with UUID id and long ref_
 test('booking accepts the booking-wizard payload shape (empty optional fields)', async () => {
   const res = await request(app).post('/api/bookings').send({
     service: 'Accounting & Tax Services',
-    meetingType: 'Virtual (Google Meet)',
+    meetingType: 'Virtual',
     date: '',
     timeSlot: '10:00 AM - 10:30 AM',
     clientName: '  Ngozi Eze  ',
@@ -285,7 +285,7 @@ test('public content APIs respond', async () => {
   const industries = await request(app).get('/api/industries');
   assert.ok(industries.body.data.length >= 6);
   const team = await request(app).get('/api/team');
-  assert.ok(team.body.data.length >= 3);
+  assert.ok(team.body.data.length >= 2);
   const launch = await request(app).get('/api/launch');
   assert.equal(launch.body.data.title, 'THEWHY Executive Business Seminar');
   assert.ok(!/CMD|bootcamp/i.test(JSON.stringify(launch.body.data)), 'seminar data must not mention CMD or a bootcamp');

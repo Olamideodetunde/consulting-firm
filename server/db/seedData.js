@@ -408,15 +408,6 @@ module.exports = {
       image: null, // TODO(client-assets): add headshot
       bio: "A certified Professional in Human Resources - International (PHRi) with an MBA in Finance. She directs THEWHY Consulting's human capital advisory, organizational design, executive capacity building, and corporate training programs. She brings deep competence in competency framework design, executive headhunting, and statutory human resource compliance across diverse industrial sectors.",
       specialties: ["Corporate Training", "Executive Talent Acquisition", "Compensation & Grading", "Statutory Certifications (PENCOM/ITF)"]
-    },
-    {
-      id: "seun-olaniyi",
-      name: "Mr. Seun Olaniyi",
-      credentials: "BSc Accounting, ACA",
-      role: "Accounting Operations",
-      image: null, // TODO(client-assets): add headshot
-      bio: "A dedicated Associate Chartered Accountant (ACA) who oversees daily accounting operations, outsourced financial management, and statutory audit liaison for THEWHY's diverse SME and corporate client portfolios. Mr. Olaniyi specializes in cloud accounting implementations, payroll architecture, cash flow budgeting, and financial statement integrity.",
-      specialties: ["Cloud Accounting Systems", "Statutory Reporting & IFRS", "Outsourced Payroll", "Internal Control Reviews"]
     }
   ],
 
@@ -514,7 +505,7 @@ module.exports = {
     {
       "id": "faq-4",
       "question": "How does the initial consultation process work?",
-      "answer": "You can book a 30-minute strategic advisory session directly on our website. You can choose whether to meet virtually via Google Meet, over a direct phone call, or in-person at our Lagos Headquarters in Yaba. Once booked, our senior partners review your business profile and come prepared with actionable diagnostics."
+      "answer": "You can book a 30-minute strategic advisory session directly on our website. You can choose whether to meet virtually, over a direct phone call, or in-person at our Lagos Headquarters in Yaba. Once booked, our senior partners review your business profile and come prepared with actionable diagnostics."
     },
     {
       "id": "faq-5",
