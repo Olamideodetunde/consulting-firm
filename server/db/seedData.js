@@ -489,8 +489,8 @@ module.exports = {
     heroSubtitle: "Boutique management consulting, accounting & tax advisory, corporate finance, CAC registration, and HR and training services in Lagos, Nigeria.",
     phone: "+234-701-977-7048",
     email: "info@thewhy.ng",
-    addressYaba: "1a Hughes Avenue, Alagomeji, Yaba, Lagos, Nigeria",
-    addressIkeja: "29, Isaac John Street, GRA Ikeja, Lagos, Nigeria",
+    addressYaba: "29, Ogayemi Close, Sabo Yaba, Lagos, Nigeria",
+    addressIkeja: "",
     affiliate: "An affiliate of Wale Kehinde & Co. (Chartered Accountants)"
   },
 
@@ -514,7 +514,7 @@ module.exports = {
     {
       "id": "faq-4",
       "question": "How does the initial consultation process work?",
-      "answer": "You can book a 45-minute strategic advisory session directly on our website. You can choose whether to meet virtually via Google Meet, over a direct phone call, or in-person at our Lagos Headquarters in Yaba. Once booked, our senior partners review your business profile and come prepared with actionable diagnostics."
+      "answer": "You can book a 30-minute strategic advisory session directly on our website. You can choose whether to meet virtually via Google Meet, over a direct phone call, or in-person at our Lagos Headquarters in Yaba. Once booked, our senior partners review your business profile and come prepared with actionable diagnostics."
     },
     {
       "id": "faq-5",

@@ -35,6 +35,26 @@ function icsText(value) {
     .replace(/\r?\n/g, '\\n');
 }
 
+const SESSION_MINUTES = 30;
+const LAGOS_UTC_OFFSET_HOURS = 1;
+
+/** "02:00 PM - 02:30 PM" (Lagos time) -> ['130000', '133000'] in UTC; defaults to a 10:00 AM start. */
+function slotTimesUtc(timeSlot) {
+  const m = /(\d{1,2}):(\d{2})\s*(AM|PM)/i.exec(String(timeSlot || ''));
+  let hours = 10;
+  let minutes = 0;
+  if (m) {
+    hours = (Number(m[1]) % 12) + (m[3].toUpperCase() === 'PM' ? 12 : 0);
+    minutes = Number(m[2]);
+  }
+  const start = (hours - LAGOS_UTC_OFFSET_HOURS) * 60 + minutes;
+  const fmt = (total) => {
+    const t = ((total % 1440) + 1440) % 1440;
+    return String(Math.floor(t / 60)).padStart(2, '0') + String(t % 60).padStart(2, '0') + '00';
+  };
+  return [fmt(start), fmt(start + SESSION_MINUTES)];
+}
+
 router.get('/:id/calendar.ics', wrap(async (req, res) => {
   const booking = await db.getBookingById(req.params.id);
   if (!booking) return res.status(404).type('text/plain').send('Booking not found');
@@ -44,6 +64,7 @@ router.get('/:id/calendar.ics', wrap(async (req, res) => {
     : new Date().toISOString().slice(0, 10);
   const dt = dateStr.replace(/-/g, '');
   const ref = booking.ref_code || booking.id;
+  const [startUtc, endUtc] = slotTimesUtc(booking.timeSlot);
   const ics = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
@@ -53,11 +74,11 @@ router.get('/:id/calendar.ics', wrap(async (req, res) => {
     'BEGIN:VEVENT',
     `UID:${booking.id}@why.ng`,
     `DTSTAMP:${dt}T090000Z`,
-    `DTSTART:${dt}T100000Z`,
-    `DTEND:${dt}T104500Z`,
+    `DTSTART:${dt}T${startUtc}Z`,
+    `DTEND:${dt}T${endUtc}Z`,
     `SUMMARY:${icsText(`THEWHY Consulting Advisory: ${booking.service || 'Management Advisory'}`)}`,
     `DESCRIPTION:${icsText(`Strategic Advisory Session with THEWHY Consulting\nClient: ${booking.clientName}\nRef: ${ref}\nFormat: ${booking.meetingType}`)}`,
-    `LOCATION:${icsText('1a Hughes Avenue Alagomeji, Yaba, Lagos / Virtual')}`,
+    `LOCATION:${icsText('29 Ogayemi Close, Sabo Yaba, Lagos / Virtual')}`,
     'STATUS:TENTATIVE',
     'END:VEVENT',
     'END:VCALENDAR'

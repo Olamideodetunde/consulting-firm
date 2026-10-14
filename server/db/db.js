@@ -502,7 +502,7 @@ async function createBooking(data) {
     service: data.service || 'General Strategic Advisory',
     meetingType: data.meetingType || 'Virtual (Google Meet)',
     date: data.date || new Date().toISOString().slice(0, 10),
-    timeSlot: data.timeSlot || '10:00 AM - 10:45 AM',
+    timeSlot: data.timeSlot || '10:00 AM - 10:30 AM',
     companySize: data.companySize || 'SME',
     message: data.message || '',
     estimatedFee: data.estimatedFee || 'To Be Determined',

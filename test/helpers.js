@@ -62,7 +62,7 @@ const validBooking = () => ({
   service: 'General Strategic Advisory',
   meetingType: 'Virtual (Google Meet)',
   date: '2026-11-02',
-  timeSlot: '10:00 AM - 10:45 AM',
+  timeSlot: '10:00 AM - 10:30 AM',
   companySize: 'SME (10-100 staff)',
   message: 'Need help with a bank charges audit.',
   estimatedFee: ''

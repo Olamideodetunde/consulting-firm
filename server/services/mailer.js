@@ -159,7 +159,7 @@ const BRAND = {
   phoneHref: 'tel:+2347019777048',
   email: 'info@thewhy.ng',
   whatsapp: 'https://wa.me/2347019777048',
-  address: '1a Hughes Avenue, Alagomeji, Yaba, Lagos'
+  address: '29, Ogayemi Close, Sabo Yaba, Lagos'
 };
 const FONT = "'DM Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
 const FONT_HEAD = "'Manrope', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
@@ -467,7 +467,7 @@ function notifyNewBooking(b) {
       next: [
         'A partner reviews your request and the challenge you described.',
         'We contact you within 24 hours to confirm the date, time and meeting format.',
-        'Your 45-minute session takes place under strict confidentiality (NDA available on request).'
+        'Your 30-minute session takes place under strict confidentiality (NDA available on request).'
       ],
       actions: [
         { label: 'Add to calendar', href: calendarId ? `${s.siteUrl}/api/bookings/${encodeURIComponent(calendarId)}/calendar.ics` : '' },

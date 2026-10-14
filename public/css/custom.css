@@ -5446,11 +5446,9 @@ body.drawer-open .scroll-top {
   height: auto;
   margin: 0.5rem 0 1.5rem;
 }
-.subpage-hero h1.raa-hero-title {
-  font-size: clamp(1.9rem, 3.4vw, 3.2rem);
-  line-height: 1.08;
-  letter-spacing: -0.03em;
-  max-width: 760px;
+.subpage-hero h1.raa-hero-h1 {
+  margin: 0;
+  line-height: 0;
 }
 .raa-needs {
   margin-top: 1.5rem;
