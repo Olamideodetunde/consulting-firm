@@ -225,6 +225,6 @@ test('legacy CMD bootcamp campaign records are served as the seminar', async () 
 test('inquiry emails distinguish seminar, Rent-An-Accountant and general requests', () => {
   const mailer = require('../server/services/mailer');
   assert.equal(mailer._inquiryKind('Executive Business Seminar'), 'seminar');
-  assert.equal(mailer._inquiryKind('Rent-An-Accountant (Dedicated)'), 'accountant');
+  assert.equal(mailer._inquiryKind('Rent-An-Accountant (Hybrid)'), 'accountant');
   assert.equal(mailer._inquiryKind('Tax Defense'), 'general');
 });

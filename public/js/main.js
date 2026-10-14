@@ -212,7 +212,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const wa = document.createElement('a');
     wa.className = 'wa-float';
     wa.id = 'waFloat';
-    wa.href = `https://wa.me/2348034992318?text=${waText}`;
+    wa.href = `https://wa.me/2347019777048?text=${waText}`;
     wa.target = '_blank';
     wa.rel = 'noopener';
     wa.setAttribute('aria-label', 'Chat with THEWHY Consulting on WhatsApp');
@@ -547,7 +547,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (bookingMsg) {
           bookingMsg.className = 'form-alert error';
           bookingMsg.style.display = 'block';
-          bookingMsg.innerHTML = `<strong>Error:</strong> ${esc((err && err.message) || 'Network error. Please try again or reach us directly at +234-8034-99-23-18.')}`;
+          bookingMsg.innerHTML = `<strong>Error:</strong> ${esc((err && err.message) || 'Network error. Please try again or reach us directly at +234-701-977-7048.')}`;
         }
       } finally {
         if (submitBtn) {
@@ -607,7 +607,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (contactMsg) {
           contactMsg.className = 'form-alert error';
           contactMsg.style.display = 'block';
-          contactMsg.innerHTML = `<strong>Error:</strong> ${esc((err && err.message) || 'Unable to deliver message right now. Call us at +234-8034-99-23-18.')}`;
+          contactMsg.innerHTML = `<strong>Error:</strong> ${esc((err && err.message) || 'Unable to deliver message right now. Call us at +234-701-977-7048.')}`;
         }
       } finally {
         if (submitBtn) {

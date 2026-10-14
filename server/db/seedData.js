@@ -487,7 +487,7 @@ module.exports = {
     announcement: "Now Open: Seat registration for the THEWHY Executive Business Seminar.",
     heroHeadline: "We Help Small & Medium Businesses Evolve Into Resilient Conglomerates",
     heroSubtitle: "Boutique management consulting, accounting & tax advisory, corporate finance, CAC registration, and HR and training services in Lagos, Nigeria.",
-    phone: "+234-8034-99-23-18",
+    phone: "+234-701-977-7048",
     email: "info@thewhy.ng",
     addressYaba: "1a Hughes Avenue, Alagomeji, Yaba, Lagos, Nigeria",
     addressIkeja: "29, Isaac John Street, GRA Ikeja, Lagos, Nigeria",

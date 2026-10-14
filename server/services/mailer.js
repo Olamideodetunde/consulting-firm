@@ -155,10 +155,10 @@ const BRAND = {
   lineStrong: '#DED8CE',
   paper: '#F7F4EF',
   soft: '#FBF9F6',
-  phone: '+234-8034-99-23-18',
-  phoneHref: 'tel:+2348034992318',
+  phone: '+234-701-977-7048',
+  phoneHref: 'tel:+2347019777048',
   email: 'info@thewhy.ng',
-  whatsapp: 'https://wa.me/2348034992318',
+  whatsapp: 'https://wa.me/2347019777048',
   address: '1a Hughes Avenue, Alagomeji, Yaba, Lagos'
 };
 const FONT = "'DM Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
@@ -540,12 +540,12 @@ const INQUIRY_COPY = {
     subject: 'Your Rent-An-Accountant request | THEWHY Consulting',
     title: 'Your request has been received',
     eyebrow: 'Rent-An-Accountant',
-    preheader: 'A consultant will contact you within 24 hours to arrange a free consultation.',
-    paragraph: () => 'Thank you for your interest in our Rent-An-Accountant service. A consultant will contact you within 24 hours to arrange a free consultation.',
+    preheader: 'A consultant will contact you within 24 hours to discuss your requirements.',
+    paragraph: () => 'Thank you for your interest in our Rent-An-Accountant service. A consultant will contact you within 24 hours to discuss your requirements.',
     next: [
-      'We review your books, transaction volume and filing obligations.',
-      'We recommend the right engagement and send a fixed monthly quote.',
-      'Your matched accountant starts, with partner-reviewed monthly reports.'
+      'We review your records, systems and filing obligations.',
+      'We agree your scope (remote, hybrid or onsite) and reporting schedule, and send a fixed monthly quote.',
+      'Your accountant sets up and supports your finances, with accurate monthly reports.'
     ]
   },
   general: {
