@@ -5636,3 +5636,13 @@ body.drawer-open .scroll-top {
     grid-template-columns: 1fr;
   }
 }
+
+/* Milestones with three counters: one row on desktop/tablet, stacked on phones */
+.counter-grid.counter-grid-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+@media (max-width: 599.98px) {
+  .counter-grid.counter-grid-3 {
+    grid-template-columns: 1fr;
+  }
+}

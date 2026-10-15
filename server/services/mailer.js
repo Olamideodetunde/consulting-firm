@@ -4,7 +4,7 @@
  * Transport (first one configured wins):
  *   1. Brevo transactional API — BREVO_API_KEY (an "xkeysib-..." API key)
  *   2. SMTP via nodemailer     — SMTP_HOST, SMTP_PORT, SMTP_SECURE, SMTP_USER, SMTP_PASS
- * Shared: MAIL_FROM ("Name <email>"), NOTIFY_TO (default info@thewhy.ng).
+ * Shared: MAIL_FROM ("Name <email>"), NOTIFY_TO (default hello@thewhy.ng).
  *
  * All sends are fire-and-forget: they run after the HTTP response path and any
  * failure is logged, never thrown. With no transport configured the mailer is a
@@ -27,8 +27,8 @@ function settings() {
     secure: String(process.env.SMTP_SECURE || '').toLowerCase() === 'true',
     user: process.env.SMTP_USER || '',
     pass: process.env.SMTP_PASS || '',
-    from: process.env.MAIL_FROM || 'THEWHY Consulting <info@thewhy.ng>',
-    notifyTo: process.env.NOTIFY_TO || 'info@thewhy.ng',
+    from: process.env.MAIL_FROM || 'THEWHY Consulting <hello@thewhy.ng>',
+    notifyTo: process.env.NOTIFY_TO || 'hello@thewhy.ng',
     siteUrl: (process.env.SITE_URL || 'https://why.ng').replace(/\/+$/, '')
   };
 }
@@ -157,7 +157,7 @@ const BRAND = {
   soft: '#FBF9F6',
   phone: '+234-701-977-7048',
   phoneHref: 'tel:+2347019777048',
-  email: 'info@thewhy.ng',
+  email: 'hello@thewhy.ng',
   whatsapp: 'https://wa.me/2347019777048',
   address: '29, Ogayemi Close, Sabo Yaba, Lagos'
 };

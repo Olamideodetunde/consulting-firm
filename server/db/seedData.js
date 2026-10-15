@@ -479,7 +479,7 @@ module.exports = {
     heroHeadline: "We Help Small & Medium Businesses Evolve Into Resilient Conglomerates",
     heroSubtitle: "Boutique management consulting, accounting & tax advisory, corporate finance, CAC registration, and HR and training services in Lagos, Nigeria.",
     phone: "+234-701-977-7048",
-    email: "info@thewhy.ng",
+    email: "hello@thewhy.ng",
     addressYaba: "29, Ogayemi Close, Sabo Yaba, Lagos, Nigeria",
     addressIkeja: "",
     affiliate: "An affiliate of Wale Kehinde & Co. (Chartered Accountants)"
