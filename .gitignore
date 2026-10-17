@@ -41,3 +41,6 @@ ehthumbs.db
 server/data/runtime-db.json
 server/data/*.tmp
 server/data/database.json
+
+# Test uploads
+public/assets/img/gallery/*test_upload*

@@ -18,6 +18,11 @@
     contacts: [],
     subscribers: [],
     media: [],
+    gallery: [],
+    galleryPage: 1,
+    galleryTotal: 0,
+    galleryTotalPages: 1,
+    galleryFilter: { category: 'All', status: 'all', search: '' },
     booted: false
   };
 
@@ -211,6 +216,7 @@
     fetchSubscribers();
     fetchLaunchData();
     fetchSettings();
+    fetchAdminGallery();
   }
 
   // -------------------------------------------------------------------------
@@ -1056,6 +1062,436 @@
       status.className = 'text-[11px] text-red-600 font-semibold';
     } finally {
       btn.classList.remove('opacity-60', 'pointer-events-none');
+    }
+  });
+
+  // -------------------------------------------------------------------------
+  // 10. PHOTO GALLERY MANAGER
+  // -------------------------------------------------------------------------
+  let selectedGalleryFile = null;
+
+  async function fetchAdminGallery(append = false) {
+    const grid = $('admin-gallery-grid');
+    const counter = $('admin-gallery-counter');
+    const loadMoreStrip = $('admin-gallery-load-more-strip');
+    const loadMoreBtn = $('btn-admin-gallery-load-more');
+    if (!grid) return;
+
+    if (!append) {
+      state.galleryPage = 1;
+      grid.innerHTML = '<div class="col-span-full py-12 text-center text-slate-400 bg-white rounded-3xl border border-slate-200"><i class="fa-solid fa-circle-notch fa-spin text-brandOrange text-2xl mb-2"></i><p>Loading gallery items…</p></div>';
+    } else if (loadMoreBtn) {
+      loadMoreBtn.disabled = true;
+      loadMoreBtn.innerHTML = 'Loading… <i class="fa-solid fa-circle-notch fa-spin ml-2"></i>';
+    }
+
+    try {
+      const params = new URLSearchParams({
+        page: String(state.galleryPage),
+        limit: '36'
+      });
+      if (state.galleryFilter.category && state.galleryFilter.category !== 'All') {
+        params.append('category', state.galleryFilter.category);
+      }
+      if (state.galleryFilter.status && state.galleryFilter.status !== 'all') {
+        params.append('status', state.galleryFilter.status);
+      }
+      if (state.galleryFilter.search) {
+        params.append('search', state.galleryFilter.search);
+      }
+
+      const json = await api(`/api/admin/gallery?${params.toString()}`);
+      state.galleryTotal = json.total;
+      state.galleryTotalPages = json.totalPages;
+
+      if (append) {
+        state.gallery = state.gallery.concat(json.data || []);
+      } else {
+        state.gallery = json.data || [];
+      }
+
+      if (counter) counter.textContent = `Showing ${state.gallery.length} of ${state.galleryTotal} photos`;
+
+      if (loadMoreStrip) {
+        if (state.gallery.length >= state.galleryTotal || state.galleryPage >= state.galleryTotalPages) {
+          loadMoreStrip.classList.add('hidden');
+        } else {
+          loadMoreStrip.classList.remove('hidden');
+        }
+      }
+
+      renderAdminGallery();
+    } catch (err) {
+      if (err instanceof AuthError) return;
+      console.error('Error fetching gallery:', err);
+      if (!append && grid) {
+        grid.innerHTML = `<div class="col-span-full py-8 text-center text-red-500 bg-white rounded-3xl border border-slate-200 text-xs">Error loading gallery photos: ${escapeHtml(err.message)}</div>`;
+      }
+    } finally {
+      if (loadMoreBtn) {
+        loadMoreBtn.disabled = false;
+        loadMoreBtn.textContent = 'Load More Photos';
+      }
+    }
+  }
+
+  function renderAdminGallery() {
+    const grid = $('admin-gallery-grid');
+    if (!grid) return;
+    if (state.gallery.length === 0) {
+      grid.innerHTML = '<div class="col-span-full py-12 text-center text-slate-400 bg-white rounded-3xl border border-slate-200 text-xs">No photos found matching your criteria. Click "Add / Upload Photo" to add one.</div>';
+      return;
+    }
+
+    grid.innerHTML = state.gallery.map(item => {
+      const id = escapeHtml(item.id);
+      const isFeatured = !!item.is_featured;
+      const isActive = item.is_active !== false;
+
+      return `
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col group transition-all hover:shadow-md">
+          <div class="relative h-44 bg-slate-100 overflow-hidden">
+            <img src="${escapeHtml(item.image_url)}" alt="${escapeHtml(item.title)}" loading="lazy" class="w-full h-full object-cover transition-transform group-hover:scale-105">
+            <div class="absolute top-2 right-2 flex gap-1.5">
+              <button data-action="toggle-featured" data-id="${id}" class="w-7 h-7 rounded-lg ${isFeatured ? 'bg-amber-400 text-amber-950' : 'bg-slate-900/60 text-white hover:bg-slate-900'} flex items-center justify-center text-xs shadow-sm transition-colors" title="${isFeatured ? 'Featured (click to unfeature)' : 'Mark as featured'}">
+                <i class="fa-solid fa-star"></i>
+              </button>
+              <button data-action="toggle-active" data-id="${id}" class="w-7 h-7 rounded-lg ${isActive ? 'bg-emerald-500 text-white' : 'bg-rose-500 text-white'} flex items-center justify-center text-xs shadow-sm transition-colors" title="${isActive ? 'Active on site (click to hide)' : 'Hidden (click to show)'}">
+                <i class="fa-solid ${isActive ? 'fa-eye' : 'fa-eye-slash'}"></i>
+              </button>
+            </div>
+            <div class="absolute bottom-2 left-2">
+              <span class="px-2 py-0.5 rounded-md bg-slate-900/80 text-white font-bold text-[10px] uppercase tracking-wider backdrop-blur-sm">
+                ${escapeHtml(item.category || 'Launch Event')}
+              </span>
+            </div>
+          </div>
+
+          <div class="p-3.5 flex-1 flex flex-col justify-between gap-3 text-xs">
+            <div>
+              <h4 class="font-bold text-slate-800 line-clamp-2 leading-tight" title="${escapeHtml(item.title)}">
+                ${escapeHtml(item.title)}
+              </h4>
+              <p class="text-[11px] text-slate-400 mt-1 line-clamp-1 font-mono">
+                ${escapeHtml(item.image_url)}
+              </p>
+            </div>
+
+            <div class="pt-2 border-t border-slate-100 flex items-center justify-between gap-2">
+              <div class="flex gap-1.5">
+                <button data-action="edit-photo" data-id="${id}" class="px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[11px] flex items-center gap-1 transition-colors">
+                  <i class="fa-solid fa-pen-to-square"></i> Edit
+                </button>
+                <button data-action="copy-url" data-url="${escapeHtml(item.image_url)}" class="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 text-[11px] transition-colors" title="Copy URL">
+                  <i class="fa-regular fa-copy"></i>
+                </button>
+              </div>
+              <button data-action="delete-photo" data-id="${id}" class="p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 text-[11px] transition-colors" title="Delete photo">
+                <i class="fa-regular fa-trash-can"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    bindAdminGalleryEvents();
+  }
+
+  function bindAdminGalleryEvents() {
+    const grid = $('admin-gallery-grid');
+    if (!grid) return;
+
+    grid.querySelectorAll('[data-action]').forEach(btn => {
+      btn.onclick = async (e) => {
+        e.stopPropagation();
+        const action = btn.getAttribute('data-action');
+        const id = btn.getAttribute('data-id');
+
+        if (action === 'toggle-featured') {
+          const item = state.gallery.find(p => String(p.id) === String(id));
+          if (!item) return;
+          try {
+            await api(`/api/admin/gallery/${id}`, {
+              method: 'PUT',
+              body: { is_featured: !item.is_featured }
+            });
+            item.is_featured = !item.is_featured;
+            renderAdminGallery();
+          } catch (err) {
+            reportError('Failed to toggle featured status', err);
+          }
+        } else if (action === 'toggle-active') {
+          const item = state.gallery.find(p => String(p.id) === String(id));
+          if (!item) return;
+          try {
+            await api(`/api/admin/gallery/${id}`, {
+              method: 'PUT',
+              body: { is_active: !item.is_active }
+            });
+            item.is_active = !item.is_active;
+            renderAdminGallery();
+          } catch (err) {
+            reportError('Failed to toggle active status', err);
+          }
+        } else if (action === 'edit-photo') {
+          const item = state.gallery.find(p => String(p.id) === String(id));
+          if (item) openGalleryModal(item);
+        } else if (action === 'delete-photo') {
+          if (!confirm('Are you sure you want to delete this photo from the gallery?')) return;
+          try {
+            await api(`/api/admin/gallery/${id}`, { method: 'DELETE' });
+            state.gallery = state.gallery.filter(p => String(p.id) !== String(id));
+            state.galleryTotal = Math.max(0, state.galleryTotal - 1);
+            const counter = $('admin-gallery-counter');
+            if (counter) counter.textContent = `Showing ${state.gallery.length} of ${state.galleryTotal} photos`;
+            renderAdminGallery();
+          } catch (err) {
+            reportError('Failed to delete photo', err);
+          }
+        } else if (action === 'copy-url') {
+          const url = btn.getAttribute('data-url');
+          if (url) {
+            navigator.clipboard.writeText(url).then(() => {
+              btn.innerHTML = '<i class="fa-solid fa-check text-emerald-600"></i>';
+              setTimeout(() => { btn.innerHTML = '<i class="fa-regular fa-copy"></i>'; }, 1500);
+            });
+          }
+        }
+      };
+    });
+  }
+
+  // Gallery Modal Elements
+  const galModal = $('gallery-modal');
+  const galForm = $('gallery-form');
+  const galId = $('modal-gal-id');
+  const galTitle = $('modal-gal-title');
+  const galCategory = $('modal-gal-category');
+  const galOrder = $('modal-gal-order');
+  const galUrl = $('modal-gal-url');
+  const galFile = $('modal-gal-file');
+  const galCaption = $('modal-gal-caption');
+  const galActive = $('modal-gal-active');
+  const galFeatured = $('modal-gal-featured');
+  const galPreviewBox = $('modal-gal-preview-box');
+  const galPreviewEmpty = $('modal-gal-preview-empty');
+  const galError = $('gallery-modal-error');
+  const galSubmitBtn = $('btn-save-gallery-item');
+
+  function updateGalPreview(src) {
+    if (!galPreviewBox) return;
+    if (src) {
+      galPreviewBox.style.backgroundImage = `url("${src}")`;
+      if (galPreviewEmpty) galPreviewEmpty.classList.add('hidden');
+    } else {
+      galPreviewBox.style.backgroundImage = '';
+      if (galPreviewEmpty) galPreviewEmpty.classList.remove('hidden');
+    }
+  }
+
+  function openGalleryModal(photo = null) {
+    if (!galModal) return;
+    selectedGalleryFile = null;
+    if (galFile) galFile.value = '';
+    if (galError) galError.classList.add('hidden');
+
+    if (photo) {
+      const modalTitle = $('gal-modal-title');
+      if (modalTitle) modalTitle.textContent = 'Edit Photo Details';
+      if (galId) galId.value = photo.id;
+      if (galTitle) galTitle.value = photo.title || '';
+      if (galCategory) galCategory.value = photo.category || 'Rent-An-Accountant Launch';
+      if (galOrder) galOrder.value = photo.display_order !== undefined ? photo.display_order : 0;
+      if (galUrl) galUrl.value = photo.image_url || '';
+      if (galCaption) galCaption.value = photo.caption || '';
+      if (galActive) galActive.checked = photo.is_active !== false;
+      if (galFeatured) galFeatured.checked = !!photo.is_featured;
+      updateGalPreview(photo.image_url);
+    } else {
+      const modalTitle = $('gal-modal-title');
+      if (modalTitle) modalTitle.textContent = 'Add / Upload New Photo';
+      if (galId) galId.value = '';
+      if (galTitle) galTitle.value = '';
+      if (galCategory) galCategory.value = 'Rent-An-Accountant Launch';
+      if (galOrder) galOrder.value = 0;
+      if (galUrl) galUrl.value = '';
+      if (galCaption) galCaption.value = '';
+      if (galActive) galActive.checked = true;
+      if (galFeatured) galFeatured.checked = false;
+      updateGalPreview('');
+    }
+
+    galModal.classList.remove('hidden');
+    if (galTitle) setTimeout(() => galTitle.focus(), 0);
+  }
+
+  function closeGalleryModal() {
+    if (galModal) galModal.classList.add('hidden');
+    selectedGalleryFile = null;
+    if (galFile) galFile.value = '';
+    if (galError) galError.classList.add('hidden');
+  }
+
+  $('btn-add-gallery-item')?.addEventListener('click', () => openGalleryModal());
+  $('btn-close-gallery-modal')?.addEventListener('click', closeGalleryModal);
+  galModal?.addEventListener('click', (e) => {
+    if (e.target === galModal) closeGalleryModal();
+  });
+
+  galUrl?.addEventListener('input', (e) => updateGalPreview(e.target.value.trim()));
+
+  galFile?.addEventListener('change', (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+
+    if (!/\.(jpe?g|png|webp|avif)$/i.test(file.name)) {
+      if (galError) {
+        galError.textContent = 'Please choose a JPG, PNG, WebP or AVIF image file.';
+        galError.classList.remove('hidden');
+      }
+      return;
+    }
+    if (file.size > 20 * 1024 * 1024) {
+      if (galError) {
+        galError.textContent = 'Image file exceeds the 20 MB limit.';
+        galError.classList.remove('hidden');
+      }
+      return;
+    }
+
+    if (galError) galError.classList.add('hidden');
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      selectedGalleryFile = {
+        name: file.name,
+        data: ev.target.result
+      };
+      updateGalPreview(ev.target.result);
+      if (galTitle && !galTitle.value.trim()) {
+        galTitle.value = file.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ');
+      }
+    };
+    reader.readAsDataURL(file);
+  });
+
+  galForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (galError) galError.classList.add('hidden');
+    if (galSubmitBtn) {
+      galSubmitBtn.disabled = true;
+      galSubmitBtn.innerHTML = 'Saving… <i class="fa-solid fa-circle-notch fa-spin ml-2"></i>';
+    }
+
+    const id = galId.value;
+    const title = galTitle.value.trim();
+    const category = galCategory.value.trim() || 'Rent-An-Accountant Launch';
+    const order = parseInt(galOrder.value || 0, 10);
+    const caption = galCaption.value.trim();
+    const is_active = galActive.checked;
+    const is_featured = galFeatured.checked;
+
+    try {
+      if (selectedGalleryFile) {
+        const res = await api('/api/admin/gallery/upload', {
+          method: 'POST',
+          body: {
+            filename: selectedGalleryFile.name,
+            data: selectedGalleryFile.data,
+            title,
+            category,
+            caption,
+            display_order: order,
+            is_active,
+            is_featured
+          }
+        });
+
+        if (id && res.data && res.data.id !== id) {
+          await api(`/api/admin/gallery/${id}`, {
+            method: 'PUT',
+            body: {
+              image_url: res.url,
+              title,
+              category,
+              caption,
+              display_order: order,
+              is_active,
+              is_featured
+            }
+          });
+          await api(`/api/admin/gallery/${res.data.id}`, { method: 'DELETE' });
+        }
+      } else {
+        const image_url = galUrl.value.trim();
+        if (!image_url) {
+          throw new Error('Please choose an image file or provide an image URL.');
+        }
+
+        const payload = {
+          title,
+          image_url,
+          category,
+          caption,
+          display_order: order,
+          is_active,
+          is_featured
+        };
+
+        if (id) {
+          await api(`/api/admin/gallery/${id}`, {
+            method: 'PUT',
+            body: payload
+          });
+        } else {
+          await api('/api/admin/gallery', {
+            method: 'POST',
+            body: payload
+          });
+        }
+      }
+
+      closeGalleryModal();
+      fetchAdminGallery();
+    } catch (err) {
+      if (galError) {
+        galError.textContent = err.message || 'Failed to save photo.';
+        galError.classList.remove('hidden');
+      }
+    } finally {
+      if (galSubmitBtn) {
+        galSubmitBtn.disabled = false;
+        galSubmitBtn.textContent = 'Save Photo Details';
+      }
+    }
+  });
+
+  $('admin-gallery-cat-filter')?.addEventListener('change', (e) => {
+    state.galleryFilter.category = e.target.value;
+    state.galleryPage = 1;
+    fetchAdminGallery();
+  });
+
+  $('admin-gallery-status-filter')?.addEventListener('change', (e) => {
+    state.galleryFilter.status = e.target.value;
+    state.galleryPage = 1;
+    fetchAdminGallery();
+  });
+
+  let adminGalSearchTimer = null;
+  $('admin-gallery-search')?.addEventListener('input', (e) => {
+    clearTimeout(adminGalSearchTimer);
+    adminGalSearchTimer = setTimeout(() => {
+      state.galleryFilter.search = e.target.value.trim();
+      state.galleryPage = 1;
+      fetchAdminGallery();
+    }, 300);
+  });
+
+  $('btn-admin-gallery-load-more')?.addEventListener('click', () => {
+    if (state.galleryPage < state.galleryTotalPages) {
+      state.galleryPage += 1;
+      fetchAdminGallery(true);
     }
   });
 

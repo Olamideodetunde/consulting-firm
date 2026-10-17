@@ -31,6 +31,7 @@ const STATIC_ROUTES = [
   { loc: '/seminar', priority: '0.8', changefreq: 'weekly' },
   { loc: '/contact', priority: '0.7', changefreq: 'yearly' },
   { loc: '/booking', priority: '0.8', changefreq: 'yearly' },
+  { loc: '/gallery', priority: '0.8', changefreq: 'weekly' },
   { loc: '/privacy', priority: '0.3', changefreq: 'yearly' },
   { loc: '/terms', priority: '0.3', changefreq: 'yearly' }
 ];
@@ -45,6 +46,7 @@ const HTML_REDIRECTS = {
   'insights.html': '/insights',
   'seminar.html': '/seminar',
   'rent-an-accountant.html': '/rent-an-accountant',
+  'gallery.html': '/gallery',
   // Retired pages (client corrections, Oct 2026)
   'launch.html': '/seminar',
   'contact.html': '/contact',
@@ -60,6 +62,8 @@ const ALIAS_REDIRECTS = {
   '/our-team': '/team',
   '/who-we-serve': '/industries',
   '/product-launch': '/seminar',
+  '/photos': '/gallery',
+  '/photo-page': '/gallery',
   // Retired pages (client corrections, Oct 2026)
   '/launch': '/seminar',
   '/calculator': '/booking',

@@ -304,3 +304,60 @@ test('calculator API is gone', async () => {
   const res = await request(app).post('/api/calculator/estimate').send({});
   assert.equal(res.status, 404);
 });
+
+// ---------------------------------------------------------------------------
+// Gallery
+// ---------------------------------------------------------------------------
+test('public gallery API returns photos, pagination, and categories', async () => {
+  const res = await request(app).get('/api/gallery?limit=12');
+  assert.equal(res.status, 200);
+  assert.equal(res.body.success, true);
+  assert.ok(res.body.total > 0);
+  assert.equal(res.body.count, Math.min(12, res.body.total));
+  assert.ok(Array.isArray(res.body.categories));
+  assert.ok(res.body.categories.length > 0);
+  assert.ok(res.body.data[0].image_url);
+});
+
+test('public gallery categories endpoint returns distinct categories', async () => {
+  const res = await request(app).get('/api/gallery/categories');
+  assert.equal(res.status, 200);
+  assert.equal(res.body.success, true);
+  assert.ok(Array.isArray(res.body.data));
+  assert.ok(res.body.data.length > 0);
+});
+
+test('admin gallery CRUD and upload', async () => {
+  const unauth = await request(app).get('/api/admin/gallery');
+  assert.equal(unauth.status, 401);
+
+  const created = await request(app).post('/api/admin/gallery').set('Cookie', cookie).send({
+    title: 'Test Photo Launch Event',
+    image_url: '/assets/img/gallery/DSC_9860.jpeg',
+    category: 'Keynotes & Presentations',
+    is_featured: true
+  });
+  assert.equal(created.status, 201);
+  const id = created.body.data.id;
+
+  const updated = await request(app).put(`/api/admin/gallery/${id}`).set('Cookie', cookie).send({
+    title: 'Updated Test Photo Launch Event',
+    is_featured: false
+  });
+  assert.equal(updated.status, 200);
+  assert.equal(updated.body.data.title, 'Updated Test Photo Launch Event');
+
+  const sampleBase64 = 'data:image/jpeg;base64,' + Buffer.from('fake image content').toString('base64');
+  const uploadRes = await request(app).post('/api/admin/gallery/upload').set('Cookie', cookie).send({
+    filename: 'test_upload.jpg',
+    data: sampleBase64,
+    title: 'Uploaded Launch Photo'
+  });
+  assert.equal(uploadRes.status, 201);
+  assert.ok(uploadRes.body.url.startsWith('/assets/img/gallery/'));
+
+  await request(app).delete(`/api/admin/gallery/${uploadRes.body.data.id}`).set('Cookie', cookie);
+  const del = await request(app).delete(`/api/admin/gallery/${id}`).set('Cookie', cookie);
+  assert.equal(del.status, 200);
+});
+

@@ -62,6 +62,22 @@ function seedInsightsForStore() {
   }));
 }
 
+function seedGalleryForStore() {
+  const ts = nowIso();
+  return (seedData.gallery || []).map((item, i) => ({
+    id: item.id || crypto.randomUUID(),
+    title: item.title || `Rent-An-Accountant Launch Photo #${i + 1}`,
+    category: item.category || 'Rent-An-Accountant Launch',
+    image_url: item.image_url,
+    caption: item.caption || '',
+    display_order: item.display_order !== undefined ? item.display_order : i + 1,
+    is_featured: !!item.is_featured,
+    is_active: item.is_active !== false,
+    created_at: item.created_at || ts,
+    updated_at: item.updated_at || ts
+  }));
+}
+
 function freshStore() {
   return {
     version: 2,
@@ -69,6 +85,7 @@ function freshStore() {
     contacts: [],
     inquiries: [],
     insights: seedInsightsForStore(),
+    gallery: seedGalleryForStore(),
     newsletter: [],
     siteSettings: clone(seedData.siteSettings),
     launchCampaign: clone(seedData.launchCampaign)
@@ -95,6 +112,7 @@ function loadStore() {
       contacts: Array.isArray(loaded.contacts) ? loaded.contacts : [],
       inquiries: Array.isArray(loaded.inquiries) ? loaded.inquiries : [],
       insights: Array.isArray(loaded.insights) ? loaded.insights : base.insights,
+      gallery: Array.isArray(loaded.gallery) && loaded.gallery.length ? loaded.gallery : base.gallery,
       newsletter: Array.isArray(loaded.newsletter) ? loaded.newsletter : [],
       siteSettings: { ...base.siteSettings, ...(loaded.siteSettings || {}) },
       launchCampaign: { ...base.launchCampaign, ...(loaded.launchCampaign || {}) }
@@ -280,11 +298,26 @@ async function createSchema() {
       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`);
 
+  await q(`
+    CREATE TABLE IF NOT EXISTS gallery (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      uid CHAR(36) NULL,
+      title VARCHAR(300) NOT NULL,
+      image_url VARCHAR(500) NOT NULL,
+      category VARCHAR(100) DEFAULT 'Rent-An-Accountant Launch',
+      caption TEXT,
+      display_order INT DEFAULT 0,
+      is_featured BOOLEAN DEFAULT false,
+      is_active BOOLEAN DEFAULT true,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`);
+
   // Upgrades for tables created by older versions.
   await ensureColumn('inquiries', 'company', 'company VARCHAR(200) NULL');
   await ensureColumn('insights', 'read_time', 'read_time VARCHAR(50) NULL');
   await ensureColumn('insights', 'tags', 'tags TEXT NULL');
-  for (const t of ['bookings', 'contact_submissions', 'insights', 'inquiries', 'newsletter_subscribers']) {
+  for (const t of ['bookings', 'contact_submissions', 'insights', 'inquiries', 'newsletter_subscribers', 'gallery']) {
     await ensureUid(t);
   }
 }
@@ -297,6 +330,13 @@ async function seedMysql() {
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)`,
       [crypto.randomUUID(), post.slug, post.title, post.excerpt || '', post.content || '', post.category || 'Insights',
         post.cover_image || '', post.author || 'THEWHY Practice Team', post.readTime || '4 min read', JSON.stringify(post.tags || [])]
+    );
+  }
+  for (const item of seedData.gallery || []) {
+    await q(
+      `INSERT IGNORE INTO gallery (uid, title, image_url, category, caption, display_order, is_featured, is_active)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+      [item.id || crypto.randomUUID(), item.title, item.image_url, item.category || 'Rent-An-Accountant Launch', item.caption || '', item.display_order || 0, item.is_featured ? 1 : 0, item.is_active ? 1 : 0]
     );
   }
   for (const [key, value] of Object.entries(seedData.siteSettings)) {
@@ -474,6 +514,19 @@ const mapSubscriber = (r) => ({
   name: r.name || '',
   source: r.source || '',
   createdAt: toIso(r.created_at)
+});
+
+const mapGallery = (r) => ({
+  id: r.uid || String(r.id),
+  title: r.title,
+  image_url: r.image_url,
+  category: r.category || 'Rent-An-Accountant Launch',
+  caption: r.caption || '',
+  display_order: parseInt(r.display_order || 0, 10),
+  is_featured: !!r.is_featured,
+  is_active: r.is_active !== 0 && r.is_active !== false,
+  created_at: toIso(r.created_at),
+  updated_at: toIso(r.updated_at)
 });
 
 function escapeLike(s) {
@@ -905,6 +958,207 @@ async function deleteInsight(slug) {
 }
 
 // ---------------------------------------------------------------------------
+// GALLERY
+// ---------------------------------------------------------------------------
+function sortGallery(list) {
+  return [...list].sort((a, b) => {
+    if (a.is_featured && !b.is_featured) return -1;
+    if (!a.is_featured && b.is_featured) return 1;
+    const ordA = a.display_order !== undefined ? a.display_order : 9999;
+    const ordB = b.display_order !== undefined ? b.display_order : 9999;
+    if (ordA !== ordB) return ordA - ordB;
+    return String(b.created_at || '').localeCompare(String(a.created_at || ''));
+  });
+}
+
+async function getAllGalleryItems({ category, featuredOnly = false, activeOnly = true, limit = 0, offset = 0, search = '' } = {}) {
+  if (isMysql()) {
+    const where = [];
+    const params = [];
+    if (activeOnly) {
+      where.push('is_active = 1');
+    }
+    if (featuredOnly) {
+      where.push('is_featured = 1');
+    }
+    if (category && category !== 'All') {
+      where.push('category = ?');
+      params.push(category);
+    }
+    if (search && search.trim()) {
+      where.push('(title LIKE ? OR caption LIKE ?)');
+      params.push(`%${search.trim()}%`, `%${search.trim()}%`);
+    }
+    const whereClause = where.length ? `WHERE ${where.join(' AND ')}` : '';
+
+    const countRows = await q(`SELECT COUNT(*) AS total FROM gallery ${whereClause}`, params);
+    const total = countRows[0] ? countRows[0].total : 0;
+
+    const catRows = await q(`SELECT category, COUNT(*) AS count FROM gallery WHERE is_active = 1 GROUP BY category ORDER BY count DESC`);
+    const categories = catRows.map(r => ({ name: r.category, count: r.count }));
+
+    let sql = `SELECT * FROM gallery ${whereClause} ORDER BY is_featured DESC, display_order ASC, id ASC`;
+    if (limit > 0) {
+      sql += ` LIMIT ? OFFSET ?`;
+      params.push(limit, offset);
+    }
+    const rows = await q(sql, params);
+    return {
+      items: rows.map(mapGallery),
+      total,
+      categories
+    };
+  }
+
+  const s = loadStore();
+  let list = Array.isArray(s.gallery) ? s.gallery : [];
+
+  const catCounts = {};
+  for (const item of list) {
+    if (item.is_active !== false) {
+      const c = item.category || 'Rent-An-Accountant Launch';
+      catCounts[c] = (catCounts[c] || 0) + 1;
+    }
+  }
+  const categories = Object.keys(catCounts).map(name => ({ name, count: catCounts[name] }));
+
+  if (activeOnly) {
+    list = list.filter(i => i.is_active !== false);
+  }
+  if (featuredOnly) {
+    list = list.filter(i => !!i.is_featured);
+  }
+  if (category && category !== 'All') {
+    list = list.filter(i => (i.category || '').toLowerCase() === category.toLowerCase());
+  }
+  if (search && search.trim()) {
+    const qStr = search.trim().toLowerCase();
+    list = list.filter(i =>
+      (i.title || '').toLowerCase().includes(qStr) ||
+      (i.caption || '').toLowerCase().includes(qStr)
+    );
+  }
+
+  const sorted = sortGallery(list);
+  const total = sorted.length;
+  const items = limit > 0 ? sorted.slice(offset, offset + limit) : sorted;
+
+  return { items, total, categories };
+}
+
+async function getGalleryItemById(id) {
+  if (!id) return null;
+  if (isMysql()) {
+    const rows = await q('SELECT * FROM gallery WHERE uid = ? OR id = ? LIMIT 1', [id, isNaN(id) ? -1 : parseInt(id, 10)]);
+    return rows.length ? mapGallery(rows[0]) : null;
+  }
+  const s = loadStore();
+  return (s.gallery || []).find(i => String(i.id) === String(id) || i.uid === id) || null;
+}
+
+async function createGalleryItem(data) {
+  const ts = nowIso();
+  const id = crypto.randomUUID();
+  const item = {
+    id,
+    title: String(data.title || 'Rent-An-Accountant Launch Photo').trim(),
+    image_url: String(data.image_url || '').trim(),
+    category: String(data.category || 'Rent-An-Accountant Launch').trim(),
+    caption: String(data.caption || '').trim(),
+    display_order: parseInt(data.display_order || 0, 10),
+    is_featured: !!data.is_featured,
+    is_active: data.is_active !== false,
+    created_at: ts,
+    updated_at: ts
+  };
+
+  if (isMysql()) {
+    await q(
+      `INSERT INTO gallery (uid, title, image_url, category, caption, display_order, is_featured, is_active, created_at, updated_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())`,
+      [item.id, item.title, item.image_url, item.category, item.caption, item.display_order, item.is_featured ? 1 : 0, item.is_active ? 1 : 0]
+    );
+    return getGalleryItemById(item.id);
+  }
+
+  const s = loadStore();
+  if (!Array.isArray(s.gallery)) s.gallery = [];
+  s.gallery.unshift(item);
+  saveStore();
+  return item;
+}
+
+const GALLERY_COLUMNS = {
+  title: 'title',
+  image_url: 'image_url',
+  category: 'category',
+  caption: 'caption',
+  display_order: 'display_order',
+  is_featured: 'is_featured',
+  is_active: 'is_active'
+};
+
+async function updateGalleryItem(id, data) {
+  if (!id) return null;
+  const ts = nowIso();
+  if (isMysql()) {
+    const sets = [];
+    const params = [];
+    for (const [key, col] of Object.entries(GALLERY_COLUMNS)) {
+      if (data[key] !== undefined) {
+        sets.push(`${col} = ?`);
+        if (key === 'is_featured' || key === 'is_active') {
+          params.push(data[key] ? 1 : 0);
+        } else if (key === 'display_order') {
+          params.push(parseInt(data[key] || 0, 10));
+        } else {
+          params.push(String(data[key]));
+        }
+      }
+    }
+    if (sets.length) {
+      sets.push('updated_at = NOW()');
+      const res = await q(`UPDATE gallery SET ${sets.join(', ')} WHERE uid = ? OR id = ?`, [...params, id, isNaN(id) ? -1 : parseInt(id, 10)]);
+      if (!res.affectedRows) return null;
+    }
+    return getGalleryItemById(id);
+  }
+
+  const s = loadStore();
+  if (!Array.isArray(s.gallery)) s.gallery = [];
+  const idx = s.gallery.findIndex(i => String(i.id) === String(id) || i.uid === id);
+  if (idx === -1) return null;
+
+  const patch = {};
+  for (const key of Object.keys(GALLERY_COLUMNS)) {
+    if (data[key] !== undefined) {
+      if (key === 'is_featured') patch.is_featured = !!data[key];
+      else if (key === 'is_active') patch.is_active = data[key] !== false;
+      else if (key === 'display_order') patch.display_order = parseInt(data[key] || 0, 10);
+      else patch[key] = String(data[key]).trim();
+    }
+  }
+  s.gallery[idx] = { ...s.gallery[idx], ...patch, updated_at: ts };
+  saveStore();
+  return s.gallery[idx];
+}
+
+async function deleteGalleryItem(id) {
+  if (!id) return false;
+  if (isMysql()) {
+    const res = await q('DELETE FROM gallery WHERE uid = ? OR id = ?', [id, isNaN(id) ? -1 : parseInt(id, 10)]);
+    return res.affectedRows > 0;
+  }
+  const s = loadStore();
+  if (!Array.isArray(s.gallery)) return false;
+  const idx = s.gallery.findIndex(i => String(i.id) === String(id) || i.uid === id);
+  if (idx === -1) return false;
+  s.gallery.splice(idx, 1);
+  saveStore();
+  return true;
+}
+
+// ---------------------------------------------------------------------------
 // SITE SETTINGS & LAUNCH CAMPAIGN
 // ---------------------------------------------------------------------------
 async function getSiteSettings() {
@@ -1053,5 +1307,10 @@ module.exports = {
   getTeam,
   getTestimonials,
   getFaqs,
-  getStats
+  getStats,
+  getAllGalleryItems,
+  getGalleryItemById,
+  createGalleryItem,
+  updateGalleryItem,
+  deleteGalleryItem
 };

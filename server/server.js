@@ -93,7 +93,7 @@ app.use((req, res, next) => {
 const smallJson = express.json({ limit: '20kb' });
 const smallForm = express.urlencoded({ extended: false, limit: '20kb' });
 app.use((req, res, next) => {
-  if (req.path.startsWith('/api/insights')) return next();
+  if (req.path.startsWith('/api/insights') || req.path.startsWith('/api/admin/gallery/upload')) return next();
   smallJson(req, res, (err) => (err ? next(err) : smallForm(req, res, next)));
 });
 
@@ -141,6 +141,8 @@ app.get('/contact', sendPage('contact.html'));
 app.get('/booking', sendPage('booking.html'));
 app.get('/privacy', sendPage('privacy.html'));
 app.get('/terms', sendPage('terms.html'));
+app.get('/gallery', sendPage('gallery.html'));
+app.get('/photos', (req, res) => res.redirect(301, '/gallery'));
 app.get('/admin', sendPage('admin.html'));
 
 // ---------------------------------------------------------------------------
@@ -169,6 +171,9 @@ app.use(express.static(PUBLIC_DIR, {
 // ---------------------------------------------------------------------------
 // API routes
 // ---------------------------------------------------------------------------
+const { publicRouter: galleryRouter, adminRouter: adminGalleryRouter } = require('./routes/gallery');
+app.use('/api/gallery', galleryRouter);
+app.use('/api/admin/gallery', adminGalleryRouter);
 app.use('/api/bookings', require('./routes/bookings'));
 app.use('/api/contact', require('./routes/contact'));
 app.use('/api/inquiries', require('./routes/inquiries'));

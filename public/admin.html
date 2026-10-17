@@ -101,6 +101,9 @@
         <button data-tab="tab-media" class="admin-tab-btn text-slate-500 hover:text-slate-800 pb-1 flex items-center gap-2">
           <i class="fa-regular fa-image"></i> Media Library
         </button>
+        <button data-tab="tab-gallery" class="admin-tab-btn text-slate-500 hover:text-slate-800 pb-1 flex items-center gap-2">
+          <i class="fa-solid fa-camera-retro"></i> Photo Gallery
+        </button>
       </nav>
     </div>
   </div>
@@ -399,7 +402,148 @@
       </div>
     </section>
 
+    <!-- TAB: PHOTO GALLERY MANAGER -->
+    <section id="tab-gallery" class="tab-content hidden space-y-6">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+        <div>
+          <h2 class="font-heading text-xl font-bold text-brandDark">Rent-An-Accountant Photo Gallery</h2>
+          <p class="text-xs text-slate-500">Manage, edit, change, and upload event photos. You can change image files, update titles and categories, feature highlights, or hide photos from the public gallery.</p>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <button id="btn-add-gallery-item" class="px-4 py-2.5 bg-brandOrange hover:bg-brandOrangeDark text-white font-bold rounded-xl text-xs flex items-center gap-2 shadow-md">
+            <i class="fa-solid fa-plus"></i> Add / Upload Photo
+          </button>
+          <a href="/gallery" target="_blank" rel="noopener" class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-xl text-xs flex items-center gap-2 shadow-md">
+            <i class="fa-solid fa-arrow-up-right-from-square"></i> View Live Gallery
+          </a>
+        </div>
+      </div>
+
+      <!-- Gallery Toolbar: Search & Filter -->
+      <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col md:flex-row gap-4 justify-between items-start md:items-center text-xs">
+        <div class="flex flex-wrap gap-3 items-center w-full md:w-auto">
+          <div class="relative flex-1 md:w-64">
+            <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+            <input type="text" id="admin-gallery-search" placeholder="Search photos..." class="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-300 bg-slate-50 focus:bg-white text-xs">
+          </div>
+          <select id="admin-gallery-cat-filter" class="px-3 py-2 rounded-xl border border-slate-300 bg-white text-xs font-semibold">
+            <option value="All">All Categories</option>
+            <option value="Arrivals & Red Carpet">Arrivals &amp; Red Carpet</option>
+            <option value="Keynotes & Presentations">Keynotes &amp; Presentations</option>
+            <option value="Panel & Discussions">Panel &amp; Discussions</option>
+            <option value="Networking & Guests">Networking &amp; Guests</option>
+            <option value="Executive Team & VIPs">Executive Team &amp; VIPs</option>
+          </select>
+          <select id="admin-gallery-status-filter" class="px-3 py-2 rounded-xl border border-slate-300 bg-white text-xs font-semibold">
+            <option value="all">All Statuses</option>
+            <option value="active">Active Only</option>
+            <option value="hidden">Hidden Only</option>
+            <option value="featured">Featured Only</option>
+          </select>
+        </div>
+        <div class="text-slate-500 font-semibold" id="admin-gallery-counter">
+          Loading photos...
+        </div>
+      </div>
+
+      <!-- Gallery Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" id="admin-gallery-grid">
+        <div class="col-span-full py-12 text-center text-slate-400 bg-white rounded-3xl border border-slate-200">
+          <i class="fa-solid fa-circle-notch fa-spin text-brandOrange text-2xl mb-2"></i>
+          <p>Loading gallery items...</p>
+        </div>
+      </div>
+
+      <!-- Load More in Admin -->
+      <div id="admin-gallery-load-more-strip" class="text-center py-4 hidden">
+        <button id="btn-admin-gallery-load-more" class="px-6 py-2.5 bg-white hover:bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold text-slate-700 shadow-sm">
+          Load More Photos
+        </button>
+      </div>
+    </section>
+
   </main>
+
+  <!-- GALLERY PHOTO ADD / EDIT MODAL -->
+  <div id="gallery-modal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl relative border border-slate-200 max-h-[90vh] overflow-y-auto space-y-4">
+      <button id="btn-close-gallery-modal" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 flex items-center justify-center">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <h3 id="gal-modal-title" class="font-heading text-xl font-bold text-brandDark">Edit Photo</h3>
+
+      <form id="gallery-form" class="space-y-4 text-xs">
+        <input type="hidden" id="modal-gal-id">
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Photo Title / Caption *</label>
+          <input type="text" id="modal-gal-title" required maxlength="300" placeholder="e.g. Rent-An-Accountant Keynote Session" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Category *</label>
+            <input type="text" id="modal-gal-category" list="gallery-category-options" required maxlength="100" placeholder="Category name" class="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white">
+            <datalist id="gallery-category-options">
+              <option value="Arrivals & Red Carpet">
+              <option value="Keynotes & Presentations">
+              <option value="Panel & Discussions">
+              <option value="Networking & Guests">
+              <option value="Executive Team & VIPs">
+              <option value="Rent-An-Accountant Launch">
+            </datalist>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Display Order</label>
+            <input type="number" id="modal-gal-order" value="0" min="0" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Image (Upload file or change URL) *</label>
+          <div class="flex flex-col sm:flex-row gap-3 p-3 rounded-xl border-2 border-dashed border-slate-300 bg-slate-50">
+            <div id="modal-gal-preview-box" class="relative w-full sm:w-36 h-28 shrink-0 rounded-lg bg-slate-200 bg-cover bg-center overflow-hidden flex items-center justify-center text-slate-400 text-[10px] font-bold">
+              <span id="modal-gal-preview-empty">No image</span>
+            </div>
+            <div class="flex-1 min-w-0 flex flex-col gap-2">
+              <label class="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-brandDark hover:bg-brandNavy text-white text-xs font-bold cursor-pointer transition-colors w-fit">
+                <i class="fa-solid fa-cloud-arrow-up"></i>
+                <span>Choose New Image File</span>
+                <input type="file" id="modal-gal-file" accept="image/jpeg,image/png,image/webp,image/avif" class="sr-only">
+              </label>
+              <input type="text" id="modal-gal-url" required maxlength="500" placeholder="Image URL e.g. /assets/img/gallery/DSC_9860.jpeg" class="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white text-xs">
+              <p class="text-[11px] text-slate-500">Pick an image from your device to upload, or paste an existing image URL or asset path.</p>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Description / Notes (Optional)</label>
+          <textarea id="modal-gal-caption" rows="2" maxlength="500" placeholder="Brief note about this photo..." class="w-full px-3 py-2 rounded-xl border border-slate-300"></textarea>
+        </div>
+
+        <div class="flex flex-wrap gap-4 pt-1">
+          <label class="flex items-center gap-2 cursor-pointer font-bold text-slate-700">
+            <input type="checkbox" id="modal-gal-active" checked class="w-4 h-4 text-brandOrange rounded">
+            <span>Visible on Live Website</span>
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer font-bold text-slate-700">
+            <input type="checkbox" id="modal-gal-featured" class="w-4 h-4 text-amber-500 rounded">
+            <span>Featured (Star highlight)</span>
+          </label>
+        </div>
+
+        <div id="gallery-modal-error" class="hidden text-xs text-red-600 font-semibold"></div>
+
+        <div class="pt-3 flex gap-2">
+          <button type="submit" id="btn-save-gallery-item" class="flex-1 py-3 bg-brandOrange hover:bg-brandOrangeDark text-white font-bold rounded-xl shadow-md transition-all text-xs">
+            Save Photo Details
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <!-- ARTICLE CREATE / EDIT MODAL -->
   <div id="article-modal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">

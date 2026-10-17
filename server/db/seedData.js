@@ -23,7 +23,7 @@ module.exports = {
         "CAC Company Registration & Annual Returns",
         "Treasury & Bank Reconciliation",
         "Cloud Accounting Software Setup (QuickBooks, Zoho, Sage)",
-        "Stress-Free Tax Authority Liaison (NRS & LIRS)",
+        "Stress-Free Tax Authority Liaison (NRS & SIRS)",
         "Employee & Expatriate Tax Planning",
         "VAT Registration & Monthly Compliance"
       ],
@@ -588,5 +588,12 @@ Our HR Advisory practice facilitates expedited compliance documentation, payroll
 
 Through aggressive financial engineering, THEWHY Consulting has defended over ₦3.2 Billion in operational machinery and preserved hundreds of jobs.`
   }
-  ]
+  ],
+  gallery: (() => {
+    try {
+      return require('../data/gallery-seed.json');
+    } catch (_) {
+      return [];
+    }
+  })()
 };
