@@ -406,8 +406,8 @@
     <section id="tab-gallery" class="tab-content hidden space-y-6">
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
         <div>
-          <h2 class="font-heading text-xl font-bold text-brandDark">Rent-An-Accountant Photo Gallery</h2>
-          <p class="text-xs text-slate-500">Manage, edit, change, and upload event photos. You can change image files, update titles and categories, feature highlights, or hide photos from the public gallery.</p>
+          <h2 class="font-heading text-xl font-bold text-brandDark">Photo Gallery</h2>
+          <p class="text-xs text-slate-500">Photos are grouped into albums, one per activity (for example "Rent-An-Accountant Launch"). Upload photos into an album, set the moment they show, feature highlights, or hide photos from the public gallery.</p>
         </div>
         <div class="flex flex-wrap gap-2">
           <button id="btn-add-gallery-item" class="px-4 py-2.5 bg-brandOrange hover:bg-brandOrangeDark text-white font-bold rounded-xl text-xs flex items-center gap-2 shadow-md">
@@ -426,13 +426,11 @@
             <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
             <input type="text" id="admin-gallery-search" placeholder="Search photos..." class="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-300 bg-slate-50 focus:bg-white text-xs">
           </div>
+          <select id="admin-gallery-album-filter" class="px-3 py-2 rounded-xl border border-slate-300 bg-white text-xs font-semibold">
+            <option value="All">All Albums</option>
+          </select>
           <select id="admin-gallery-cat-filter" class="px-3 py-2 rounded-xl border border-slate-300 bg-white text-xs font-semibold">
-            <option value="All">All Categories</option>
-            <option value="Arrivals & Red Carpet">Arrivals &amp; Red Carpet</option>
-            <option value="Keynotes & Presentations">Keynotes &amp; Presentations</option>
-            <option value="Panel & Discussions">Panel &amp; Discussions</option>
-            <option value="Networking & Guests">Networking &amp; Guests</option>
-            <option value="Executive Team & VIPs">Executive Team &amp; VIPs</option>
+            <option value="All">All Moments</option>
           </select>
           <select id="admin-gallery-status-filter" class="px-3 py-2 rounded-xl border border-slate-300 bg-white text-xs font-semibold">
             <option value="all">All Statuses</option>
@@ -477,27 +475,27 @@
         <input type="hidden" id="modal-gal-id">
 
         <div>
-          <label class="block font-bold text-slate-700 mb-1">Photo Title / Caption *</label>
-          <input type="text" id="modal-gal-title" required maxlength="300" placeholder="e.g. Rent-An-Accountant Keynote Session" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+          <label class="block font-bold text-slate-700 mb-1">Album (activity) *</label>
+          <input type="text" id="modal-gal-album" list="gallery-album-options" required maxlength="150" placeholder="e.g. Rent-An-Accountant Launch, Executive Seminar 2026" class="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white">
+          <datalist id="gallery-album-options"></datalist>
+          <p class="text-[11px] text-slate-500 mt-1">Pick an existing album or type a new name to start a new album.</p>
         </div>
 
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block font-bold text-slate-700 mb-1">Category *</label>
-            <input type="text" id="modal-gal-category" list="gallery-category-options" required maxlength="100" placeholder="Category name" class="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white">
-            <datalist id="gallery-category-options">
-              <option value="Arrivals & Red Carpet">
-              <option value="Keynotes & Presentations">
-              <option value="Panel & Discussions">
-              <option value="Networking & Guests">
-              <option value="Executive Team & VIPs">
-              <option value="Rent-An-Accountant Launch">
-            </datalist>
+            <label class="block font-bold text-slate-700 mb-1">Moment</label>
+            <input type="text" id="modal-gal-category" list="gallery-category-options" maxlength="100" placeholder="e.g. Keynotes &amp; Presentations" class="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white">
+            <datalist id="gallery-category-options"></datalist>
           </div>
           <div>
             <label class="block font-bold text-slate-700 mb-1">Display Order</label>
             <input type="number" id="modal-gal-order" value="0" min="0" class="w-full px-3 py-2 rounded-xl border border-slate-300">
           </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Title (for your reference)</label>
+          <input type="text" id="modal-gal-title" maxlength="300" placeholder="e.g. Keynote session" class="w-full px-3 py-2 rounded-xl border border-slate-300">
         </div>
 
         <div>
@@ -514,13 +512,15 @@
               </label>
               <input type="text" id="modal-gal-url" required maxlength="500" placeholder="Image URL e.g. /assets/img/gallery/DSC_9860.jpeg" class="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white text-xs">
               <p class="text-[11px] text-slate-500">Pick an image from your device to upload, or paste an existing image URL or asset path.</p>
+              <p id="modal-gal-upload-note" class="hidden text-[11px] font-semibold text-amber-700"></p>
+              <div id="modal-gal-progress" class="hidden h-1.5 rounded-full bg-slate-200 overflow-hidden"><div class="h-full bg-brandOrange transition-all" style="width:0%"></div></div>
             </div>
           </div>
         </div>
 
         <div>
-          <label class="block font-bold text-slate-700 mb-1">Description / Notes (Optional)</label>
-          <textarea id="modal-gal-caption" rows="2" maxlength="500" placeholder="Brief note about this photo..." class="w-full px-3 py-2 rounded-xl border border-slate-300"></textarea>
+          <label class="block font-bold text-slate-700 mb-1">Caption (optional, shown under the photo)</label>
+          <textarea id="modal-gal-caption" rows="2" maxlength="500" placeholder="e.g. Our MD welcoming guests" class="w-full px-3 py-2 rounded-xl border border-slate-300"></textarea>
         </div>
 
         <div class="flex flex-wrap gap-4 pt-1">

@@ -317,6 +317,20 @@ test('public gallery API returns photos, pagination, and categories', async () =
   assert.ok(Array.isArray(res.body.categories));
   assert.ok(res.body.categories.length > 0);
   assert.ok(res.body.data[0].image_url);
+  assert.ok(Array.isArray(res.body.albums) && res.body.albums.length > 0);
+  assert.ok(res.body.data.every(p => p.album));
+});
+
+test('public gallery filters by album and scopes moments to it', async () => {
+  const all = await request(app).get('/api/gallery?limit=1');
+  const album = all.body.albums[0];
+  const res = await request(app).get('/api/gallery?limit=100&album=' + encodeURIComponent(album.name));
+  assert.equal(res.status, 200);
+  assert.equal(res.body.total, album.count);
+  assert.ok(res.body.data.every(p => p.album === album.name));
+  const none = await request(app).get('/api/gallery?album=No%20Such%20Album');
+  assert.equal(none.body.total, 0);
+  assert.equal(none.body.categories.length, 0);
 });
 
 test('public gallery categories endpoint returns distinct categories', async () => {
@@ -334,11 +348,15 @@ test('admin gallery CRUD and upload', async () => {
   const created = await request(app).post('/api/admin/gallery').set('Cookie', cookie).send({
     title: 'Test Photo Launch Event',
     image_url: '/assets/img/gallery/DSC_9860.jpeg',
+    album: 'Test Album',
     category: 'Keynotes & Presentations',
     is_featured: true
   });
   assert.equal(created.status, 201);
+  assert.equal(created.body.data.album, 'Test Album');
   const id = created.body.data.id;
+  const inAlbum = await request(app).get('/api/gallery?album=Test%20Album');
+  assert.equal(inAlbum.body.total, 1);
 
   const updated = await request(app).put(`/api/admin/gallery/${id}`).set('Cookie', cookie).send({
     title: 'Updated Test Photo Launch Event',
@@ -355,8 +373,12 @@ test('admin gallery CRUD and upload', async () => {
   });
   assert.equal(uploadRes.status, 201);
   assert.ok(uploadRes.body.url.startsWith('/assets/img/gallery/'));
+  const uploadedFile = path.join(__dirname, '..', 'public', uploadRes.body.url);
+  assert.ok(fs.existsSync(uploadedFile));
 
   await request(app).delete(`/api/admin/gallery/${uploadRes.body.data.id}`).set('Cookie', cookie);
+  await new Promise(r => setTimeout(r, 50));
+  assert.ok(!fs.existsSync(uploadedFile), 'deleting the photo removes the uploaded file');
   const del = await request(app).delete(`/api/admin/gallery/${id}`).set('Cookie', cookie);
   assert.equal(del.status, 200);
 });

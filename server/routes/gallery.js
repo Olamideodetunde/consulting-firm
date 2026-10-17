@@ -1,6 +1,7 @@
 /**
  * THEWHY CONSULTING - Gallery API Routes
- * Public and Admin endpoints for Event Photos & Rent-An-Accountant Gallery.
+ * Public and admin endpoints for the activities gallery (photos grouped into albums,
+ * e.g. "Rent-An-Accountant Launch", and moments within an album).
  */
 
 const express = require('express');
@@ -25,6 +26,16 @@ try {
   console.warn('[GALLERY] Could not create gallery directory:', e.message);
 }
 
+/**
+ * Delete a file saved by the local-disk upload fallback (gallery_<timestamp>_<name>.<ext>).
+ * Seeded photos and Cloudinary URLs are never touched.
+ */
+function removeLocalUpload(imageUrl) {
+  const m = /^\/assets\/img\/gallery\/(gallery_\d+_[A-Za-z0-9_-]+\.(?:jpg|png|webp|avif))$/.exec(String(imageUrl || ''));
+  if (!m) return;
+  fs.unlink(path.join(GALLERY_DIR, m[1]), () => {});
+}
+
 // ---------------------------------------------------------------------------
 // PUBLIC ROUTES
 // ---------------------------------------------------------------------------
@@ -40,11 +51,13 @@ publicRouter.get('/', wrap(async (req, res) => {
   }
 
   const offset = limit > 0 ? (page - 1) * limit : 0;
-  const category = (req.query.category || '').trim();
-  const search = (req.query.search || '').trim();
+  const album = String(req.query.album || '').trim();
+  const category = String(req.query.category || '').trim();
+  const search = String(req.query.search || '').trim();
   const featuredOnly = req.query.featured === 'true' || req.query.featured === '1';
 
   const result = await db.getAllGalleryItems({
+    album,
     category,
     featuredOnly,
     activeOnly: true,
@@ -62,6 +75,7 @@ publicRouter.get('/', wrap(async (req, res) => {
     page,
     totalPages,
     limit,
+    albums: result.albums,
     categories: result.categories,
     data: result.items
   });
@@ -104,9 +118,10 @@ adminRouter.get('/', wrap(async (req, res) => {
   }
 
   const offset = limit > 0 ? (page - 1) * limit : 0;
-  const category = (req.query.category || '').trim();
-  const search = (req.query.search || '').trim();
-  const status = (req.query.status || 'all').toLowerCase();
+  const album = String(req.query.album || '').trim();
+  const category = String(req.query.category || '').trim();
+  const search = String(req.query.search || '').trim();
+  const status = String(req.query.status || 'all').toLowerCase();
 
   let activeOnly = false;
   let featuredOnly = false;
@@ -114,6 +129,7 @@ adminRouter.get('/', wrap(async (req, res) => {
   if (status === 'featured') featuredOnly = true;
 
   const result = await db.getAllGalleryItems({
+    album,
     category,
     featuredOnly,
     activeOnly,
@@ -139,6 +155,7 @@ adminRouter.get('/', wrap(async (req, res) => {
     page,
     totalPages,
     limit,
+    albums: result.albums,
     categories: result.categories,
     data: items
   });
@@ -146,15 +163,16 @@ adminRouter.get('/', wrap(async (req, res) => {
 
 // POST /api/admin/gallery - add new photo item
 adminRouter.post('/', wrap(async (req, res) => {
-  const { title, image_url, category, caption, display_order, is_featured, is_active } = req.body;
+  const { title, image_url, album, category, caption, display_order, is_featured, is_active } = req.body;
   if (!image_url || typeof image_url !== 'string') {
     return res.status(400).json({ success: false, error: 'Image URL is required.' });
   }
 
   const item = await db.createGalleryItem({
-    title: title || 'Rent-An-Accountant Photo',
+    title: title || 'Gallery photo',
     image_url,
-    category: category || 'Rent-An-Accountant Launch',
+    album,
+    category,
     caption: caption || '',
     display_order: display_order !== undefined ? parseInt(display_order, 10) : 0,
     is_featured: !!is_featured,
@@ -185,16 +203,18 @@ adminRouter.put('/:id', wrap(async (req, res) => {
 
 // DELETE /api/admin/gallery/:id - delete photo
 adminRouter.delete('/:id', wrap(async (req, res) => {
-  const ok = await db.deleteGalleryItem(req.params.id);
+  const existing = await db.getGalleryItemById(req.params.id);
+  const ok = existing && await db.deleteGalleryItem(req.params.id);
   if (!ok) {
     return res.status(404).json({ success: false, error: 'Photo not found.' });
   }
+  removeLocalUpload(existing.image_url);
   res.json({ success: true, message: 'Photo removed from gallery.' });
 }));
 
 // POST /api/admin/gallery/upload - upload image file directly (base64)
 adminRouter.post('/upload', largeJson, wrap(async (req, res) => {
-  const { filename, data, title, category, caption, is_featured, is_active, display_order } = req.body;
+  const { filename, data, title, album, category, caption, is_featured, is_active, display_order } = req.body;
 
   if (!data || typeof data !== 'string') {
     return res.status(400).json({ success: false, error: 'No image data provided.' });
@@ -228,9 +248,10 @@ adminRouter.post('/upload', largeJson, wrap(async (req, res) => {
 
   // Automatically create database record
   const item = await db.createGalleryItem({
-    title: (title || filename || 'Rent-An-Accountant Photo').replace(/\.[^/.]+$/, ''),
+    title: (title || filename || 'Gallery photo').replace(/\.[^/.]+$/, ''),
     image_url: publicUrl,
-    category: category || 'Rent-An-Accountant Launch',
+    album,
+    category,
     caption: caption || '',
     display_order: display_order !== undefined ? parseInt(display_order, 10) : 0,
     is_featured: !!is_featured,

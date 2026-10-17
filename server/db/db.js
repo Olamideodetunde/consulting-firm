@@ -15,6 +15,8 @@
 require('dotenv').config();
 const mysql = require('mysql2/promise');
 const crypto = require('crypto');
+
+const DEFAULT_GALLERY_ALBUM = 'Rent-An-Accountant Launch';
 const fs = require('fs');
 const path = require('path');
 const seedData = require('./seedData');
@@ -66,8 +68,9 @@ function seedGalleryForStore() {
   const ts = nowIso();
   return (seedData.gallery || []).map((item, i) => ({
     id: item.id || crypto.randomUUID(),
-    title: item.title || `Rent-An-Accountant Launch Photo #${i + 1}`,
-    category: item.category || 'Rent-An-Accountant Launch',
+    title: item.title || `Photo #${i + 1}`,
+    album: item.album || DEFAULT_GALLERY_ALBUM,
+    category: item.category || 'General',
     image_url: item.image_url,
     caption: item.caption || '',
     display_order: item.display_order !== undefined ? item.display_order : i + 1,
@@ -112,7 +115,9 @@ function loadStore() {
       contacts: Array.isArray(loaded.contacts) ? loaded.contacts : [],
       inquiries: Array.isArray(loaded.inquiries) ? loaded.inquiries : [],
       insights: Array.isArray(loaded.insights) ? loaded.insights : base.insights,
-      gallery: Array.isArray(loaded.gallery) && loaded.gallery.length ? loaded.gallery : base.gallery,
+      gallery: Array.isArray(loaded.gallery) && loaded.gallery.length
+        ? loaded.gallery.map(g => ({ ...g, album: g.album || DEFAULT_GALLERY_ALBUM }))
+        : base.gallery,
       newsletter: Array.isArray(loaded.newsletter) ? loaded.newsletter : [],
       siteSettings: { ...base.siteSettings, ...(loaded.siteSettings || {}) },
       launchCampaign: { ...base.launchCampaign, ...(loaded.launchCampaign || {}) }
@@ -304,7 +309,8 @@ async function createSchema() {
       uid CHAR(36) NULL,
       title VARCHAR(300) NOT NULL,
       image_url VARCHAR(500) NOT NULL,
-      category VARCHAR(100) DEFAULT 'Rent-An-Accountant Launch',
+      album VARCHAR(150) NULL,
+      category VARCHAR(100) DEFAULT 'General',
       caption TEXT,
       display_order INT DEFAULT 0,
       is_featured BOOLEAN DEFAULT false,
@@ -317,6 +323,8 @@ async function createSchema() {
   await ensureColumn('inquiries', 'company', 'company VARCHAR(200) NULL');
   await ensureColumn('insights', 'read_time', 'read_time VARCHAR(50) NULL');
   await ensureColumn('insights', 'tags', 'tags TEXT NULL');
+  await ensureColumn('gallery', 'album', 'album VARCHAR(150) NULL');
+  await q("UPDATE gallery SET album = ? WHERE album IS NULL OR album = ''", [DEFAULT_GALLERY_ALBUM]);
   for (const t of ['bookings', 'contact_submissions', 'insights', 'inquiries', 'newsletter_subscribers', 'gallery']) {
     await ensureUid(t);
   }
@@ -334,9 +342,9 @@ async function seedMysql() {
   }
   for (const item of seedData.gallery || []) {
     await q(
-      `INSERT IGNORE INTO gallery (uid, title, image_url, category, caption, display_order, is_featured, is_active)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-      [item.id || crypto.randomUUID(), item.title, item.image_url, item.category || 'Rent-An-Accountant Launch', item.caption || '', item.display_order || 0, item.is_featured ? 1 : 0, item.is_active ? 1 : 0]
+      `INSERT IGNORE INTO gallery (uid, title, image_url, album, category, caption, display_order, is_featured, is_active)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [item.id || crypto.randomUUID(), item.title, item.image_url, item.album || DEFAULT_GALLERY_ALBUM, item.category || 'General', item.caption || '', item.display_order || 0, item.is_featured ? 1 : 0, item.is_active ? 1 : 0]
     );
   }
   for (const [key, value] of Object.entries(seedData.siteSettings)) {
@@ -520,7 +528,8 @@ const mapGallery = (r) => ({
   id: r.uid || String(r.id),
   title: r.title,
   image_url: r.image_url,
-  category: r.category || 'Rent-An-Accountant Launch',
+  album: r.album || DEFAULT_GALLERY_ALBUM,
+  category: r.category || 'General',
   caption: r.caption || '',
   display_order: parseInt(r.display_order || 0, 10),
   is_featured: !!r.is_featured,
@@ -971,7 +980,7 @@ function sortGallery(list) {
   });
 }
 
-async function getAllGalleryItems({ category, featuredOnly = false, activeOnly = true, limit = 0, offset = 0, search = '' } = {}) {
+async function getAllGalleryItems({ album, category, featuredOnly = false, activeOnly = true, limit = 0, offset = 0, search = '' } = {}) {
   if (isMysql()) {
     const where = [];
     const params = [];
@@ -980,6 +989,10 @@ async function getAllGalleryItems({ category, featuredOnly = false, activeOnly =
     }
     if (featuredOnly) {
       where.push('is_featured = 1');
+    }
+    if (album && album !== 'All') {
+      where.push('album = ?');
+      params.push(album);
     }
     if (category && category !== 'All') {
       where.push('category = ?');
@@ -994,8 +1007,16 @@ async function getAllGalleryItems({ category, featuredOnly = false, activeOnly =
     const countRows = await q(`SELECT COUNT(*) AS total FROM gallery ${whereClause}`, params);
     const total = countRows[0] ? countRows[0].total : 0;
 
-    const catRows = await q(`SELECT category, COUNT(*) AS count FROM gallery WHERE is_active = 1 GROUP BY category ORDER BY count DESC`);
-    const categories = catRows.map(r => ({ name: r.category, count: r.count }));
+    const albumScoped = album && album !== 'All';
+    const catRows = await q(
+      `SELECT category, COUNT(*) AS count FROM gallery WHERE is_active = 1${albumScoped ? ' AND album = ?' : ''} GROUP BY category ORDER BY count DESC`,
+      albumScoped ? [album] : []
+    );
+    const categories = catRows.map(r => ({ name: r.category, count: Number(r.count) }));
+    const albumRows = await q(
+      `SELECT album, COUNT(*) AS count, MIN(display_order) AS first_order FROM gallery WHERE is_active = 1 GROUP BY album ORDER BY first_order ASC, count DESC`
+    );
+    const albums = albumRows.map(r => ({ name: r.album || DEFAULT_GALLERY_ALBUM, count: Number(r.count) }));
 
     let sql = `SELECT * FROM gallery ${whereClause} ORDER BY is_featured DESC, display_order ASC, id ASC`;
     if (limit > 0) {
@@ -1006,27 +1027,38 @@ async function getAllGalleryItems({ category, featuredOnly = false, activeOnly =
     return {
       items: rows.map(mapGallery),
       total,
-      categories
+      categories,
+      albums
     };
   }
 
   const s = loadStore();
   let list = Array.isArray(s.gallery) ? s.gallery : [];
 
+  const albumOf = (i) => i.album || DEFAULT_GALLERY_ALBUM;
+  const albumScoped = album && album !== 'All';
   const catCounts = {};
-  for (const item of list) {
-    if (item.is_active !== false) {
-      const c = item.category || 'Rent-An-Accountant Launch';
-      catCounts[c] = (catCounts[c] || 0) + 1;
-    }
+  const albumCounts = {};
+  for (const item of sortGallery(list)) {
+    if (item.is_active === false) continue;
+    albumCounts[albumOf(item)] = (albumCounts[albumOf(item)] || 0) + 1;
+    if (albumScoped && albumOf(item).toLowerCase() !== album.toLowerCase()) continue;
+    const c = item.category || 'General';
+    catCounts[c] = (catCounts[c] || 0) + 1;
   }
-  const categories = Object.keys(catCounts).map(name => ({ name, count: catCounts[name] }));
+  const categories = Object.keys(catCounts)
+    .map(name => ({ name, count: catCounts[name] }))
+    .sort((a, b) => b.count - a.count);
+  const albums = Object.keys(albumCounts).map(name => ({ name, count: albumCounts[name] }));
 
   if (activeOnly) {
     list = list.filter(i => i.is_active !== false);
   }
   if (featuredOnly) {
     list = list.filter(i => !!i.is_featured);
+  }
+  if (albumScoped) {
+    list = list.filter(i => albumOf(i).toLowerCase() === album.toLowerCase());
   }
   if (category && category !== 'All') {
     list = list.filter(i => (i.category || '').toLowerCase() === category.toLowerCase());
@@ -1043,7 +1075,7 @@ async function getAllGalleryItems({ category, featuredOnly = false, activeOnly =
   const total = sorted.length;
   const items = limit > 0 ? sorted.slice(offset, offset + limit) : sorted;
 
-  return { items, total, categories };
+  return { items, total, categories, albums };
 }
 
 async function getGalleryItemById(id) {
@@ -1061,9 +1093,10 @@ async function createGalleryItem(data) {
   const id = crypto.randomUUID();
   const item = {
     id,
-    title: String(data.title || 'Rent-An-Accountant Launch Photo').trim(),
+    title: String(data.title || 'Gallery photo').trim(),
     image_url: String(data.image_url || '').trim(),
-    category: String(data.category || 'Rent-An-Accountant Launch').trim(),
+    album: String(data.album || DEFAULT_GALLERY_ALBUM).trim(),
+    category: String(data.category || 'General').trim(),
     caption: String(data.caption || '').trim(),
     display_order: parseInt(data.display_order || 0, 10),
     is_featured: !!data.is_featured,
@@ -1074,9 +1107,9 @@ async function createGalleryItem(data) {
 
   if (isMysql()) {
     await q(
-      `INSERT INTO gallery (uid, title, image_url, category, caption, display_order, is_featured, is_active, created_at, updated_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())`,
-      [item.id, item.title, item.image_url, item.category, item.caption, item.display_order, item.is_featured ? 1 : 0, item.is_active ? 1 : 0]
+      `INSERT INTO gallery (uid, title, image_url, album, category, caption, display_order, is_featured, is_active, created_at, updated_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())`,
+      [item.id, item.title, item.image_url, item.album, item.category, item.caption, item.display_order, item.is_featured ? 1 : 0, item.is_active ? 1 : 0]
     );
     return getGalleryItemById(item.id);
   }
@@ -1091,6 +1124,7 @@ async function createGalleryItem(data) {
 const GALLERY_COLUMNS = {
   title: 'title',
   image_url: 'image_url',
+  album: 'album',
   category: 'category',
   caption: 'caption',
   display_order: 'display_order',

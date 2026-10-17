@@ -22,7 +22,9 @@
     galleryPage: 1,
     galleryTotal: 0,
     galleryTotalPages: 1,
-    galleryFilter: { category: 'All', status: 'all', search: '' },
+    galleryFilter: { album: 'All', category: 'All', status: 'all', search: '' },
+    galleryAlbums: [],
+    galleryCategories: [],
     booted: false
   };
 
@@ -1090,6 +1092,9 @@
         page: String(state.galleryPage),
         limit: '36'
       });
+      if (state.galleryFilter.album && state.galleryFilter.album !== 'All') {
+        params.append('album', state.galleryFilter.album);
+      }
       if (state.galleryFilter.category && state.galleryFilter.category !== 'All') {
         params.append('category', state.galleryFilter.category);
       }
@@ -1103,6 +1108,9 @@
       const json = await api(`/api/admin/gallery?${params.toString()}`);
       state.galleryTotal = json.total;
       state.galleryTotalPages = json.totalPages;
+      if (Array.isArray(json.albums)) state.galleryAlbums = json.albums;
+      if (Array.isArray(json.categories) && !append) state.galleryCategories = json.categories;
+      syncGalleryFilterOptions();
 
       if (append) {
         state.gallery = state.gallery.concat(json.data || []);
@@ -1135,6 +1143,40 @@
     }
   }
 
+  /** Grid-sized version of a gallery photo (pre-built thumbs for seeded photos, resized Cloudinary URL). */
+  function galleryThumb(url) {
+    const u = String(url || '');
+    const local = /^\/assets\/img\/gallery\/(DSC_[^/]+)$/.exec(u);
+    if (local) return `/assets/img/gallery/thumbs/${local[1]}`;
+    const cloud = /^(https:\/\/res\.cloudinary\.com\/[^/]+\/image\/upload\/)(?:f_auto,q_auto,c_limit,w_\d+\/)?(.+)$/.exec(u);
+    if (cloud) return `${cloud[1]}f_auto,q_auto,c_limit,w_720/${cloud[2]}`;
+    return u;
+  }
+
+  function fillOptions(select, items, allLabel, current) {
+    if (!select) return;
+    select.innerHTML = `<option value="All">${escapeHtml(allLabel)}</option>` +
+      items.map(i => `<option value="${escapeHtml(i.name)}">${escapeHtml(i.name)} (${i.count})</option>`).join('');
+    select.value = items.some(i => i.name === current) ? current : 'All';
+  }
+
+  function fillDatalist(list, names) {
+    if (!list) return;
+    list.innerHTML = names.map(n => `<option value="${escapeHtml(n)}">`).join('');
+  }
+
+  const SUGGESTED_ALBUMS = ['Rent-An-Accountant Launch', 'Executive Seminars', 'Trainings & Workshops', 'Corporate Events', 'Team & Office'];
+  const SUGGESTED_MOMENTS = ['Arrivals & Red Carpet', 'Keynotes & Presentations', 'Panel & Discussions', 'Networking & Guests', 'Executive Team & VIPs'];
+
+  function syncGalleryFilterOptions() {
+    fillOptions($('admin-gallery-album-filter'), state.galleryAlbums, 'All Albums', state.galleryFilter.album);
+    fillOptions($('admin-gallery-cat-filter'), state.galleryCategories.filter(c => c.name && c.name !== 'General'), 'All Moments', state.galleryFilter.category);
+    const albumNames = [...new Set(state.galleryAlbums.map(a => a.name).concat(SUGGESTED_ALBUMS))];
+    const momentNames = [...new Set(state.galleryCategories.map(c => c.name).filter(n => n && n !== 'General').concat(SUGGESTED_MOMENTS))];
+    fillDatalist($('gallery-album-options'), albumNames);
+    fillDatalist($('gallery-category-options'), momentNames);
+  }
+
   function renderAdminGallery() {
     const grid = $('admin-gallery-grid');
     if (!grid) return;
@@ -1151,7 +1193,7 @@
       return `
         <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col group transition-all hover:shadow-md">
           <div class="relative h-44 bg-slate-100 overflow-hidden">
-            <img src="${escapeHtml(item.image_url)}" alt="${escapeHtml(item.title)}" loading="lazy" class="w-full h-full object-cover transition-transform group-hover:scale-105">
+            <img src="${escapeHtml(galleryThumb(item.image_url))}" data-full="${escapeHtml(item.image_url)}" alt="${escapeHtml(item.title)}" loading="lazy" class="w-full h-full object-cover transition-transform group-hover:scale-105">
             <div class="absolute top-2 right-2 flex gap-1.5">
               <button data-action="toggle-featured" data-id="${id}" class="w-7 h-7 rounded-lg ${isFeatured ? 'bg-amber-400 text-amber-950' : 'bg-slate-900/60 text-white hover:bg-slate-900'} flex items-center justify-center text-xs shadow-sm transition-colors" title="${isFeatured ? 'Featured (click to unfeature)' : 'Mark as featured'}">
                 <i class="fa-solid fa-star"></i>
@@ -1162,7 +1204,7 @@
             </div>
             <div class="absolute bottom-2 left-2">
               <span class="px-2 py-0.5 rounded-md bg-slate-900/80 text-white font-bold text-[10px] uppercase tracking-wider backdrop-blur-sm">
-                ${escapeHtml(item.category || 'Launch Event')}
+                ${escapeHtml(item.album || 'Gallery')}${item.category && item.category !== 'General' ? ' · ' + escapeHtml(item.category) : ''}
               </span>
             </div>
           </div>
@@ -1267,7 +1309,10 @@
   const galForm = $('gallery-form');
   const galId = $('modal-gal-id');
   const galTitle = $('modal-gal-title');
+  const galAlbum = $('modal-gal-album');
   const galCategory = $('modal-gal-category');
+  const galUploadNote = $('modal-gal-upload-note');
+  const galProgress = $('modal-gal-progress');
   const galOrder = $('modal-gal-order');
   const galUrl = $('modal-gal-url');
   const galFile = $('modal-gal-file');
@@ -1301,7 +1346,8 @@
       if (modalTitle) modalTitle.textContent = 'Edit Photo Details';
       if (galId) galId.value = photo.id;
       if (galTitle) galTitle.value = photo.title || '';
-      if (galCategory) galCategory.value = photo.category || 'Rent-An-Accountant Launch';
+      if (galAlbum) galAlbum.value = photo.album || '';
+      if (galCategory) galCategory.value = photo.category && photo.category !== 'General' ? photo.category : '';
       if (galOrder) galOrder.value = photo.display_order !== undefined ? photo.display_order : 0;
       if (galUrl) galUrl.value = photo.image_url || '';
       if (galCaption) galCaption.value = photo.caption || '';
@@ -1313,7 +1359,8 @@
       if (modalTitle) modalTitle.textContent = 'Add / Upload New Photo';
       if (galId) galId.value = '';
       if (galTitle) galTitle.value = '';
-      if (galCategory) galCategory.value = 'Rent-An-Accountant Launch';
+      if (galAlbum) galAlbum.value = state.galleryFilter.album !== 'All' ? state.galleryFilter.album : '';
+      if (galCategory) galCategory.value = '';
       if (galOrder) galOrder.value = 0;
       if (galUrl) galUrl.value = '';
       if (galCaption) galCaption.value = '';
@@ -1322,8 +1369,53 @@
       updateGalPreview('');
     }
 
+    setGalProgress(null);
+    getUploadsConfig().then((cfg) => {
+      if (!galUploadNote) return;
+      galUploadNote.textContent = cfg.enabled
+        ? ''
+        : 'Cloudinary is not set up, so uploads are saved on the web server and can be lost when the site is redeployed. Add CLOUDINARY_URL on the server to keep uploaded photos permanently.';
+      galUploadNote.classList.toggle('hidden', !!cfg.enabled);
+    }).catch(() => {});
+
     galModal.classList.remove('hidden');
-    if (galTitle) setTimeout(() => galTitle.focus(), 0);
+    if (galAlbum) setTimeout(() => (galAlbum.value ? galTitle : galAlbum).focus(), 0);
+  }
+
+  /** Shrink large camera photos (longest side 2400px, JPEG) before upload; small files pass through unchanged. */
+  function downscaleImage(file, maxEdge = 2400) {
+    return new Promise((resolve) => {
+      if (!file || !/^image\/(jpeg|png|webp)$/.test(file.type) || !window.createImageBitmap) return resolve(file);
+      createImageBitmap(file).then((bmp) => {
+        const scale = Math.min(1, maxEdge / Math.max(bmp.width, bmp.height));
+        if (scale === 1 && file.size <= 3 * 1024 * 1024) { bmp.close && bmp.close(); return resolve(file); }
+        const canvas = document.createElement('canvas');
+        canvas.width = Math.round(bmp.width * scale);
+        canvas.height = Math.round(bmp.height * scale);
+        canvas.getContext('2d').drawImage(bmp, 0, 0, canvas.width, canvas.height);
+        bmp.close && bmp.close();
+        canvas.toBlob((blob) => {
+          if (!blob) return resolve(file);
+          resolve(new File([blob], file.name.replace(/\.[^.]+$/, '') + '.jpg', { type: 'image/jpeg' }));
+        }, 'image/jpeg', 0.86);
+      }).catch(() => resolve(file));
+    });
+  }
+
+  function readAsDataUrl(file) {
+    return new Promise((resolve, reject) => {
+      const r = new FileReader();
+      r.onload = () => resolve(r.result);
+      r.onerror = () => reject(new Error('Could not read the image file.'));
+      r.readAsDataURL(file);
+    });
+  }
+
+  function setGalProgress(pct) {
+    if (!galProgress) return;
+    galProgress.classList.toggle('hidden', pct == null);
+    const bar = galProgress.firstElementChild;
+    if (bar) bar.style.width = `${pct || 0}%`;
   }
 
   function closeGalleryModal() {
@@ -1364,6 +1456,7 @@
     const reader = new FileReader();
     reader.onload = (ev) => {
       selectedGalleryFile = {
+        file,
         name: file.name,
         data: ev.target.result
       };
@@ -1384,21 +1477,40 @@
     }
 
     const id = galId.value;
-    const title = galTitle.value.trim();
-    const category = galCategory.value.trim() || 'Rent-An-Accountant Launch';
+    const album = galAlbum ? galAlbum.value.trim() : '';
+    const category = galCategory.value.trim() || 'General';
+    const title = galTitle.value.trim() || [album, category !== 'General' ? category : ''].filter(Boolean).join(' - ') || 'Gallery photo';
     const order = parseInt(galOrder.value || 0, 10);
     const caption = galCaption.value.trim();
     const is_active = galActive.checked;
     const is_featured = galFeatured.checked;
 
     try {
-      if (selectedGalleryFile) {
+      if (!album) throw new Error('Please choose or type an album name.');
+      const cfg = selectedGalleryFile ? await getUploadsConfig() : null;
+      if (selectedGalleryFile && cfg && cfg.enabled) {
+        // Straight to Cloudinary, then save the record with the hosted URL.
+        const file = await downscaleImage(selectedGalleryFile.file);
+        const problem = checkImageFile(file, cfg);
+        if (problem) throw new Error(problem);
+        setGalProgress(0);
+        const uploaded = await uploadImage(file, setGalProgress);
+        const payload = { title, image_url: uploaded.url, album, category, caption, display_order: order, is_active, is_featured };
+        if (id) {
+          await api(`/api/admin/gallery/${id}`, { method: 'PUT', body: payload });
+        } else {
+          await api('/api/admin/gallery', { method: 'POST', body: payload });
+        }
+      } else if (selectedGalleryFile) {
+        const small = await downscaleImage(selectedGalleryFile.file);
+        if (small !== selectedGalleryFile.file) selectedGalleryFile.data = await readAsDataUrl(small);
         const res = await api('/api/admin/gallery/upload', {
           method: 'POST',
           body: {
             filename: selectedGalleryFile.name,
             data: selectedGalleryFile.data,
             title,
+            album,
             category,
             caption,
             display_order: order,
@@ -1413,6 +1525,7 @@
             body: {
               image_url: res.url,
               title,
+              album,
               category,
               caption,
               display_order: order,
@@ -1431,6 +1544,7 @@
         const payload = {
           title,
           image_url,
+          album,
           category,
           caption,
           display_order: order,
@@ -1451,9 +1565,11 @@
         }
       }
 
+      setGalProgress(null);
       closeGalleryModal();
       fetchAdminGallery();
     } catch (err) {
+      setGalProgress(null);
       if (galError) {
         galError.textContent = err.message || 'Failed to save photo.';
         galError.classList.remove('hidden');
@@ -1465,6 +1581,19 @@
       }
     }
   });
+
+  $('admin-gallery-album-filter')?.addEventListener('change', (e) => {
+    state.galleryFilter.album = e.target.value;
+    state.galleryFilter.category = 'All';
+    state.galleryPage = 1;
+    fetchAdminGallery();
+  });
+
+  // Missing thumbnail (uploaded photo): show the full image instead.
+  $('admin-gallery-grid')?.addEventListener('error', (e) => {
+    const img = e.target;
+    if (img.tagName === 'IMG' && img.dataset.full && !img.src.endsWith(img.dataset.full)) img.src = img.dataset.full;
+  }, true);
 
   $('admin-gallery-cat-filter')?.addEventListener('change', (e) => {
     state.galleryFilter.category = e.target.value;

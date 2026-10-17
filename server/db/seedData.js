@@ -396,7 +396,7 @@ module.exports = {
       name: "Mr. Kehinde Adewale",
       credentials: "HND, FCA, ACIT, ACS, MBA Finance",
       role: "Managing Consultant",
-      image: null, // TODO(client-assets): add headshot
+      image: "/assets/img/team/kehinde-adewale.jpg",
       bio: "A distinguished Fellow of the Institute of Chartered Accountants of Nigeria (FCA), Associate of the Chartered Institute of Taxation of Nigeria (ACIT), and Associate of the Chartered Institute of Stockbrokers (ACS). With over two decades of cutting-edge practice spanning corporate finance, forensic tax advisory, and strategic turnaround management, Mr. Adewale leads THEWHY Consulting with an unwavering commitment to enterprise resilience and wealth preservation.",
       specialties: ["Forensic Tax Advisory", "CAC Company Registration", "Corporate Finance & M&A", "Capital Restructuring"]
     },
@@ -405,7 +405,7 @@ module.exports = {
       name: "Mrs. Dolapo Wale-Kehinde",
       credentials: "B.Tech, MBA (Finance), PHRi",
       role: "Head, Training and HR Consulting",
-      image: null, // TODO(client-assets): add headshot
+      image: "/assets/img/team/dolapo-wale-kehinde.jpg",
       bio: "A certified Professional in Human Resources - International (PHRi) with an MBA in Finance. She directs THEWHY Consulting's human capital advisory, organizational design, executive capacity building, and corporate training programs. She brings deep competence in competency framework design, executive headhunting, and statutory human resource compliance across diverse industrial sectors.",
       specialties: ["Corporate Training", "Executive Talent Acquisition", "Compensation & Grading", "Statutory Certifications (PENCOM/ITF)"]
     }
